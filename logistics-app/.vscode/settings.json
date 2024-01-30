@@ -1,0 +1,7 @@
+{
+    "workbench.colorTheme": "Visual Studio Dark",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "editor.semanticHighlighting.enabled": true,
+    "editor.tabSize": 2,
+    "editor.stickyTabStops": true
+}
