@@ -1,7 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logisitcs.BLL.Interfaces\Logisitcs.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\Logisitcs.DAL.Interfaces\Logisitcs.DAL.Interfaces.csproj" />
+  </ItemGroup>
 
 </Project>

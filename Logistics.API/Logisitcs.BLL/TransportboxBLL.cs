@@ -11,5 +11,6 @@ namespace Logisitcs.BLL
          {
             _DAL = dal;
          }
+      
     }
 }

@@ -11,5 +11,5 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     provideAnimations(),
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', subscriptSizing: 'dynamic' } },
-],
+  ],
 }).catch((err) => console.error(err));

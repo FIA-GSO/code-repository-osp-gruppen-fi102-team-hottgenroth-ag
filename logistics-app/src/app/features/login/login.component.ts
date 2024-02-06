@@ -4,7 +4,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -14,4 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class LoginComponent {
   hide = true;
+
+  constructor()
+  {
+  }
 }
