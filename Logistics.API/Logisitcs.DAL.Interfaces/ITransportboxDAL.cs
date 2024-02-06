@@ -2,7 +2,8 @@
 
 namespace Logisitcs.DAL.Interfaces
 {
-    public class Class1
+    public interface ITransportboxDAL
     {
+
     }
 }
