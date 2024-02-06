@@ -1,0 +1,21 @@
+
+<h1 class="text-center w-2/3">Login</h1>
+
+<div class="flex flex-row w-2/3 m-4">
+  <mat-form-field class="w-full">
+    <mat-label>Account name</mat-label>
+    <input matInput placeholder="Account name">
+  </mat-form-field>
+</div>
+<div class="flex flex-row w-2/3 m-4">
+  <mat-form-field class="w-full">
+    <mat-label>Enter your password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div class="flex justify-center w-2/3 ">
+  <button mat-flat-button color="primary" >Primary</button>
+</div>
