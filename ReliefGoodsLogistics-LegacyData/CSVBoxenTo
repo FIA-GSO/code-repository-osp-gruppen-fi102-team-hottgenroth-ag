@@ -1,0 +1,43 @@
+import csv
+import sqlite3
+
+# Pfad zur SQLite-Datenbankdatei
+db_path = 'logisticsDB.sqlite'  
+
+# Pfad zur CSV-Datei
+csv_file_path = 'Boxen.csv'
+
+# Verbindung zur SQLite-Datenbank herstellen
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+# CSV-Datei einlesen und in die Datenbank schreiben
+with open(csv_file_path, 'r', encoding='utf-8-sig') as csv_file:
+    csv_reader = csv.DictReader(csv_file, delimiter=';')
+    for row in csv_reader:
+        try:
+            # Führe die Datenbankoperation aus
+            cursor.execute('''
+            INSERT INTO Transportbox (BoxGUID, Number, Description, Category) 
+            VALUES (?, ?, ?, ?)
+            ''', (
+                row['BoxGUID'],
+                int(row['Number']),  # Konvertiert den String in eine Ganzzahl
+                row['Description'],
+                row['Category']
+            ))
+        except ValueError as ve:
+            # Fehler beim Konvertieren von Datentypen
+            print(f"Fehler bei der Datenkonvertierung: {ve} in Zeile: {row}")
+        except sqlite3.IntegrityError as ie:
+            # Fehler bei der Datenintegrität, z.B. Duplikate bei Primary Keys
+            print(f"Fehler bei der Datenintegrität: {ie} in Zeile: {row}")
+        except Exception as e:
+            # Allgemeiner Fehler
+            print(f"Ein Fehler ist aufgetreten: {e} in Zeile: {row}")
+
+# Änderungen speichern und Verbindung schließen
+conn.commit()
+conn.close()
+
+print("Daten wurden erfolgreich in die Datenbank importiert.")

@@ -4,11 +4,11 @@ CREATE TABLE Status (
     Name TEXT NOT NULL CHECK (Name IN ('Defect', 'Lost', 'Discarded', 'Consumed', 'Donated', 'Received'))
 );
 
--- Neue Tabelle für Project
+-- Tabelle für Project
 CREATE TABLE Project (
     ProjectGUID TEXT PRIMARY KEY,
-    Name TEXT,
-    Date DATE
+    ProjectName TEXT,
+    CreationDate DATE
 );
 
 -- Modifizierte Tabelle Transportbox
@@ -20,21 +20,28 @@ CREATE TABLE Transportbox (
     LocationTransport TEXT,
     LocationHome TEXT,
     LocationDeployment TEXT,
-    Category TEXT,
     FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
 );
 
--- Article
+-- Tabelle Article
 CREATE TABLE Article (
     ArticleGUID TEXT PRIMARY KEY,
-    BoxGUID TEXT,
-    Position REAL,
+    ArticleName TEXT,
     Description TEXT,
     GTIN INTEGER,
-    Status INTEGER,
-    Unit TEXT,
-    Quantity INTEGER,
-    ExpiryDate DATE,
+    Unit TEXT
+);
+
+-- Tabelle ArticleBoxAssignment
+CREATE TABLE ArticleBoxAssignment (
+    AssignmentGUID TEXT PRIMARY KEY,
+    ArticleGUID TEXT,
+	BoxGUID TEXT,
+	Position REAL,
+	Status INTEGER,
+	Quantity INTEGER,
+	ExpiryDate DATE,
+    FOREIGN KEY (ArticleGUID) REFERENCES Article(ArticleGUID),
     FOREIGN KEY (BoxGUID) REFERENCES Transportbox(BoxGUID),
-    FOREIGN KEY (Status) REFERENCES Status(StatusID)
+	FOREIGN KEY (Status) REFERENCES Status(StatusID)
 );

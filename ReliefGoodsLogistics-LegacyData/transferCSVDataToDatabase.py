@@ -1,34 +1,58 @@
 import csv
 import sqlite3
-import os
 
 # Pfad zur SQLite-Datenbankdatei
-db_path = 'logisticsDB.sqlite'  # Ersetzen Sie 'your_database.db' mit dem tatsächlichen Datenbanknamen
-
-# Pfad zur CSV-Datei
-csv_file_path = 'Article.csv'  # Stellen sicher, dass die CSV-Datei im selben Ordner wie dieses Skript ist
+db_path = 'logisticsDB.sqlite'
 
 # Verbindung zur SQLite-Datenbank herstellen
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-# CSV-Datei einlesen und in die Datenbank schreiben
-with open(csv_file_path, 'r', encoding='utf-8') as csv_file:
-    csv_reader = csv.DictReader(csv_file, delimiter=';')
-    for row in csv_reader:
-        cursor.execute('''
-        INSERT INTO Article (BoxGUID, ArticleGUID, Position, Description, GTIN, Quantity, Unit, ExpiryDate) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            row['BoxGUID'],
-            row['ArticleGUID'],
-            float(row['Position']) if row['Position'] else None,
-            row['Description'] if row['Description'] else None,
-            row['GTIN'] if row['GTIN'] else None,
-            int(row['Quantity']) if row['Quantity'] else None,
-            row['Unit'] if row['Unit'] else None,
-            row['ExpiryDate'] if row['ExpiryDate'] else None
-        ))
+# Funktion zum Importieren von Daten aus der CSV-Datei in die Transportbox-Tabelle
+def import_transportbox(csv_file_path):
+    with open(csv_file_path, 'r', encoding='utf-8-sig') as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=';')
+        for row in csv_reader:
+            try:
+                cursor.execute('''
+                INSERT INTO Transportbox (BoxGUID, Number, Description, Category) 
+                VALUES (?, ?, ?, ?)
+                ''', (
+                    row['BoxGUID'],
+                    int(row['Number']),
+                    row['Description'],
+                    row['Category']
+                ))
+            except Exception as e:
+                print(f"Ein Fehler ist aufgetreten: {e} in Zeile: {row}")
+
+# Funktion zum Importieren von Daten aus der CSV-Datei in die Article-Tabelle
+def import_article(csv_file_path):
+    with open(csv_file_path, 'r', encoding='utf-8-sig') as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=';')
+        for row in csv_reader:
+            try:
+                cursor.execute('''
+                INSERT INTO Article (BoxGUID, ArticleGUID, Position, Description, GTIN, Quantity, Unit, ExpiryDate) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    row['BoxGUID'],
+                    row['ArticleGUID'],
+                    float(row['Position']),
+                    row['Description'],
+                    int(row['GTIN']) if row['GTIN'] else None,
+                    int(row['Quantity']),
+                    row['Unit'],
+                    row['ExpiryDate'] if row['ExpiryDate'] else None
+                ))
+            except Exception as e:
+                print(f"Ein Fehler ist aufgetreten: {e} in Zeile: {row}")
+
+# Importiere Daten in die Transportbox-Tabelle
+import_transportbox('Boxen.csv')
+
+# Importiere Daten in die Article-Tabelle
+import_article('Article.csv')
 
 # Änderungen speichern und Verbindung schließen
 conn.commit()
