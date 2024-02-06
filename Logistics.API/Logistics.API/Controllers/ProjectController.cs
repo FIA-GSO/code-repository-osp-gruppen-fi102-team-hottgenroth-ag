@@ -15,9 +15,33 @@ namespace Logistics.API.Controllers
       }
 
       [HttpGet]
-      public string Get()
+      public async Task<IActionResult> GetAll()
       {
-         return "";
+         return Ok();
+      }
+
+      [HttpGet("{id}")]
+      public async Task<IActionResult> Get(Guid id)
+      {
+         return Ok();
+      }
+
+      [HttpPost]
+      public async Task<IActionResult> Create([FromBody] object data)
+      {
+         return Ok();
+      }
+
+      [HttpPut]
+      public async Task<IActionResult> Update([FromBody] object data)
+      {
+         return Ok();
+      }
+
+      [HttpDelete("{id}")]
+      public async Task<IActionResult> Delete(Guid id)
+      {
+         return Ok();
       }
    }
 }

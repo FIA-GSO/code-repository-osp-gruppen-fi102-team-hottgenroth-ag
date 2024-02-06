@@ -5,17 +5,17 @@ namespace Logistics.API.Controllers
 {
    [ApiController]
    [Route("[controller]")]
-   public class TransportboxController : ControllerBase
+   public class ArticleController : ControllerBase
    {
-      protected ITransportboxBLL BLL { get; }
+      protected IArticleBLL BLL { get; }
 
-      public TransportboxController(ITransportboxBLL bll)
+      public ArticleController(IArticleBLL bll)
       {
          BLL = bll;
       }
 
-      [HttpGet("all/{prjId}")]
-      public async Task<IActionResult> GetAll(string prjId)
+      [HttpGet("all/{boxId}")]
+      public async Task<IActionResult> GetAll(string boxId)
       {
          return Ok();
       }

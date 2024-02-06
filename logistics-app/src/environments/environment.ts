@@ -6,7 +6,7 @@ const domainUrl :string = "https://localhost:44349";
 const securedRoutes = SecuredRoutes.getSecuredRoutes(domainUrl);
 
 const env: Partial<typeof commonEnv> = {
-  serviceURL: domainUrl + "/api", // Service url might get replaced at runtime
+  serviceURL: domainUrl, // Service url might get replaced at runtime
 
   securedRoutes: securedRoutes,
 };
