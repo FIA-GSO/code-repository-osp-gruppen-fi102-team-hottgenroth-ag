@@ -2,7 +2,8 @@
 
 namespace Logisitcs.BLL.Interfaces
 {
-    public class Class1
+    public interface ITransportboxBLL
     {
+      
     }
 }
