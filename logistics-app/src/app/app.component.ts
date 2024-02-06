@@ -29,6 +29,7 @@ export class AppComponent implements AfterViewInit
     if(!!this._framework.navigationRail)
     {
       this._framework.navigationRail.addNavRailItem("Home", "/");
+      this._framework.navigationRail.addNavRailItem("Login", "/Login");
     }
   }
 }
