@@ -5,5 +5,6 @@ export const commonEnv = {
 
   projectServicePath: "/Project",
   transportboxServicePath: "/Transportbox",
-
+  pdfServicePath: "/PDF",
+  articleServicePath: "/Article",
 };

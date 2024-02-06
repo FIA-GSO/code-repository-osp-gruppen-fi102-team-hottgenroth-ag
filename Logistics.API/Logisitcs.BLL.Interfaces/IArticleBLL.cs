@@ -2,7 +2,7 @@
 
 namespace Logisitcs.BLL.Interfaces
 {
-    public interface IGoodsBLL
+    public interface IArticleBLL
     {
 
     }

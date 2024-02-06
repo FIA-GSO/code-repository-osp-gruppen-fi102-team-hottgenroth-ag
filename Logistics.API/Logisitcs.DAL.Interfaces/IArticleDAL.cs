@@ -2,7 +2,7 @@
 
 namespace Logisitcs.DAL.Interfaces
 {
-    public interface IGoodsDAL
+    public interface IArticleDAL
     {
 
     }

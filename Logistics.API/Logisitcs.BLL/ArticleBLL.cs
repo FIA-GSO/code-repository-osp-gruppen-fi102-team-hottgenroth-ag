@@ -4,10 +4,10 @@ using System;
 
 namespace Logisitcs.BLL
 {
-    public class GoodsBLL: IGoodsBLL
+    public class ArticleBLL: IArticleBLL
     {
-         IGoodsDAL _DAL;
-         public GoodsBLL(IGoodsDAL dal)
+         IArticleDAL _DAL;
+         public ArticleBLL(IArticleDAL dal)
          {
             _DAL = dal;
          }

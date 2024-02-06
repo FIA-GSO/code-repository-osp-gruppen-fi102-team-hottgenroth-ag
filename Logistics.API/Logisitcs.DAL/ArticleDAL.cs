@@ -3,7 +3,7 @@ using System;
 
 namespace Logisitcs.DAL
 {
-    public class GoodsDAL: IGoodsDAL
+    public class ArticleDAL: IArticleDAL
     {
 
     }
