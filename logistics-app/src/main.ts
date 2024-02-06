@@ -3,11 +3,13 @@ import { AppComponent } from './app/app.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { PreloadAllModules, provideRouter, withDebugTracing, withPreloading, withRouterConfig } from '@angular/router';
 import { routes } from './app/routes/routes';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes, withPreloading(PreloadAllModules), withDebugTracing(), withRouterConfig({ onSameUrlNavigation: 'reload' })),
     provideAnimations(),
-    provideAnimations()
+    provideAnimations(),
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', subscriptSizing: 'dynamic' } },
 ],
 }).catch((err) => console.error(err));

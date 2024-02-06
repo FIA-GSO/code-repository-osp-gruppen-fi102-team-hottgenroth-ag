@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './framework/toolbar/toolbar.component';
 import { NavigationRailComponent } from './framework/navigation-rail/navigation-rail.component';
@@ -12,13 +12,12 @@ import { FrameworkService } from './services/framework.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent 
+export class AppComponent implements AfterViewInit
 {
   @ViewChild("navRail") navRail!: NavigationRailComponent;
   @ViewChild("toolbar") toolbar!: ToolbarComponent;
   
   private _framework: FrameworkService = inject(FrameworkService);
-
 
   ngAfterViewInit(): void
   {
