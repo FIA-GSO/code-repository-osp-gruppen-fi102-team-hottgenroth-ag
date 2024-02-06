@@ -1,3 +1,4 @@
+using Logisitcs.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
@@ -6,9 +7,11 @@ namespace Logistics.API.Controllers
    [Route("[controller]")]
    public class ProjectController : ControllerBase
    {
-      public ProjectController()
+      protected IProjectBLL BLL { get; }
+
+      public ProjectController(IProjectBLL bll)
       {
-       
+         BLL = bll;
       }
 
       [HttpGet]
