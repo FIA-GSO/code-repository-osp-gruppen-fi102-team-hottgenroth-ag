@@ -37,11 +37,15 @@ namespace Logistics.API
          //DAL
          services.AddTransient<IProjectDAL>(provider => new ProjectDAL());
          services.AddTransient<ITransportboxDAL>(provider => new TransportboxDAL());
+         services.AddTransient<IPDFDAL>(provider => new PDFDAL());
+         services.AddTransient<IGoodsDAL>(provider => new GoodsDAL());
 
 
          //BLL
          services.AddTransient<IProjectBLL>(provider => new ProjectBLL(provider.GetService<IProjectDAL>()));
          services.AddTransient<ITransportboxBLL>(provider => new TransportboxBLL(provider.GetService<ITransportboxDAL>()));
+         services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
+         services.AddTransient<IGoodsBLL>(provider => new GoodsBLL(provider.GetService<IGoodsDAL>()));
 
          #endregion
 

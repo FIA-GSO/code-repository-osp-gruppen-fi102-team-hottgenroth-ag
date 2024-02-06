@@ -5,11 +5,11 @@ namespace Logistics.API.Controllers
 {
    [ApiController]
    [Route("[controller]")]
-   public class TransportboxController : ControllerBase
+   public class GoodsController : ControllerBase
    {
-      protected ITransportboxBLL BLL { get; }
+      protected IGoodsBLL BLL { get; }
 
-      public TransportboxController(ITransportboxBLL bll)
+      public GoodsController(IGoodsBLL bll)
       {
          BLL = bll;
       }
