@@ -4,5 +4,6 @@ export const commonEnv = {
   securedRoutes: [""],
 
   projectServicePath: "/Project",
+  transportboxServicePath: "/Transportbox",
 
 };
