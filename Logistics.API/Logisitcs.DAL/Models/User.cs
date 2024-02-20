@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Logisitcs.DAL.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class User
+public partial class User 
 {
     public string UserId { get; set; }
 

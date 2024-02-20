@@ -208,10 +208,32 @@ public static class DBCommands
         db.SaveChanges();
     }
 
+    public static User GetUserByMail(string UserMail)
+    {
+        using var db = new LogisticsDbContext();
+        List<User> userList =db.Users.ToList();
+        User user =userList.SingleOrDefault(m => m.UserEmail == UserMail);
+        return user;
+    }
+
     public static User GetUser(string guid)
     {
         using var db = new LogisticsDbContext();
         return db.Users.Find(guid);
+    }
+    #endregion
+
+    #region UserRole
+
+    public static IEnumerable<UserRole> GetAllUserRoles()
+    {
+        var db = new LogisticsDbContext();
+        return db.UserRoles.ToList();
+    }
+    public static UserRole GetUserRole(int roleId)
+    {
+        using var db = new LogisticsDbContext();
+        return db.UserRoles.Find((long?)roleId);
     }
     #endregion
 }
