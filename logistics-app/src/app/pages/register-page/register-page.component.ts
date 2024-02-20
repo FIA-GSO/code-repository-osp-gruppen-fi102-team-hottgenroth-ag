@@ -12,6 +12,7 @@ import { NewPasswordFormComponent } from '../../features/register-password-form/
 import { ILoginData } from '../../models/ILoginData';
 import { AuthService } from '../../services/authentication/auth.service';
 import { MatIconModule } from '@angular/material/icon';
+import { SharedDialogComponent } from '../../framework/shared-dialog/shared-dialog.component';
 
 @Component({
   selector: 'app-register-page',
@@ -74,16 +75,24 @@ export class RegisterPageComponent {
     
       if(success)
       {
-        // const dialogRef = this._dialog.open();
+        const dialogRef = this._dialog.open(SharedDialogComponent,
+        {
+          data: {
+            icon: 'info',
+            title: "Success",
+            text: "The registration was successfull! You can log in now!",
+            okButtonText: "Schließen"
+          }
+        });
   
-        // if(!!this._dialogSubscription)
-        // {
-        //   this._dialogSubscription.unsubscribe();
-        // }
+        if(!!this._dialogSubscription)
+        {
+          this._dialogSubscription.unsubscribe();
+        }
   
-        // this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
-        //   this._router.navigate(["/Login"]);
-        // })
+        this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
+          this._router.navigate(["/login"]);
+        })
       }
     }
     catch(err: any)
