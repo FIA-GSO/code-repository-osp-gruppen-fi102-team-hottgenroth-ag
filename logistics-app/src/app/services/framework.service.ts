@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NavigationRailComponent } from '../framework/navigation-rail/navigation-rail.component';
 import { ToolbarComponent } from '../framework/toolbar/toolbar.component';
+import { IToolbarButton } from '../models/IToolbarButton';
 
 
 
@@ -65,5 +66,18 @@ export class FrameworkService {
         }
       })
     }
+  }
+
+  public createToolbarButton(icon: string, id: string, text?: string, click?: () => void)
+  {
+    var button: IToolbarButton =
+    {
+      icon: icon,
+      id: id,
+      text: text,
+      click: click
+    }
+
+    return button;
   }
 }
