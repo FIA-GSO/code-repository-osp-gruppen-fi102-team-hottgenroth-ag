@@ -1,8 +1,10 @@
 using Logisitcs.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
+   [Authorize]
    [ApiController]
    [Route("[controller]")]
    public class ProjectController : ControllerBase

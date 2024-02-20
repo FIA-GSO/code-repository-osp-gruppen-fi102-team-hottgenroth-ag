@@ -3,6 +3,15 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span class="flex flex-grow justify-start">{{title}}</span>
+  <button mat-icon-button *ngIf="toolbarButtons.length > 0" [mat-menu-trigger-for]="menu">
+    <mat-icon>settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let btn of toolbarButtons" (click)="buttonClicked(btn)">
+      <mat-icon>{{btn.icon}}</mat-icon>
+      <span *ngIf="!!btn.text">{{btn.text}}</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
 
 <div [ngStyle]="{height: 'calc(100% - ' + height + 'px)'} ">

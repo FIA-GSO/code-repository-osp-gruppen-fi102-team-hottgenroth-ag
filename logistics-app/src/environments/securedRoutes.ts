@@ -4,6 +4,10 @@ export class SecuredRoutes
   {
     return  ([
       domainUrl + "/Transportbox",
+      domainUrl + "/Project",
+      domainUrl + "/Article",
+      domainUrl + "/PDF",    
+      domainUrl + "/Login",      
 
     ]);
   }

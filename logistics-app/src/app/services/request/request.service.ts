@@ -32,7 +32,7 @@ export class RequestService {
     }
 
     var refMap: any = {};
-
+    
     return JSON.parse(pJson, function (key, value) {
       if (key === '$id') 
       {
@@ -46,7 +46,7 @@ export class RequestService {
       {
         return refMap[value.$ref];
       }
-
+      
       return value;
     });
   }
@@ -71,7 +71,7 @@ export class RequestService {
   public post(url: string, data: any, headers: HttpHeaders | undefined = undefined,
     params: HttpParams | undefined = undefined): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.post<any>(url, JSON.stringify(data), { headers: headers, params: params }).pipe(
+      this.http.post<any>(url, data, { headers: headers, params: params }).pipe(
         catchError(error => {
           return throwError(() => {
             console.error(error.message || 'server Error');
@@ -88,7 +88,7 @@ export class RequestService {
   public put(url: string, data: any, headers: HttpHeaders | undefined = undefined,
     params: HttpParams | undefined = undefined): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.put<any>(url, JSON.stringify(data), { headers: headers, params: params }).pipe(
+      this.http.put<any>(url, data, { headers: headers, params: params }).pipe(
         catchError(error => {
           return throwError(() => {
             console.error(error.message || 'server Error');
