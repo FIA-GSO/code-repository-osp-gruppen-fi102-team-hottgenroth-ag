@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Logisitcs.DAL\Logisitcs.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fileserver\logisticsDB.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
