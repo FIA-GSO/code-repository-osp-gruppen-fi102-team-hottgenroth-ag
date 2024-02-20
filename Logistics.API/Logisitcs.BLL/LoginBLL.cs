@@ -43,7 +43,7 @@ namespace Logisitcs.BLL
             
             //Validate the User Credentials
             //Demo Purpose, I have Passed HardCoded User Information
-            if (login.Username == "r.mueller@hottgenroth.de")
+            if (login.UserEmail == "r.mueller@hottgenroth.de")
             {
                user = new UserData { UserEmail = "r.mueller@hottgenroth.de", Role = "Lagerist", UserId = new Guid() };
             }

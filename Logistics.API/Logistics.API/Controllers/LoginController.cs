@@ -50,8 +50,7 @@ namespace Logistics.API.Controllers
 
          if (user != null)
          {
-            var tokenString = GenerateJSONWebToken(user);
-            response = Ok(new { token = tokenString });
+            response = Ok();
          }
 
          return response;

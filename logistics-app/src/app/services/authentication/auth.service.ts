@@ -36,6 +36,18 @@ export class AuthService
     }
   }
 
+  public async register(user: ILoginData): Promise<boolean>
+  {
+    let result: any = await this._request.post(environment.serviceURL + environment.loginServicePath + "/register", user);
+
+    if(!!result)
+    {
+      return true;
+    }
+    
+    return false;
+  }
+
   public logout(): void
   {
     if(this.hasToken())

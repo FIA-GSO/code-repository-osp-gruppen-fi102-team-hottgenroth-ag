@@ -1,0 +1,35 @@
+
+<section class="h-full flex flex-col justify-center items-center overflow-hidden">
+  <mat-card class="w-full max-w-md">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>login</mat-icon>
+      </div>
+      <mat-card-title>Register</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <section class="flex flex-col grow gap-4">
+        <span>Here you can register for the relief goods registration app!</span>
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>E-Mail</mat-label>
+            <input matInput type="email" inputmode="email"
+              [formControl]="emailFormControl" autocomplete="off" [(ngModel)]="mail">
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+              Email must <strong>not be empty!</strong>
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('email')">
+              Email is not in the right format!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <new-password-form #newPasswordForm [(password)]="password"></new-password-form>  
+      </section>
+    </mat-card-content>
+    <mat-card-actions align="end" class="!mt-6">
+      <button mat-raised-button color="primary" [disabled]="!!!passwordForm || (!passwordForm.valid || !emailFormControl.valid)" (click)="register()">Registrieren</button>
+    </mat-card-actions>
+  </mat-card>
+</section>
+

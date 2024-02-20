@@ -1,0 +1,12 @@
+
+mat-card-content{
+  flex-grow: 1;
+  overflow: auto;
+}
+mat-card{
+  display:flex;
+  flex-direction: column;
+}
+.login-content-text{
+  margin-bottom: 5px;
+}

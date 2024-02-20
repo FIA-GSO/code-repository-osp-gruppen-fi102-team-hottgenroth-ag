@@ -8,11 +8,13 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../../services/authentication/auth.service';
 import { ILoginData } from '../../models/ILoginData';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, MatCardModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatIconModule, 
+    MatButtonModule, MatCardModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -33,7 +35,7 @@ export class LoginComponent {
     if(!!this.userName && this.userName != "" || !!this.userPassword && this.userPassword != "")
     {
       let user: ILoginData = {
-        username: this.userName,
+        userEmail: this.userName,
         password: this.userPassword
       }
       try

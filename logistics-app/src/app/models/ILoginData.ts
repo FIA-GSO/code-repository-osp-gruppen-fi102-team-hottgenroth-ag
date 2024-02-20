@@ -1,5 +1,5 @@
 export interface ILoginData
 {
-  username: string,
+  userEmail: string,
   password: string
 }
