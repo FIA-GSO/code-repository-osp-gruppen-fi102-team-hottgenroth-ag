@@ -9,6 +9,7 @@ import { AuthService } from '../../services/authentication/auth.service';
 import { ILoginData } from '../../models/ILoginData';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
 })
 export class LoginComponent {
   private _loginService: AuthService = inject(AuthService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
   public hidePassword: boolean = true;
   public userName: string = "";
@@ -34,17 +36,20 @@ export class LoginComponent {
   {
     if(!!this.userName && this.userName != "" || !!this.userPassword && this.userPassword != "")
     {
-      let user: ILoginData = {
-        userEmail: this.userName,
-        password: this.userPassword
-      }
+      this._spinner.show();
       try
       {
+        let user: ILoginData = {
+          userEmail: this.userName,
+          password: this.userPassword
+        }
         await this._loginService.login(user);
+        this._spinner.hide();
       }
       catch(err: any)
       {
         console.log(err)
+        this._spinner.hide();
       }
     }
   }

@@ -23,7 +23,7 @@ namespace Logisitcs.BLL
             {
                 IUserData userData = null;
                 User user = DBCommands.GetUserByMail(loginData.UserEmail);
-                if (user.UserId != null)
+                if(user != null)
                 {
                     UserRole userRole = DBCommands.GetUserRole((int)user.UserRoleId);
                     userData = new UserData(Guid.Parse(user.UserId), user.UserEmail, userRole.Role);
