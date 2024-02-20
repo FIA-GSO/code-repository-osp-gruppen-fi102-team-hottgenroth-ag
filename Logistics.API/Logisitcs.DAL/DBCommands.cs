@@ -45,7 +45,7 @@ public static class DBCommands
     public static IEnumerable<ArticleBoxAssignment> GetAllTArticleBoxAssignments()
     {
         var db = new LogisticsDbContext();
-        return db.ArticleBoxAssignments;
+        return db.ArticleBoxAssignments.ToList();
     }
     public static void AddArticleBoxAssignments(ArticleBoxAssignment articleBoxAssignment)
     {
@@ -80,7 +80,7 @@ public static class DBCommands
     public static IEnumerable<Project> GetAllTProjects()
     {
         var db = new LogisticsDbContext();
-        return db.Projects;
+        return db.Projects.ToList();
     }
     public static void AddProject(Project project)
     {
@@ -112,10 +112,10 @@ public static class DBCommands
 
     #region Statues
 
-    public static IEnumerable<Status> GetAllTransportStatues()
+    public static IEnumerable<Status> GetAllStatues()
     {
         var db = new LogisticsDbContext();
-        return db.Statuses;
+        return db.Statuses.ToList();
     }
     public static void AddStatus(Status status)
     {
@@ -156,7 +156,7 @@ public static class DBCommands
     public static IEnumerable<Transportbox> GetAllTransportBoxes()
     {
         var db = new LogisticsDbContext();
-        return db.Transportboxes;
+        return db.Transportboxes.ToList();
     }
     public static void DeleteTransportbox(string guid)
     {
@@ -190,7 +190,7 @@ public static class DBCommands
     public static IEnumerable<User> GetAllUsers()
     {
         var db = new LogisticsDbContext();
-        return db.Users;
+        return db.Users.ToList();
     }
 
     public static void DeleteUser(string guid)
