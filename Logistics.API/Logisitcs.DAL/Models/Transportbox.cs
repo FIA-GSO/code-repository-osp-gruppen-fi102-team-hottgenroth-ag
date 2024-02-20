@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Logisitcs.DAL.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class Transportbox
+public partial class Transportbox 
 {
     public string BoxGuid { get; set; }
 

@@ -16,10 +16,4 @@
     <ProjectReference Include="..\Logisitcs.DAL.Interfaces\Logisitcs.DAL.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Database\logisticsDB.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

@@ -31,8 +31,9 @@ public partial class LogisticsDbContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlite($"Data Source={Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}\\Logisitcs.DAL\\Database\\logisticsDB.sqlite");
-
+        => optionsBuilder.UseSqlite($"Data Source={System.Environment.CurrentDirectory}\\Fileserver\\logisticsDB.sqlite");
+        //=> optionsBuilder.UseSqlite($"Data Source={Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}\\Logisitcs.DAL\\Database\\logisticsDB.sqlite");
+        
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Article>(entity =>
