@@ -1,6 +1,6 @@
 export interface IProjectData
 {
-  name: string;
-  id: string;
-  created: string;
+  projectName: string;
+  projectGuid: string;
+  creationDate: Date;
 }

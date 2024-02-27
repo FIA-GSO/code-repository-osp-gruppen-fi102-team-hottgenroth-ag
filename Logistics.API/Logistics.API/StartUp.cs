@@ -32,8 +32,75 @@ namespace Logistics.API
             {
                 options.MimeTypes = new[] {
                "application/json"
-               };
-                options.EnableForHttps = true;
+            };
+            options.EnableForHttps = true;
+         });
+
+         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+          .AddJwtBearer(options =>
+          {
+             options.TokenValidationParameters = new TokenValidationParameters
+             {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = Configuration["Jwt:Issuer"],
+                ValidAudience = Configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+             };
+          });
+
+         services.AddMvc();
+
+         #region BLL_DAL_DI
+         //DAL
+         services.AddTransient<IProjectDAL>(provider => new ProjectDAL());
+         services.AddTransient<ITransportboxDAL>(provider => new TransportboxDAL());
+         services.AddTransient<IPDFDAL>(provider => new PDFDAL());
+         services.AddTransient<IArticleDAL>(provider => new ArticleDAL());
+
+
+         //BLL
+         services.AddTransient<IProjectBLL>(provider => new ProjectBLL());
+         services.AddTransient<ITransportboxBLL>(provider => new TransportboxBLL(provider.GetService<ITransportboxDAL>()));
+         services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
+         services.AddTransient<IArticleBLL>(provider => new ArticleBLL(provider.GetService<IArticleDAL>()));
+         services.AddTransient<ILoginBLL>(provider => new LoginBLL());
+
+         #endregion
+
+         #region Json
+
+         // Add Newtonsoft JSON
+         services.AddControllers().AddNewtonsoftJson(options =>
+         {
+            // Configure a custom converter
+            /*options.SerializerSettings.Converters.Add(new JsonConverter<INTERFACE, OBJECT>());*/
+            options.SerializerSettings.Converters.Add(new JsonConverter<IUserData, UserData>());
+            options.SerializerSettings.Converters.Add(new JsonConverter<ILoginData, LoginData>());
+            options.SerializerSettings.Converters.Add(new JsonConverter<IProjectData, ProjectData>());
+
+            options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            options.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+         });
+
+         #endregion
+
+
+
+         services.AddSwaggerGen(opt =>
+         {
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Logistics.API", Version = "v1" });
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+               In = ParameterLocation.Header,
+               Description = "Please enter token",
+               Name = "Authorization",
+               Type = SecuritySchemeType.Http,
+               BearerFormat = "JWT",
+               Scheme = "bearer"
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -16,7 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
 export class NavigationRailComponent
 {
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
-  private _router: Router = inject(Router);
 
   @ViewChild('drawer') railNav!: MatSidenav;
 
@@ -43,24 +42,17 @@ export class NavigationRailComponent
     }
   }
 
-  public async navigateToRoute(pRoute: string): Promise<void>
+  public async itemClicked(item: INavRailItem): Promise<void>
   {
-    await this._router.navigate([pRoute]);
+    item.click();
     if(!!this.railNav)
     {
       this.railNav.close();
     }
   }
 
-  public addNavRailItem(pName: string, pRoute: string, pIcon: string | undefined = undefined): void
-  {
-    var item: INavRailItem = {
-      name: pName,
-      route: pRoute,
-      identifier: Guid.create().toString(),
-      icon: pIcon
-    }
-
+  public addNavRailItem(item: INavRailItem): void
+  { 
     this._navRailItems.push(item);
     this._cd.detectChanges();
   }

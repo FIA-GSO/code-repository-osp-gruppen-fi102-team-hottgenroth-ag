@@ -2,9 +2,9 @@ export interface IDialogData
 {
   icon: 'warning' | 'info';
   title: string;
-  subtitle: string;
+  subtitle?: string;
   text: string;
   okButtonText: string;
-  cancelButtonText: string;
-  hasCancelButton: boolean;
+  cancelButtonText?: string;
+  hasCancelButton?: boolean;
 }

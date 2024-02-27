@@ -34,6 +34,19 @@ export class ToolbarComponent {
     return this._title
   }
 
+  private _subtitle: string = "";
+  public set subtitle(pSubTitle: string)
+  {
+    this._subtitle = pSubTitle;
+
+    this._cd.detectChanges();
+  }
+
+  public get subtitle()
+  {
+    return this._subtitle
+  }
+
   public toolbarButtons: IToolbarButton[] = [];
 
   public addToolbarButton(button: IToolbarButton)
