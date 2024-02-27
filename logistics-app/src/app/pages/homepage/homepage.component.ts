@@ -37,7 +37,8 @@ export class HomepageComponent {
   
       if(!!this._framework.toolbar)
       {
-        this._framework.toolbar.addToolbarButton(this._btnStore.loginButton)
+        this._framework.toolbar.addToolbarButton(this._btnStore.pdfButton);
+        this._framework.toolbar.addToolbarButton(this._btnStore.logoutButton);
       }
   
       if(!!this._framework.navigationRail)
