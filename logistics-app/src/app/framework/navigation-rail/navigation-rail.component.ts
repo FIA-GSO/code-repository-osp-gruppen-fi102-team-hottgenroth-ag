@@ -42,6 +42,11 @@ export class NavigationRailComponent
     }
   }
 
+  public clean(): void
+  {
+    this._navRailItems = [];
+  }
+
   public async itemClicked(item: INavRailItem): Promise<void>
   {
     item.click();

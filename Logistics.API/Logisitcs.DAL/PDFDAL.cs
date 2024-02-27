@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using iText.Kernel.Pdf;
+﻿using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using Logisitcs.DAL.Interfaces;
-using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Logisitcs.DAL
 {
@@ -60,7 +59,6 @@ namespace Logisitcs.DAL
 
             return paragraphText;
         }
-
     }
 
     public class MyData

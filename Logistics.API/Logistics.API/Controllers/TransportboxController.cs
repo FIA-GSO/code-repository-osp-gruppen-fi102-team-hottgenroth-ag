@@ -1,7 +1,6 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Logistics.API.Controllers
 {
