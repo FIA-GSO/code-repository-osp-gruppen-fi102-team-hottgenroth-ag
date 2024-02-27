@@ -20,8 +20,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.DAL.Interfaces", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistics.API", "Logistics.API\Logistics.API.csproj", "{655804CA-A42A-4396-8EDA-AE42BEE386B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistics.TestApp", "Logistics.TestApp\Logistics.TestApp.csproj", "{B3DF9801-2BAF-4295-A7F0-A231DF070608}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,14 +84,6 @@ Global
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Release|x64.ActiveCfg = Release|x64
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Release|x64.Build.0 = Release|x64
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Debug|x64.Build.0 = Debug|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Release|x64.ActiveCfg = Release|Any CPU
-		{B3DF9801-2BAF-4295-A7F0-A231DF070608}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
