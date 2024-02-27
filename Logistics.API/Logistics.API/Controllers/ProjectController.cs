@@ -1,4 +1,5 @@
 using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,31 +20,56 @@ namespace Logistics.API.Controllers
       [HttpGet]
       public async Task<IActionResult> GetAll()
       {
-         return Ok();
+            var result = await BLL.GetAllProjects();
+            if(result == null)
+            {
+                return NotFound();
+            }            
+            return Ok(result); 
       }
 
       [HttpGet("{id}")]
       public async Task<IActionResult> Get(Guid id)
       {
-         return Ok();
-      }
+            var result = await BLL.GetProject(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
 
       [HttpPost]
-      public async Task<IActionResult> Create([FromBody] object data)
+      public async Task<IActionResult> Create([FromBody] IProjectData data)
       {
-         return Ok();
+            var result = await BLL.AddProject(data);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
       }
 
       [HttpPut]
-      public async Task<IActionResult> Update([FromBody] object data)
+      public async Task<IActionResult> Update([FromBody] IProjectData data)
       {
-         return Ok();
-      }
+            bool result = await BLL.UpdateProject(data);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
 
       [HttpDelete("{id}")]
       public async Task<IActionResult> Delete(Guid id)
       {
-         return Ok();
+            bool result = await BLL.DeleteProject(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return Ok(result);
       }
    }
 }

@@ -69,7 +69,7 @@ namespace Logistics.API
 
 
          //BLL
-         services.AddTransient<IProjectBLL>(provider => new ProjectBLL(provider.GetService<IProjectDAL>()));
+         services.AddTransient<IProjectBLL>(provider => new ProjectBLL());
          services.AddTransient<ITransportboxBLL>(provider => new TransportboxBLL(provider.GetService<ITransportboxDAL>()));
          services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
          services.AddTransient<IArticleBLL>(provider => new ArticleBLL(provider.GetService<IArticleDAL>()));
