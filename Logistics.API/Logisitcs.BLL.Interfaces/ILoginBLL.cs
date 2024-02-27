@@ -1,13 +1,14 @@
 ﻿using Logisitcs.BLL.Interfaces.ModelInterfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL.Interfaces
 {
-    public interface ILoginBLL
+    public interface ILoginBll
     {
-      Task<IUserData> Login(ILoginData user);
-      Task<IUserData> Register(ILoginData user);
-      Task<bool> UpdateRole(IUserData user);
-   }
+        Task<IUserData> Login(ILoginData loginData);
+
+        Task<IUserData> Register(ILoginData loginData);
+
+        Task<bool> UpdateRole(IUserData user);
+    }
 }

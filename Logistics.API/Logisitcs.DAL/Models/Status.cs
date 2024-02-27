@@ -1,10 +1,8 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class Status 
+public partial class Status
 {
     public long StatusId { get; set; }
 

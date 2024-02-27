@@ -13,12 +13,14 @@ public static class DBCommands
         var db = new LogisticsDbContext();
         return db.Articles.ToList();
     }
+
     public static void AddArticles(Article article)
     {
         using var db = new LogisticsDbContext();
         db.Articles.Add(article);
         db.SaveChanges();
     }
+
     public static void DeleteArticles(string guid)
     {
         using var db = new LogisticsDbContext();
@@ -27,6 +29,7 @@ public static class DBCommands
         db.Articles.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateArticle(Article article)
     {
         using var db = new LogisticsDbContext();
@@ -39,20 +42,24 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.Articles.Find(guid);
     }
-    #endregion
+
+    #endregion Article
 
     #region ArticleBoxAssignments
+
     public static IEnumerable<ArticleBoxAssignment> GetAllTArticleBoxAssignments()
     {
         var db = new LogisticsDbContext();
         return db.ArticleBoxAssignments.ToList();
     }
+
     public static void AddArticleBoxAssignments(ArticleBoxAssignment articleBoxAssignment)
     {
         using var db = new LogisticsDbContext();
         db.ArticleBoxAssignments.Add(articleBoxAssignment);
         db.SaveChanges();
     }
+
     public static void DeleteArticleBoxAssignments(string guid)
     {
         using var db = new LogisticsDbContext();
@@ -61,6 +68,7 @@ public static class DBCommands
         db.ArticleBoxAssignments.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateArticleBoxAssignment(ArticleBoxAssignment articleBoxAssignment)
     {
         using var db = new LogisticsDbContext();
@@ -73,7 +81,8 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.ArticleBoxAssignments.Find(guid);
     }
-    #endregion
+
+    #endregion ArticleBoxAssignments
 
     #region Project
 
@@ -82,12 +91,14 @@ public static class DBCommands
         var db = new LogisticsDbContext();
         return db.Projects.ToList();
     }
+
     public static void AddProject(Project project)
     {
         using var db = new LogisticsDbContext();
         db.Projects.Add(project);
         db.SaveChanges();
     }
+
     public static void DeleteProject(string guid)
     {
         using var db = new LogisticsDbContext();
@@ -96,6 +107,7 @@ public static class DBCommands
         db.Projects.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateProject(Project project)
     {
         using var db = new LogisticsDbContext();
@@ -108,7 +120,8 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.Projects.Find(guid);
     }
-    #endregion
+
+    #endregion Project
 
     #region Statues
 
@@ -117,12 +130,14 @@ public static class DBCommands
         var db = new LogisticsDbContext();
         return db.Statuses.ToList();
     }
+
     public static void AddStatus(Status status)
     {
         using var db = new LogisticsDbContext();
         db.Statuses.Add(status);
         db.SaveChanges();
     }
+
     public static void DeleteStatus(string guid)
     {
         using var db = new LogisticsDbContext();
@@ -131,6 +146,7 @@ public static class DBCommands
         db.Statuses.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateStatus(Status status)
     {
         using var db = new LogisticsDbContext();
@@ -143,9 +159,11 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.Statuses.Find(guid);
     }
-    #endregion
+
+    #endregion Statues
 
     #region Transportboxes
+
     public static void AddTransportbox(Transportbox transportbox)
     {
         using var db = new LogisticsDbContext();
@@ -153,11 +171,12 @@ public static class DBCommands
         db.SaveChanges();
     }
 
-    public static IEnumerable<Transportbox> GetAllTransportBoxes()
+    public static IEnumerable<Transportbox> GetAllTransportBoxesByPrjGuid(string prjId)
     {
         var db = new LogisticsDbContext();
-        return db.Transportboxes.ToList();
+        return db.Transportboxes.Where(m => m.ProjectGuid == prjId).ToList();
     }
+
     public static void DeleteTransportbox(string guid)
     {
         using var db = new LogisticsDbContext();
@@ -166,6 +185,7 @@ public static class DBCommands
         db.Transportboxes.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateTransportbox(Transportbox transportbox)
     {
         using var db = new LogisticsDbContext();
@@ -178,15 +198,18 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.Transportboxes.Find(guid);
     }
-    #endregion
+
+    #endregion Transportboxes
 
     #region User
+
     public static void AddUser(User user)
     {
         using var db = new LogisticsDbContext();
         db.Users.Add(user);
         db.SaveChanges();
     }
+
     public static IEnumerable<User> GetAllUsers()
     {
         var db = new LogisticsDbContext();
@@ -201,6 +224,7 @@ public static class DBCommands
         db.Users.Remove(article);
         db.SaveChanges();
     }
+
     public static void UpdateUser(User user)
     {
         using var db = new LogisticsDbContext();
@@ -211,8 +235,8 @@ public static class DBCommands
     public static User GetUserByMail(string UserMail)
     {
         using var db = new LogisticsDbContext();
-        List<User> userList =db.Users.ToList();
-        User user =userList.SingleOrDefault(m => m.UserEmail == UserMail);
+        List<User> userList = db.Users.ToList();
+        User user = userList.SingleOrDefault(m => m.UserEmail == UserMail);
         return user;
     }
 
@@ -221,7 +245,8 @@ public static class DBCommands
         using var db = new LogisticsDbContext();
         return db.Users.Find(guid);
     }
-    #endregion
+
+    #endregion User
 
     #region UserRole
 
@@ -230,10 +255,18 @@ public static class DBCommands
         var db = new LogisticsDbContext();
         return db.UserRoles.ToList();
     }
+
     public static UserRole GetUserRole(int roleId)
     {
         using var db = new LogisticsDbContext();
         return db.UserRoles.Find((long?)roleId);
     }
-    #endregion
+
+    public static int GetUserRoleByName(string role)
+    {
+        using var db = new LogisticsDbContext();
+        return int.Parse(db.UserRoles.Single(x => x.Role == role).RoleId.ToString());
+    }
+
+    #endregion UserRole
 }

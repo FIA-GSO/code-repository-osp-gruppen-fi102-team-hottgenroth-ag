@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Logisitcs.DAL.Models;
+﻿using Logisitcs.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Logisitcs.DAL;
+
 public partial class LogisticsDbContext : DbContext
 {
     public LogisticsDbContext()
@@ -31,9 +30,8 @@ public partial class LogisticsDbContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlite($"Data Source={System.Environment.CurrentDirectory}\\Fileserver\\logisticsDB.sqlite");
-        //=> optionsBuilder.UseSqlite($"Data Source={Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}\\Logisitcs.DAL\\Database\\logisticsDB.sqlite");
-        
+        => optionsBuilder.UseSqlite($"Data Source={Environment.CurrentDirectory}\\Fileserver\\logisticsDB.sqlite");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Article>(entity =>
@@ -90,6 +88,7 @@ public partial class LogisticsDbContext : DbContext
 
             entity.Property(e => e.BoxGuid).HasColumnName("BoxGUID");
             entity.Property(e => e.ProjectGuid).HasColumnName("ProjectGUID");
+            entity.Property(e => e.BoxCategory).HasColumnName("BoxCategory");
 
             entity.HasOne(d => d.Project).WithMany(p => p.Transportboxes).HasForeignKey(d => d.ProjectGuid);
         });
