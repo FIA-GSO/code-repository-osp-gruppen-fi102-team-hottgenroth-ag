@@ -1,4 +1,5 @@
 using Logisitcs.BLL.Interfaces;
+using Logisitcs.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
@@ -29,10 +30,20 @@ namespace Logistics.API.Controllers
       [HttpPost]
       public async Task<IActionResult> Create([FromBody] object data)
       {
-         return Ok();
-      }
+        var result = await BLL.Create(data);
 
-      [HttpPut]
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        // use name of created document if we add guid,...
+        // data.pdfName = result;
+
+        return Ok(result);
+        }
+
+        [HttpPut]
       public async Task<IActionResult> Update([FromBody] object data)
       {
          return Ok();
@@ -45,3 +56,19 @@ namespace Logistics.API.Controllers
       }
    }
 }
+
+//public struct PDF_Data
+//{
+//    public Dictionary<string, string> replacementValues { get; set; }
+//    public string pdfName { get; set; }
+//}
+
+//public struct PDF_Notes_Images_Data
+//{
+//    public IWAppContact UserAddress { get; set; }
+//    public int LangValue { get; set; }
+//    public bool PrintImages { get; set; }
+//    public bool PrintNotes { get; set; }
+//    public List<IMediaData> StoreImages { get; set; }
+//    public List<INoteData> StoreNotes { get; set; }
+//}
