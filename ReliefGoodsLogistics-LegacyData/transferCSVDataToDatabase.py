@@ -8,6 +8,32 @@ db_path = 'logisticsDB.sqlite'
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
+# Inhalt von Article und Transportbox löschen
+cursor.execute('DROP TABLE IF EXISTS Article')
+cursor.execute('DROP TABLE IF EXISTS Transportbox')
+
+# Article und Transportbox neu erstellen
+cursor.execute('''
+CREATE TABLE Transportbox (
+    BoxGUID TEXT PRIMARY KEY,
+    Number INTEGER,
+    Description TEXT,
+    ProjectGUID TEXT, 
+    LocationTransport TEXT,
+    LocationHome TEXT,
+    LocationDeployment TEXT,
+    FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
+)''')
+
+cursor.execute('''
+CREATE TABLE Article (
+    ArticleGUID TEXT PRIMARY KEY,
+    ArticleName TEXT,
+    Description TEXT,
+    GTIN INTEGER,
+    Unit TEXT
+)''')
+
 # Funktion zum Importieren von Daten aus der CSV-Datei in die Transportbox-Tabelle
 def import_transportbox(csv_file_path):
     with open(csv_file_path, 'r', encoding='utf-8-sig') as csv_file:
