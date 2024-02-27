@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AddNameDialogComponent } from '../add-name-dialog/add-name-dialog.component';
+import { ProjectStoreService } from '../../services/stores/project-store.service';
 
 @Component({
   selector: 'project-roulette',
@@ -17,6 +18,7 @@ export class ProjectRouletteComponent {
   @Input() sortedBy: 'date' | 'alphabet' = 'date';
 
   private _dialog: MatDialog = inject(MatDialog);
+  private _prjStore: ProjectStoreService = inject(ProjectStoreService);
 
   constructor(){
     
