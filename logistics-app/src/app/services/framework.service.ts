@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { NavigationRailComponent } from '../framework/navigation-rail/navigation-rail.component';
 import { ToolbarComponent } from '../framework/toolbar/toolbar.component';
 import { IToolbarButton } from '../models/IToolbarButton';
+import { INavRailItem } from '../models/INavRailItem';
 
 
 
@@ -79,5 +80,17 @@ export class FrameworkService {
     }
 
     return button;
+  }
+
+  public createNavRailItem(name: string, id: string, click: () => void, icon?: string)
+  {
+    var item: INavRailItem = {
+      name: name,
+      click: click,
+      identifier: id,
+      icon: icon
+    }
+
+    return item;
   }
 }

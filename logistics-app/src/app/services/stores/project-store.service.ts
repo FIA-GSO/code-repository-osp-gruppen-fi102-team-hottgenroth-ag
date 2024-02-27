@@ -34,7 +34,7 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
       var item: IProjectData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.delete(this._serviceURL + "/" + item.id);
+        await this.request.delete(this._serviceURL + "/" + item.projectGuid);
         this.removeItem(item);
 
         return true;
@@ -53,7 +53,7 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
       var item: IProjectData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.id, item);
+        await this.request.put(this._serviceURL + "/" + item.projectGuid, item);
         return true;
       }
     }
@@ -94,8 +94,8 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
       }
 
       var project: IProjectData = await this.request.get(this._serviceURL + "/" + projectId);
-      this.loadedProjectIdentifier = project.id;
-      return this.getById(project.id);
+      this.loadedProjectIdentifier = project.projectGuid;
+      return this.getById(project.projectGuid);
     }
     catch (reason: any) {
       console.log(reason);
@@ -108,10 +108,14 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
   {
     if (!!this.loadedProjectIdentifier) 
     {
-      return this.getItems().find(item => item.id === this.loadedProjectIdentifier);
+      return this.getItems().find(item => item.projectGuid === this.loadedProjectIdentifier);
     }
     return undefined;
   }
 
+  public override getById(id: string): IProjectData | undefined
+  {
+    return this.getItems().find(p => p.projectGuid === id);
+  }
 }
 

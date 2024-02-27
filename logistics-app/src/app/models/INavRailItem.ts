@@ -1,7 +1,7 @@
 export interface INavRailItem
 {
   name: string;
-  route: string;
+  click: () => void;
   identifier: string;
   icon: string | undefined;
 }

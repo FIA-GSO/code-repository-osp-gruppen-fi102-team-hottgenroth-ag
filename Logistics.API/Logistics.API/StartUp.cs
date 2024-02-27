@@ -86,6 +86,7 @@ namespace Logistics.API
             /*options.SerializerSettings.Converters.Add(new JsonConverter<INTERFACE, OBJECT>());*/
             options.SerializerSettings.Converters.Add(new JsonConverter<IUserData, UserData>());
             options.SerializerSettings.Converters.Add(new JsonConverter<ILoginData, LoginData>());
+            options.SerializerSettings.Converters.Add(new JsonConverter<IProjectData, ProjectData>());
 
             options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

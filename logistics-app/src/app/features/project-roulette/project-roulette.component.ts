@@ -5,6 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AddNameDialogComponent } from '../add-name-dialog/add-name-dialog.component';
 import { ProjectStoreService } from '../../services/stores/project-store.service';
+import { IProjectData } from '../../models/IProjectData';
+import { Guid } from 'guid-typescript';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
+import { FrameworkService } from '../../services/framework.service';
+import { ButtonStoreService } from '../../services/stores/button-store.service';
+import { AuthService } from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'project-roulette',
@@ -14,11 +20,16 @@ import { ProjectStoreService } from '../../services/stores/project-store.service
   styleUrl: './project-roulette.component.scss'
 })
 export class ProjectRouletteComponent {
-  @Input() projects: any[] = [];
+  @Input() projects: IProjectData[] = [];
   @Input() sortedBy: 'date' | 'alphabet' = 'date';
 
   private _dialog: MatDialog = inject(MatDialog);
   private _prjStore: ProjectStoreService = inject(ProjectStoreService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
+  private _framework: FrameworkService = inject(FrameworkService);
+  private _btnStore: ButtonStoreService = inject(ButtonStoreService);
+  private _auth: AuthService = inject(AuthService);
+
 
   constructor(){
     
@@ -28,28 +39,57 @@ export class ProjectRouletteComponent {
   {
     if(this.sortedBy === 'alphabet')
     {
-      return this.projects.sort((a,b) => a.name.localeCompare(b.name))
+      return this.projects.sort((a,b) => a.projectName.localeCompare(b.projectName))
     }
     
-    return this.projects.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+    return this.projects.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
   }
 
   public addProject()
   {
+    this.isAuthorized();
     const dialogRef = this._dialog.open(AddNameDialogComponent);
 
-    dialogRef.afterClosed().subscribe((name: string) => {
+    dialogRef.afterClosed().subscribe(async(name: string) => {
       if(!!name && name != '')
       {
-        let d = new Date();
-        let item = {
-          name: name,
-          created: d.getFullYear() + "/" + d.getDate() + "/" + d.getMonth()
-        }
-  
-        this.projects.push(item)
+        this._spinner.show("Project is created...", new Promise<void>(async(resolve, reject) => {
+          let item: IProjectData = {
+            projectName: name,
+            creationDate: new Date(),
+            projectGuid: Guid.create().toString()
+          }
+          await this._prjStore.create(item);
+          resolve();
+        }));
       }
     })
+  }
 
+  public loadProject(prj: IProjectData)
+  {
+    this._spinner.show("Project is loading...", new Promise<void>(async(resolve, reject) => {
+      let project: IProjectData | undefined = await this._prjStore.loadProject(prj.projectGuid);
+      if(project)
+      {
+        if(!!this._framework.toolbar){
+          this._framework.toolbar.subtitle = prj.projectName
+        } 
+        this._btnStore.boxButton.click();
+      }
+      resolve();
+    }))
+  }
+
+  public formatDate(pDate: Date)
+  {
+    pDate = new Date(pDate);
+    return pDate.getFullYear() + "/" + pDate.getMonth() + "/" + pDate.getDate();
+  }
+
+  private isAuthorized()
+  {
+    let role: string = this._auth.getUserRole();
+    console.log(role)
   }
 }

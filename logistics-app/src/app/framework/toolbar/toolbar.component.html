@@ -2,7 +2,10 @@
   <button mat-icon-button (click)="toggleNavRail()" class="mr-2">
     <mat-icon>menu</mat-icon>
   </button>
-  <span class="flex flex-grow justify-start">{{title}}</span>
+  <section class="flex flex-col flex-grow items-start">
+    <span>{{title}}</span>
+    <span class="text-sm">{{subtitle}}</span>
+  </section>
   <button mat-icon-button *ngIf="toolbarButtons.length > 0" [mat-menu-trigger-for]="menu">
     <mat-icon>settings</mat-icon>
   </button>

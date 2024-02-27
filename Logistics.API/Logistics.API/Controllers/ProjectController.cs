@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
-   //[Authorize]
+   [Authorize]
    [ApiController]
    [Route("[controller]")]
    public class ProjectController : ControllerBase

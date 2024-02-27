@@ -1,7 +1,7 @@
 <mat-drawer-container class="h-full w-full" autosize [hasBackdrop]="true">
-  <mat-drawer #drawer mode="over" class="min-w-[200px]">
+  <mat-drawer #drawer mode="over" class="min-w-[200px]" [autoFocus]="false">
     <div *ngFor="let item of navRailItems">
-      <button mat-button (click)="navigateToRoute(item.route)" class="w-full">{{item.name}}</button>
+      <button mat-button (click)="itemClicked(item)" class="w-full">{{item.name}}</button>
     </div>
   </mat-drawer>
 
