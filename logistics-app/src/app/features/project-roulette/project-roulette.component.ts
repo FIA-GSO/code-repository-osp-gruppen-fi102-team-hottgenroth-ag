@@ -38,7 +38,7 @@ export class ProjectRouletteComponent {
     
   }
 
-  public getSortedProjects()
+  public getSortedProjects(): IProjectData[]
   {
     if(this.sortedBy === 'alphabet')
     {
@@ -48,7 +48,7 @@ export class ProjectRouletteComponent {
     return this.projects.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
   }
 
-  public addProject()
+  public addProject(): void
   {
     if(this.isAuthorized())
     {
@@ -84,7 +84,7 @@ export class ProjectRouletteComponent {
     }
   }
 
-  public loadProject(prj: IProjectData)
+  public loadProject(prj: IProjectData): void
   {
     this._spinner.show("Project is loading...", new Promise<void>(async(resolve, reject) => {
       let project: IProjectData | undefined = await this._prjStore.loadProject(prj.projectGuid);
@@ -99,13 +99,13 @@ export class ProjectRouletteComponent {
     }))
   }
 
-  public formatDate(pDate: Date)
+  public formatDate(pDate: Date): string
   {
     pDate = new Date(pDate);
     return pDate.getFullYear() + "/" + pDate.getMonth() + "/" + pDate.getDate();
   }
 
-  private isAuthorized()
+  private isAuthorized(): boolean
   {
     let role: string = this._auth.getUserRole();
 
