@@ -36,21 +36,22 @@ export class LoginComponent {
   {
     if(!!this.userName && this.userName != "" || !!this.userPassword && this.userPassword != "")
     {
-      this._spinner.show();
-      try
-      {
-        let user: ILoginData = {
-          userEmail: this.userName,
-          password: this.userPassword
+      this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
+        try
+        {
+          let user: ILoginData = {
+            userEmail: this.userName,
+            password: this.userPassword
+          }
+          await this._loginService.login(user);
+          resolve();
         }
-        await this._loginService.login(user);
-        this._spinner.hide();
-      }
-      catch(err: any)
-      {
-        console.log(err)
-        this._spinner.hide();
-      }
+        catch(err: any)
+        {
+          console.log(err)
+          reject();
+        }
+      }));
     }
   }
 }

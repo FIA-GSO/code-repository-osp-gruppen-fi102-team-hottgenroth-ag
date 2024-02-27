@@ -4,6 +4,7 @@ import { LoginPageComponent } from '../pages/login-page/login-page.component';
 import { ProjectPageComponent } from '../pages/project-page/project-page.component';
 import { AuthGuard } from '../services/authentication/authguard';
 import { RegisterPageComponent } from '../pages/register-page/register-page.component';
+import { TransportBoxPageComponent } from '../pages/transport-box-page/transport-box-page.component';
 
 export const routes: Routes = [
     {
@@ -19,6 +20,11 @@ export const routes: Routes = [
         {
           path: "projects",
           component: ProjectPageComponent,
+          canActivate: [AuthGuard]
+        },
+        {
+          path: "transportbox",
+          component: TransportBoxPageComponent,
           canActivate: [AuthGuard]
         }
       ]

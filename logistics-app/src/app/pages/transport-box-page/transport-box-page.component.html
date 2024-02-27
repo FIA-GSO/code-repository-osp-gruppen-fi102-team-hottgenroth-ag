@@ -1,0 +1,19 @@
+
+<mat-tab-group class="h-full" #grp>
+  <mat-tab [label]="'Transportbox'">
+    <mat-card appearance="outlined" class="h-[calc(100%-16px)] m-2 !flex !flex-col">
+      <mat-card-header #head>
+        <mat-card-title>List of all tranport boxes</mat-card-title>
+        <mat-card-subtitle>
+          All transport boxes for project: 
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="!flex !flex-grow !overflow-auto">
+        <transport-box-list class="w-full" (boxSelection)="selectedBox = $event" (tabChange)="grp.selectedIndex = 1"></transport-box-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab [label]="'Details'" [disabled]="!!!selectedBox">
+    <transport-box-details [selectedBox]="selectedBox"></transport-box-details>
+  </mat-tab>
+</mat-tab-group>

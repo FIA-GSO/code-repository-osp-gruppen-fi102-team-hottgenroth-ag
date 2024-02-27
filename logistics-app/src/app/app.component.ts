@@ -34,13 +34,6 @@ export class AppComponent implements AfterViewInit
     
     }
 
-    if(!!this._framework.navigationRail)
-    {
-      this._framework.navigationRail.addNavRailItem("Projekte", "/");
-      // this._framework.navigationRail.addNavRailItem("Projekte", "/");
-
-    }
-
     let hasToken: boolean = this._loginService.hasToken();
     let isTokenValid: boolean = this._loginService.isTokenValid();
 
