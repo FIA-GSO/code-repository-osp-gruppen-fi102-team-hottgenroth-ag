@@ -4,4 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Logisitcs.DAL\Logisitcs.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
