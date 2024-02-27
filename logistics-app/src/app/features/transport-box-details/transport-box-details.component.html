@@ -1,8 +1,37 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" *ngIf="selectedBox" class="m-1">
   <mat-card-header>
-    <mat-card-title></mat-card-title>
+    <mat-card-title>{{selectedBox.description}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    {{selectedBox}}
+    <section class="flex flex-col gap-2 max-w-xl !mt-2">
+      <mat-form-field class="w-full">
+        <mat-label>description</mat-label>
+        <input matInput [value]="selectedBox.description">
+      </mat-form-field>
+      <section class="flex flex-row w-full gap-2">
+        <mat-form-field class="w-[calc(66.66%-4px)]">
+          <mat-label>box category</mat-label>
+          <mat-select [value]="selectedBox.boxCategory">
+            <mat-option></mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-[calc(33.33%-4px)] !min-w-24">
+          <mat-label>box number</mat-label>
+          <input matInput [value]="selectedBox.number">
+        </mat-form-field>
+      </section>
+      <mat-form-field>
+        <mat-label>location at home</mat-label>
+        <input matInput [value]="selectedBox.locationHome">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>location in transport</mat-label>
+        <input matInput [value]="selectedBox.locationTransport">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>location in deployment</mat-label>
+        <input matInput [value]="selectedBox.locationDeployment">
+      </mat-form-field>
+    </section>
   </mat-card-content>
 </mat-card>

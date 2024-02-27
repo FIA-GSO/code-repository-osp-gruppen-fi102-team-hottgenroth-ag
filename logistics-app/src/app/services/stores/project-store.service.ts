@@ -82,7 +82,7 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
     return undefined;
   }
 
-  /** Load a project in datamodel manager */
+  /** Load a project */
   public async loadProject(projectId: string): Promise<IProjectData | undefined> 
   {
     try 

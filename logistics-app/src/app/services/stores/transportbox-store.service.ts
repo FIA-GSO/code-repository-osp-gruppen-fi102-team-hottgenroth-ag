@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { BaseStoreService } from './base/base-store.service';
 import { environment } from '../../../environments/environment';
 import { RequestService } from '../request/request.service';
+import { ITransportBoxData } from '../../models/ITransportBoxData';
 
 @Injectable({ providedIn: 'root' })
-export class TransportboxStoreService extends BaseStoreService<any>
+export class TransportboxStoreService extends BaseStoreService<ITransportBoxData>
 {
   private readonly _serviceURL = environment.serviceURL + environment.transportboxServicePath;
 
@@ -14,23 +15,29 @@ export class TransportboxStoreService extends BaseStoreService<any>
 
   public async loadIntitalData(projectId: string): Promise<void> 
   {
-    if (this.getItems().length > 0) 
+    try
     {
-      this.clear();
+      if(this.getItems().length > 0) 
+      {
+        this.clear();
+      }
+
+      var items: ITransportBoxData[] = await this.request.get(this._serviceURL + "/all/" + projectId);
+      this.setItems(items);
+  
+      this.initialized = true;
     }
-
-    var items: any[] = await this.request.get(this._serviceURL + "/" + projectId);
-    this.setItems(items);
-
-    this.initialized = true;
+    catch(ex: any){
+      console.log(ex);
+    }
   }
 
   public async delete(itemID: string): Promise<boolean> {
     try {
-      var item: any | undefined = this.getById(itemID);
+      var item: ITransportBoxData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.delete(this._serviceURL + "/" + item.id);
+        await this.request.delete(this._serviceURL + "/" + item.boxGuid);
         this.removeItem(item);
 
         return true;
@@ -46,10 +53,10 @@ export class TransportboxStoreService extends BaseStoreService<any>
   /** Update an item in db */
   public async update(itemID: string): Promise<boolean> {
     try {
-      var item: any | undefined = this.getById(itemID);
+      var item: ITransportBoxData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.id, item);
+        await this.request.put(this._serviceURL + "/" + item.boxGuid, item);
         return true;
       }
     }
@@ -61,9 +68,9 @@ export class TransportboxStoreService extends BaseStoreService<any>
   }
 
   /** Create a new window in db and save it to store */
-  public async create(item: any): Promise<any | undefined> {
+  public async create(item: ITransportBoxData): Promise<ITransportBoxData | undefined> {
     try {
-      var data: any | undefined = await this.request.post(this._serviceURL, item);
+      var data: ITransportBoxData | undefined = await this.request.post(this._serviceURL, item);
 
       if (!!data) {
         this.addItem(data);
@@ -76,6 +83,11 @@ export class TransportboxStoreService extends BaseStoreService<any>
     }
 
     return undefined;
+  }
+
+  public override getById(id: string): ITransportBoxData | undefined
+  {
+    return this.getItems().find(p => p.boxGuid === id);
   }
 }
 
