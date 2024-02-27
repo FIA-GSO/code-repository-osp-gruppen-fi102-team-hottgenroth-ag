@@ -1,10 +1,9 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class Project 
+public partial class Project
 {
     public string ProjectGuid { get; set; }
 

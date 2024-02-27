@@ -1,10 +1,8 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class Transportbox 
+public partial class Transportbox
 {
     public string BoxGuid { get; set; }
 
@@ -19,6 +17,7 @@ public partial class Transportbox
     public string LocationHome { get; set; }
 
     public string LocationDeployment { get; set; }
+    public string BoxCategory { get; set; }
 
     public virtual ICollection<ArticleBoxAssignment> ArticleBoxAssignments { get; set; } = new List<ArticleBoxAssignment>();
 

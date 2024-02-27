@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace Logisitcs.BLL.Interfaces
+﻿namespace Logisitcs.BLL.Interfaces
 {
-    public interface IArticleBLL
+    public interface IArticleBll
     {
-
     }
 }

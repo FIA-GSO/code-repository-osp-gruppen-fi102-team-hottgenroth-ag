@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Logisitcs.BLL.Tests
+﻿namespace Logisitcs.BLL.Tests
 {
     public class Class1
     {

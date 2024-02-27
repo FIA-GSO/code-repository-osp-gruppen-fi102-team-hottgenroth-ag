@@ -1,17 +1,15 @@
 ﻿using Logisitcs.BLL.Interfaces;
 using Logisitcs.DAL.Interfaces;
-using System;
 
 namespace Logisitcs.BLL
 {
-    public class ArticleBLL: IArticleBLL
+    public class ArticleBll : IArticleBll
     {
-         IArticleDAL _DAL;
-         public ArticleBLL(IArticleDAL dal)
-         {
-            _DAL = dal;
-         }
+        private IArticleDAL _DAL;
 
-      
+        public ArticleBll(IArticleDAL dal)
+        {
+            _DAL = dal;
+        }
     }
 }

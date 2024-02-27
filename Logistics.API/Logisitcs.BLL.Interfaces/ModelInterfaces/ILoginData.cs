@@ -1,10 +1,8 @@
-﻿
-
-namespace Logisitcs.BLL.Interfaces.ModelInterfaces
+﻿namespace Logisitcs.BLL.Interfaces.ModelInterfaces
 {
-   public interface ILoginData
-   {
-      string UserEmail { get; set; }
-      string Password { get; set; }
-   }
+    public interface ILoginData
+    {
+        string UserEmail { get; set; }
+        string Password { get; set; }
+    }
 }
