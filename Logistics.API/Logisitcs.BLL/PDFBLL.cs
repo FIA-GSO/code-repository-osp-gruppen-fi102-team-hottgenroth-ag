@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Logisitcs.BLL
 {
-    public class PDFBLL: IPDFBLL
+    public class PDFBLL : IPDFBLL
     {
         IPDFDAL _DAL;
         public PDFBLL(IPDFDAL dal)

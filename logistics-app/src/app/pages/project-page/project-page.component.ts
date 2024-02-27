@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ProjectRouletteComponent } from '../../features/project-roulette/project-roulette.component';
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { ProjectStoreService } from '../../services/stores/project-store.service';
+import { IProjectData } from '../../models/IProjectData';
 
 @Component({
   selector: 'app-project-page',
@@ -13,9 +15,17 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './project-page.component.scss'
 })
 export class ProjectPageComponent {
-  sortedBy: 'date' | 'alphabet' = 'date';
+  public sortedBy: 'date' | 'alphabet' = 'date';
 
-  constructor(){}
+  private _prjStore: ProjectStoreService = inject(ProjectStoreService);
+
+  public get projects(): IProjectData[]
+  {
+    return this._prjStore.getItems();
+  }
+
+  constructor(){
+  }
   
   public toggleSorted(pSorting: 'date' | 'alphabet')
   {

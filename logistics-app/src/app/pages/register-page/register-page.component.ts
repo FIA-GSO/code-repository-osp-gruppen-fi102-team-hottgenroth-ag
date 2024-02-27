@@ -74,30 +74,28 @@ export class RegisterPageComponent {
     this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
       try
       {
-        var success: boolean = await this._registerService.register(this._loginData)
+        await this._registerService.register(this._loginData)
       
-        if(success)
+        resolve();
+        
+        const dialogRef = this._dialog.open(SharedDialogComponent,
         {
-          resolve();
-          const dialogRef = this._dialog.open(SharedDialogComponent,
-          {
-            data: {
-              icon: 'info',
-              title: "Success",
-              text: "The registration was successfull! You can log in now!",
-              okButtonText: "Close"
-            }
-          });
-    
-          if(!!this._dialogSubscription)
-          {
-            this._dialogSubscription.unsubscribe();
+          data: {
+            icon: 'info',
+            title: "Success",
+            text: "The registration was successfull! You can log in now!",
+            okButtonText: "Close"
           }
-    
-          this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
-            this._router.navigate(["/login"]);
-          })
+        });
+  
+        if(!!this._dialogSubscription)
+        {
+          this._dialogSubscription.unsubscribe();
         }
+  
+        this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
+          this._router.navigate(["/login"]);
+        });
       }
       catch(err: any)
       {

@@ -1,10 +1,8 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Logisitcs.DAL.Models;
 
-public partial class UserRole 
+public partial class UserRole
 {
     public long RoleId { get; set; }
 

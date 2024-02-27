@@ -45,10 +45,6 @@ export abstract class BaseStoreService<T>
     return this.getItems().find(f => (f as any).identifier === id);
   }
 
-  public getByGuid(guid: string) : T | undefined{
-    return this.getItems().find(f => (f as any).guid === guid);
-  }
-
   public abstract update(itemID: string): Promise<boolean>;
   public abstract delete(itemID: string): Promise<boolean>;
 

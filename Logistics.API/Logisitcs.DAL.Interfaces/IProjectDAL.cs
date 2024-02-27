@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace Logisitcs.DAL.Interfaces
+﻿namespace Logisitcs.DAL.Interfaces
 {
     public interface IProjectDAL
     {
-
     }
 }

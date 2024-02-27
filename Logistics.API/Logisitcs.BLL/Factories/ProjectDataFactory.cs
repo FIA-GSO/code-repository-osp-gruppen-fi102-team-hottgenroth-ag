@@ -15,7 +15,6 @@ namespace Logisitcs.BLL.Factories
                 CreationDate = project.CreationDate,
                 ProjectName = project.ProjectName
             };
-
         }
     }
 }

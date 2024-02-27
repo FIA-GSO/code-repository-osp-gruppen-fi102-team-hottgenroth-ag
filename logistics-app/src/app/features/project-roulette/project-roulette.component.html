@@ -17,10 +17,10 @@
         </mat-card-content>
       </mat-card>
       <ng-container *ngFor="let prj of getSortedProjects()">
-        <mat-card appearance="outlined" class="cursor-pointer min-w-48 max-w-48">
+        <mat-card appearance="outlined" class="cursor-pointer min-w-48 max-w-48" (click)="loadProject(prj)">
           <mat-card-header>
-            <mat-card-title>{{prj.name}}</mat-card-title>
-            <mat-card-subtitle>created: {{prj.created}}</mat-card-subtitle>
+            <mat-card-title>{{prj.projectName}}</mat-card-title>
+            <mat-card-subtitle>created: {{formatDate(prj.creationDate)}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
 
