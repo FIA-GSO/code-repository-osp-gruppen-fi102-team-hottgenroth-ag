@@ -12,6 +12,8 @@ import { NewPasswordFormComponent } from '../../features/register-password-form/
 import { ILoginData } from '../../models/ILoginData';
 import { AuthService } from '../../services/authentication/auth.service';
 import { MatIconModule } from '@angular/material/icon';
+import { SharedDialogComponent } from '../../framework/shared-dialog/shared-dialog.component';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 
 @Component({
   selector: 'app-register-page',
@@ -33,6 +35,7 @@ export class RegisterPageComponent {
   private _dialog: MatDialog = inject(MatDialog);
   private _router: Router = inject(Router);
   private _registerService: AuthService = inject(AuthService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
   private _loginData: ILoginData = this.createLoginData();
   
@@ -68,28 +71,40 @@ export class RegisterPageComponent {
 
   public async register()
   {
-    try
-    {
-      var success: boolean = await this._registerService.register(this._loginData)
-    
-      if(success)
+    this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
+      try
       {
-        // const dialogRef = this._dialog.open();
-  
-        // if(!!this._dialogSubscription)
-        // {
-        //   this._dialogSubscription.unsubscribe();
-        // }
-  
-        // this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
-        //   this._router.navigate(["/Login"]);
-        // })
+        var success: boolean = await this._registerService.register(this._loginData)
+      
+        if(success)
+        {
+          resolve();
+          const dialogRef = this._dialog.open(SharedDialogComponent,
+          {
+            data: {
+              icon: 'info',
+              title: "Success",
+              text: "The registration was successfull! You can log in now!",
+              okButtonText: "Close"
+            }
+          });
+    
+          if(!!this._dialogSubscription)
+          {
+            this._dialogSubscription.unsubscribe();
+          }
+    
+          this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
+            this._router.navigate(["/login"]);
+          })
+        }
       }
-    }
-    catch(err: any)
-    {
-      console.log(err)
-    } 
+      catch(err: any)
+      {
+        console.log(err);
+        reject();
+      } 
+    }))
   }
 
   private createLoginData(): ILoginData

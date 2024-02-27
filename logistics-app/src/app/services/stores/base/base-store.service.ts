@@ -30,7 +30,7 @@ export abstract class BaseStoreService<T>
 
   // Get last value without subscribing to the items$ observable (synchronously).
   public getItems(): T[] {
-    return this._source.getValue();
+    return !!this._source.getValue() ? this._source.getValue() : [];
   }
 
   /** Clear the whole store */

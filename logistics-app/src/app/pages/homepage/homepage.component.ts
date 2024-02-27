@@ -35,7 +35,13 @@ export class HomepageComponent {
     {
       this._framework.toolbar.addToolbarButton(this._btnStore.loginButton)
     }
-    
+
+    if(!!this._framework.navigationRail)
+    {
+      this._framework.navigationRail.addNavRailItem("Projects", "/");
+      this._framework.navigationRail.addNavRailItem("Transportbox", "/transportbox");
+    }
+
     this._projectStore.loadIntitalData();
 
   }

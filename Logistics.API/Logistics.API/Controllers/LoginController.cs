@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -46,14 +47,22 @@ namespace Logistics.API.Controllers
       public async Task<IActionResult> Register([FromBody] ILoginData login)
       {
          IActionResult response = Unauthorized();
-         var user = await _BLL.Register(login);
 
-         if (user != null)
+         try
          {
-            response = Ok();
-         }
+            var user = await _BLL.Register(login);
+         
+            if (user != null)
+            {
+               response = Ok();
+            }
 
-         return response;
+            return response;
+         }
+         catch(DuplicateNameException ex)
+         {
+            return BadRequest(ex);
+         }
       }
 
       [Authorize]
