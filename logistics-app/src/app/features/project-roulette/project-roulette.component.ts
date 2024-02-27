@@ -11,6 +11,9 @@ import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 import { FrameworkService } from '../../services/framework.service';
 import { ButtonStoreService } from '../../services/stores/button-store.service';
 import { AuthService } from '../../services/authentication/auth.service';
+import { eRole } from '../../models/enum/eRole';
+import { SharedDialogComponent } from '../../framework/shared-dialog/shared-dialog.component';
+import { IDialogData } from '../../models/IDialogData';
 
 @Component({
   selector: 'project-roulette',
@@ -47,30 +50,45 @@ export class ProjectRouletteComponent {
 
   public addProject()
   {
-    this.isAuthorized();
-    const dialogRef = this._dialog.open(AddNameDialogComponent);
-
-    dialogRef.afterClosed().subscribe(async(name: string) => {
-      if(!!name && name != '')
-      {
-        this._spinner.show("Project is created...", new Promise<void>(async(resolve, reject) => {
-          let item: IProjectData = {
-            projectName: name,
-            creationDate: new Date(),
-            projectGuid: Guid.create().toString()
-          }
-          await this._prjStore.create(item);
-          resolve();
-        }));
+    if(this.isAuthorized())
+    {
+      const dialogRef = this._dialog.open(AddNameDialogComponent);
+  
+      dialogRef.afterClosed().subscribe(async(name: string) => {
+        if(!!name && name != '')
+        {
+          this._spinner.show("Project is created...", new Promise<void>(async(resolve, reject) => {
+            let item: IProjectData = {
+              projectName: name,
+              creationDate: new Date(),
+              projectGuid: Guid.create().toString()
+            }
+            await this._prjStore.create(item);
+            resolve();
+          }));
+        }
+      })
+    }
+    else
+    {
+      var dialogData: IDialogData = {
+        icon: 'warning',
+        title:"Not authorized!",
+        text: "The role " + this._auth.getUserRole() + " isn´t authorized to create a new project!",
+        okButtonText: "Close",
+        hasCancelButton: false
       }
-    })
+      this._dialog.open(SharedDialogComponent, {
+        data: dialogData
+      })
+    }
   }
 
   public loadProject(prj: IProjectData)
   {
     this._spinner.show("Project is loading...", new Promise<void>(async(resolve, reject) => {
       let project: IProjectData | undefined = await this._prjStore.loadProject(prj.projectGuid);
-      if(project)
+      if(!!project)
       {
         if(!!this._framework.toolbar){
           this._framework.toolbar.subtitle = prj.projectName
@@ -90,6 +108,11 @@ export class ProjectRouletteComponent {
   private isAuthorized()
   {
     let role: string = this._auth.getUserRole();
-    console.log(role)
+
+    if(role == eRole.admin || role == eRole.keeper || role == eRole.leader)
+    {
+      return true;
+    }
+    return false;
   }
 }
