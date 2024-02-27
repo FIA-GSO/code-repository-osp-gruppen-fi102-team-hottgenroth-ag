@@ -1,13 +1,14 @@
 ﻿using Logisitcs.BLL.Interfaces;
 using Logisitcs.DAL.Interfaces;
-using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
 {
     public class PDFBLL : IPDFBLL
     {
-        IPDFDAL _DAL;
+        private IPDFDAL _DAL;
+
         public PDFBLL(IPDFDAL dal)
         {
             _DAL = dal;
@@ -22,6 +23,5 @@ namespace Logisitcs.BLL
 
             return result;
         }
-
     }
 }
