@@ -14,6 +14,7 @@ import { AuthService } from '../../services/authentication/auth.service';
 import { eRole } from '../../models/enum/eRole';
 import { SharedDialogComponent } from '../../framework/shared-dialog/shared-dialog.component';
 import { IDialogData } from '../../models/IDialogData';
+import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 
 @Component({
   selector: 'project-roulette',
@@ -27,7 +28,7 @@ export class ProjectRouletteComponent {
   @Input() sortedBy: 'date' | 'alphabet' = 'date';
 
   private _dialog: MatDialog = inject(MatDialog);
-  private _prjStore: ProjectStoreService = inject(ProjectStoreService);
+  private _logisticsStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
   private _framework: FrameworkService = inject(FrameworkService);
   private _btnStore: ButtonStoreService = inject(ButtonStoreService);
@@ -63,7 +64,7 @@ export class ProjectRouletteComponent {
               creationDate: new Date(),
               projectGuid: Guid.create().toString()
             }
-            await this._prjStore.create(item);
+            await this._logisticsStore.projectStore.create(item);
             resolve();
           }));
         }
@@ -87,7 +88,7 @@ export class ProjectRouletteComponent {
   public loadProject(prj: IProjectData): void
   {
     this._spinner.show("Project is loading...", new Promise<void>(async(resolve, reject) => {
-      let project: IProjectData | undefined = await this._prjStore.loadProject(prj.projectGuid);
+      let project: IProjectData | undefined = await this._logisticsStore.loadProject(prj.projectGuid);
       if(!!project)
       {
         if(!!this._framework.toolbar){

@@ -1,8 +1,8 @@
 <section class="!h-full">
   <mat-list class="w-full !overflow-auto !h-full">
-    @for (box of boxList; track box) 
+    @for (box of transportBoxes; track box) 
     {
-      <mat-list-item (click)="selectedBox = box;" [class.selected]="selectedBox === box">
+      <mat-list-item (click)="selectedBox = box;" [class.selected]="selectedBox?.boxGuid === box.boxGuid">
         <ng-container [ngTemplateOutlet]="box_item" [ngTemplateOutletContext]="{boxItem: box}"></ng-container>
       </mat-list-item>
     }
@@ -14,7 +14,7 @@
 
 <ng-template #box_item let-box="boxItem">
   <section class="flex flex-row justify-between items-center">
-    {{box}}
+    {{box.description}}
     <button mat-icon-button (click)="changeTab()">
       <mat-icon>chevron_right</mat-icon>
     </button>
