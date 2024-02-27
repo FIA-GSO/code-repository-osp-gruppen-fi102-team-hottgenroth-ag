@@ -15,6 +15,5 @@ namespace Logisitcs.BLL.Factories
                 ProjectName = projectData.ProjectName
             };
         }
-
     }
 }

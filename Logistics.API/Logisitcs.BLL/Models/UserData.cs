@@ -3,8 +3,8 @@ using System;
 
 namespace Logisitcs.BLL.Models
 {
-   public class UserData : IUserData
-   {
+    public class UserData : IUserData
+    {
         public UserData(Guid userId, string userEmail, string role)
         {
             UserEmail = userEmail;
@@ -13,7 +13,7 @@ namespace Logisitcs.BLL.Models
         }
 
         public string UserEmail { get; }
-        public Guid UserId { get;  }
+        public Guid UserId { get; }
         public string Role { get; }
-   }
+    }
 }

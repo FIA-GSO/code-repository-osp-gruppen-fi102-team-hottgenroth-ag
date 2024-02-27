@@ -2,7 +2,6 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
-using Logisitcs.DAL.Interfaces;
 using Logisitcs.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
 {
-    public class ProjectBLL: IProjectBLL
+    public class ProjectBll : IProjectBll
     {
         private readonly ProjectDataFactory projectDataFactory;
         private readonly ProjectFactory projectFactory;
-         public ProjectBLL()
-         {
+
+        public ProjectBll()
+        {
             projectDataFactory = new ProjectDataFactory();
             projectFactory = new ProjectFactory();
         }
@@ -39,7 +39,7 @@ namespace Logisitcs.BLL
                 Project project = DBCommands.GetProject(guid.ToString());
                 IProjectData projectData = projectDataFactory.Create(project);
                 return projectData;
-                });
+            });
         }
 
         public async Task<IProjectData> AddProject(IProjectData projectData)
@@ -52,13 +52,13 @@ namespace Logisitcs.BLL
                 return projectDataResult;
             });
         }
-      
+
         public async Task<bool> UpdateProject(IProjectData projectData)
         {
             return await Task.Run(() =>
-            {                
+            {
                 var dbProject = DBCommands.GetProject(projectData.ProjectGuid.ToString());
-                if(dbProject == null)
+                if (dbProject == null)
                 {
                     return false;
                 }
@@ -73,7 +73,7 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Project project = DBCommands.GetProject(guid.ToString());
-                if(project == null)
+                if (project == null)
                 {
                     return false;
                 }

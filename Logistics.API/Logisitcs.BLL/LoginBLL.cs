@@ -8,18 +8,17 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-
 namespace Logisitcs.BLL
 {
-    public class LoginBLL: ILoginBLL
+    public class LoginBll : ILoginBll
     {
-         public async Task<IUserData> Login(ILoginData loginData)
-         {
+        public async Task<IUserData> Login(ILoginData loginData)
+        {
             return await Task.Run(() =>
             {
                 IUserData userData = null;
                 User user = DBCommands.GetUserByMail(loginData.UserEmail);
-                if(user != null)
+                if (user != null)
                 {
                     UserRole userRole = DBCommands.GetUserRole((int)user.UserRoleId);
                     userData = new UserData(Guid.Parse(user.UserId), user.UserEmail, userRole.Role);
@@ -28,25 +27,25 @@ namespace Logisitcs.BLL
                         return userData;
                     }
                 }
-               return null;
+                return null;
             });
         }
 
-         public async Task<IUserData> Register(ILoginData user)
-         {
-            if(DBCommands.GetUserByMail(user.UserEmail)!= null)
+        public async Task<IUserData> Register(ILoginData loginData)
+        {
+            if (DBCommands.GetUserByMail(loginData.UserEmail) != null)
             {
                 throw new DuplicateNameException();
             }
-            user.Password = PasswordHashHelper.Hash(user.Password);
+            loginData.Password = PasswordHashHelper.Hash(loginData.Password);
             Guid userId = Guid.NewGuid();
-            int userRoleId = 3;
+            int userRoleId = 5;
             User userDAL = new()
             {
                 UserId = userId.ToString(),
-                UserEmail = user.UserEmail,
-                UserPassword = user.Password,
-                UserRoleId = userRoleId,                
+                UserEmail = loginData.UserEmail,
+                UserPassword = loginData.Password,
+                UserRoleId = userRoleId,
             };
             return await Task.Run(() =>
             {
@@ -60,11 +59,19 @@ namespace Logisitcs.BLL
                 }
                 return userData;
             });
-         }
+        }
 
-         public async Task<bool> UpdateRole(IUserData user)
-         {
+        public async Task<bool> UpdateRole(IUserData user)
+        {
+            User userDB = DBCommands.GetUser(user.UserId.ToString());
+            if (userDB == null)
+            {
+                return false;
+            }
+            int userRoleId = DBCommands.GetUserRoleByName(user.Role);
+            userDB.UserRoleId = userRoleId;
+            DBCommands.UpdateUser(userDB);
             return true;
-         }
+        }
     }
 }
