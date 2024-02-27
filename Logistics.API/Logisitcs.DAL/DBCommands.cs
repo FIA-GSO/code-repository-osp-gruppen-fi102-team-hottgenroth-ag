@@ -77,7 +77,7 @@ public static class DBCommands
 
     #region Project
 
-    public static IEnumerable<Project> GetAllTProjects()
+    public static IEnumerable<Project> GetAllProjects()
     {
         var db = new LogisticsDbContext();
         return db.Projects.ToList();
