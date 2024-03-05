@@ -17,8 +17,12 @@ export class PdfService {
   constructor() {   }
 
   public async createPdf(jsonData: any): Promise<any> {
-    var p: IPdfData = { transportbox: this._logisticStore.transportboxStore.getItems() }
-    
+    const url = this._serviceURL;
+
+    var transferObject: IPdfData = { 
+      transportbox: this._logisticStore.transportboxStore.getItems(),
+      project: this._logisticStore.projectStore.getLoadedProject()
+    }
 
     var allBoxes = this._logisticStore.transportboxStore.getItems()
     var projectInfo = this._logisticStore.projectStore.getLoadedProject()
@@ -26,10 +30,8 @@ export class PdfService {
     console.log(allBoxes)
     console.log(projectInfo)
 
-    const url = this._serviceURL;
-
     try {
-      const pdfData = await this._request.post(url, p);
+      const pdfData = await this._request.post(url, transferObject);
       return pdfData;
     } catch (error) {
       console.error('Error creating PDF:', error);

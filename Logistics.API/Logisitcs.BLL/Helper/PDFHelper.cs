@@ -17,6 +17,7 @@ namespace Logisitcs.BLL.Helper
     public class PDFHelper
     {
         private int y_Achse = 0;
+        public string projectName = "Testprojekt";
 
         public async Task<string> Create(object jsonData)
         {
@@ -25,7 +26,7 @@ namespace Logisitcs.BLL.Helper
             return pdfFileName;
         }
 
-        public async Task<byte[]> Create(List<ITransportBoxData> box)
+        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -40,11 +41,11 @@ namespace Logisitcs.BLL.Helper
                         var pageSize = pdf.GetNumberOfPages();
 
                         // Register the event handler for headers and footers
-                        pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new PdfHeaderFooterHandler());
+                        pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new PdfHeaderFooterHandler(project));
 
                         // Box hinzufügen
                         // AddBox(document, pdf, pageSize);
-                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse);
+                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse, box[0]);
 
                         pdf.AddNewPage();
 
@@ -56,7 +57,8 @@ namespace Logisitcs.BLL.Helper
             }
         }
 
-        private PdfPage AddBox(Document document, PdfDocument pdf, int pageNumber, int y_Achse)
+        private PdfPage AddBox(Document document, PdfDocument pdf, int pageNumber, 
+            int y_Achse, ITransportBoxData box)
         {
             PdfPage pdfPage;
 
@@ -77,20 +79,42 @@ namespace Logisitcs.BLL.Helper
             float fontSize = 12;
 
             // Texte für Boxnummer und Boxkategorie
-            string boxNumber = "Box (number)";
-            string boxCategory = "Type: (BoxCategory)";
+            string boxNumber = "Box " + box.Number;
+            string boxCategory = "Type: " + box.BoxCategory;
 
             // Textbreite berechnen
             float textWidth = font.GetWidth(boxCategory, fontSize);
 
+            // BoxNumber
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
             .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
-            .ShowText(boxNumber + " - " + "ProjectnameVariable" + boxCategory)
+            .ShowText(boxNumber)
             .EndText();
 
+            // BoxCategory
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
             .MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
             .ShowText(boxCategory)
+            .EndText();
+
+            // Description
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetLeft() + 30, pageSize.GetTop() - 90).SetColor(new DeviceRgb(128, 128, 128), true)
+            .ShowText(box.Description)
+            .EndText();
+
+            // Article Linke Seite
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetLeft() + 30, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
+            .ShowText("- ArticleName Status: Status ")
+            .EndText();
+
+            textWidth = font.GetWidth("Anzahl: zahl Einheit: unit ", fontSize);
+
+            // Article Rechte Seite
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
+            .ShowText("Anzahl: zahl Einheit: unit ")
             .EndText();
 
             // Zeichnen der Linie unter Boxnummer und Boxkategorie
@@ -102,6 +126,13 @@ namespace Logisitcs.BLL.Helper
 
     public class PdfHeaderFooterHandler : IEventHandler
     {
+        private readonly IProjectData _projectData;
+
+        public PdfHeaderFooterHandler(IProjectData projectData)
+        {
+            _projectData = projectData;
+        }
+
         public void HandleEvent(Event @event)
         {
             PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
@@ -120,7 +151,7 @@ namespace Logisitcs.BLL.Helper
             float fontSize = 12;
 
             // Textbreite berechnen
-            float textWidth = font.GetWidth(formattedDate, fontSize);
+            float textWidth = font.GetWidth("Print Date: " + formattedDate, fontSize);
 
             // Position für den Text berechnen, so dass er am rechten Rand endet
             float textX = pageSize.GetRight() - 20 - textWidth; // 20 ist der Rand, den Sie auch für die Linie verwendet haben
@@ -130,14 +161,14 @@ namespace Logisitcs.BLL.Helper
             pdfCanvas.BeginText()
                 .SetFontAndSize(font, fontSize)
                 .MoveText(textX, textY)
-                .ShowText(formattedDate)
+                .ShowText("Print Date: " + formattedDate)
                 .EndText();
 
             // Header
             // Zeile Projektname
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
                 .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 30)
-                .ShowText("Projectname - " + "ProjectnameVariable")
+                .ShowText("Projectname - " + _projectData.ProjectName)
                 .EndText();
 
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
@@ -149,7 +180,7 @@ namespace Logisitcs.BLL.Helper
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 9)
             .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 40)
             .SetColor(new DeviceRgb(128, 128, 128), true)
-            .ShowText("Creation Date: " + "creationDateVariable")
+            .ShowText("Creation Date: " + _projectData.CreationDate)
             .EndText();
 
             // Erste Linie
@@ -158,7 +189,7 @@ namespace Logisitcs.BLL.Helper
             // Footer
             pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
                 .MoveText(pageSize.GetWidth() / 2 - 15, pageSize.GetBottom() + 10)
-                .ShowText("Seite " + pdf.GetPageNumber(page))
+                .ShowText("Page " + pdf.GetPageNumber(page))
                 .EndText();
             pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetBottom() + 25).LineTo(pageSize.GetRight() - 20, pageSize.GetBottom() + 25).Stroke();
 

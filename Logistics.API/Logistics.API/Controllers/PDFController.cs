@@ -30,7 +30,7 @@ namespace Logistics.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PDF_Data data)
         {
-            var result = await BLL.Create(data.transportbox);
+            var result = await BLL.Create(data.transportbox, data.project);
 
             if (result == null)
             {
@@ -57,4 +57,5 @@ namespace Logistics.API.Controllers
 public struct PDF_Data
 {
     public List<ITransportBoxData> transportbox { get; set; }
+    public IProjectData project { get; set; }
 }
