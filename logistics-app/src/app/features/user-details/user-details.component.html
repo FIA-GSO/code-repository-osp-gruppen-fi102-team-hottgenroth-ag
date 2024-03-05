@@ -1,0 +1,12 @@
+<mat-card appearance="outlined" *ngIf="!!userData">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <button mat-mini-fab [ngStyle]="getColor(userData.userEmail)" 
+      class="icon-user mat-elevation-z0 pointer-events-none" *ngIf="!!userData.userEmail">
+        {{getInitials(userData.userEmail)}}
+      </button>
+    </div>
+    <mat-card-title>{{userData.userEmail}}</mat-card-title>
+    <mat-card-subtitle>{{userData.role}}</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>
