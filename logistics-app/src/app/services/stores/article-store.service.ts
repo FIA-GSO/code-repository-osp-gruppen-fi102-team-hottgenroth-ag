@@ -14,16 +14,22 @@ export class ArticleStoreService extends BaseStoreService<any>
 
   public async loadIntitalData(boxId: string): Promise<void> 
   {
-
-    if (this.getItems().length > 0) 
+    try
     {
-      this.clear();
+      if (this.getItems().length > 0) 
+      {
+        this.clear();
+      }
+  
+      var items: any[] = await this.request.get(this._serviceURL + "/all/" + boxId);
+      this.setItems(items);
+  
+      this.initialized = true;
     }
-
-    var items: any[] = await this.request.get(this._serviceURL + "/" + boxId);
-    this.setItems(items);
-
-    this.initialized = true;
+    catch(err: any)
+    {
+      console.log(err);
+    }
   }
 
   public async delete(itemID: string): Promise<boolean> {

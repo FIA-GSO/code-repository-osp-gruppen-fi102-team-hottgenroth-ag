@@ -6,6 +6,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { ProjectStoreService } from '../../services/stores/project-store.service';
 import { IProjectData } from '../../models/IProjectData';
+import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 
 @Component({
   selector: 'app-project-page',
@@ -17,11 +18,11 @@ import { IProjectData } from '../../models/IProjectData';
 export class ProjectPageComponent {
   public sortedBy: 'date' | 'alphabet' = 'date';
 
-  private _prjStore: ProjectStoreService = inject(ProjectStoreService);
+  private _logisticsStore: LogisticsStoreService = inject(LogisticsStoreService);
 
   public get projects(): IProjectData[]
   {
-    return this._prjStore.getItems();
+    return this._logisticsStore.projectStore.getItems();
   }
 
   constructor(){

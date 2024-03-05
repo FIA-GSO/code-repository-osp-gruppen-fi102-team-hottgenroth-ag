@@ -43,21 +43,21 @@ export class LogisticsStoreService
     this._articleStore = this.articleStoreService;
   }
 
-  public async loadProject(projectId: string): Promise<boolean>
+  public async loadProject(projectId: string): Promise<IProjectData | undefined>
   {
     if(!this._initialized)
     {
-      return false;
+      return undefined;
     }
 
     var prj: IProjectData | undefined = await this._projectStore.loadProject(projectId);
     if(!!prj)
     {
-      await this._transportboxStore.loadIntitalData(prj.id);
-      return true;
+      await this._transportboxStore.loadIntitalData(prj.projectGuid);
+      return prj;
     }
 
-    return false;
+    return undefined;
   }
 
   public async loadArticles(boxId: string): Promise<boolean>

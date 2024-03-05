@@ -40,8 +40,13 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Transportbox transportbox = DBCommands.GetTransportbox(guid.ToString());
-                ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
-                return transportboxData;
+                /*If no box is found, return null*/
+                if(transportbox != null)
+                {
+                     ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
+                     return transportboxData;
+                }
+                return null;
             });
         }
 
