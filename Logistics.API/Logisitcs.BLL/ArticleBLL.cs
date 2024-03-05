@@ -67,7 +67,7 @@ namespace Logisitcs.BLL
             return articelData;
         }
 
-        public void AddArticle(IArticleData article)
+        public bool AddArticle(IArticleData article)
         {
             ArticleAndBoxAssignment articleAndBoxAssignment = new ArticleAndBoxAssignment
             (Guid.NewGuid().ToString(),
@@ -81,10 +81,18 @@ namespace Logisitcs.BLL
              DBCommands.GetStatusByName(article.Status),
              article.Quantity,
              article.ExpiryDate.ToString());
-            DBCommands.AddArticleAndBoxAssignment(articleAndBoxAssignment);
+            try
+            {
+                DBCommands.AddArticleAndBoxAssignment(articleAndBoxAssignment);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void UpdateArticle(IArticleData article)
+        public bool UpdateArticle(IArticleData article)
         {
             ArticleAndBoxAssignment articleAndBoxAssignment = new ArticleAndBoxAssignment
             (article.ArticleGuid.ToString(),
@@ -98,12 +106,28 @@ namespace Logisitcs.BLL
              DBCommands.GetStatusByName(article.Status),
              article.Quantity,
              article.ExpiryDate.ToString());
-            DBCommands.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
+            try
+            {
+                DBCommands.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void DeleteArticle(IArticleData article)
+        public bool DeleteArticle(IArticleData article)
         {
-            DBCommands.DeleteArticleAndBoxAssignment(article.ArticleGuid.ToString(), article.ArticleBoxAssignment.ToString());
+            try
+            {
+                DBCommands.DeleteArticleAndBoxAssignment(article.ArticleGuid.ToString(), article.ArticleBoxAssignment.ToString());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
