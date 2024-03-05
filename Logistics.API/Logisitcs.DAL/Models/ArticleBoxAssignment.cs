@@ -18,7 +18,7 @@ public partial class ArticleBoxAssignment
 
     public long? Quantity { get; set; }
 
-    public byte[] ExpiryDate { get; set; }
+    public string ExpiryDate { get; set; }
 
     public virtual Article Article { get; set; }
 

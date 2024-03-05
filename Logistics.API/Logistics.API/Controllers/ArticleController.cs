@@ -1,4 +1,6 @@
 using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using Logisitcs.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
@@ -17,31 +19,56 @@ namespace Logistics.API.Controllers
         [HttpGet("all/{boxId}")]
         public async Task<IActionResult> GetAll(string boxId)
         {
-            return Ok();
+            IEnumerable<IArticleData> result = BLL.GetAllArticlesByBoxId(boxId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(Guid boxId, Guid articleId)
         {
-            return Ok();
+            IArticleData result = BLL.GetArticle(boxId.ToString(), articleId.ToString());
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] object data)
+        public async Task<IActionResult> Create([FromBody] IArticleData data)
         {
-            return Ok();
+            var result = BLL.AddArticle(data);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] object data)
+        public async Task<IActionResult> Update([FromBody] IArticleData data)
         {
-            return Ok();
+            var result = BLL.UpdateArticle(data);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok();
+            var result = BLL.DeleteArticle(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }

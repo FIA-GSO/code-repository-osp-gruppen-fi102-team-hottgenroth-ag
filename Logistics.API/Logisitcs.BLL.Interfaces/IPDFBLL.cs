@@ -6,6 +6,6 @@ namespace Logisitcs.BLL.Interfaces
 {
     public interface IPDFBLL
     {
-        Task<byte[]> Create(List<ITransportBoxData> data);
+        Task<byte[]> Create(List<ITransportBoxData> data, IProjectData project);
     }
 }
