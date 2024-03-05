@@ -92,9 +92,9 @@ public static class DBCommands
         UpdateArticleBoxAssignment(articleBoxAssignment);
     }
 
-    public static void DeleteArticleAndBoxAssignment(string articleGuid, string assignmentGuid)
+    public static void DeleteArticleAndBoxAssignment(string articleGuid)
     {
-        DeleteArticleBoxAssignments(assignmentGuid);
+        DeleteArticleBoxAssignments(articleGuid);
         DeleteArticles(articleGuid);
     }
 
@@ -147,7 +147,7 @@ public static class DBCommands
     public static void DeleteArticleBoxAssignments(string guid)
     {
         using var db = new LogisticsDbContext();
-        var article = db.ArticleBoxAssignments.Find(guid);
+        ArticleBoxAssignment article = db.ArticleBoxAssignments.SingleOrDefault(x => x.ArticleGuid == guid);
         if (article == null) return;
         db.ArticleBoxAssignments.Remove(article);
         db.SaveChanges();

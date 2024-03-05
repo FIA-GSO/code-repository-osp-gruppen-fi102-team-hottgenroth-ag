@@ -1,4 +1,5 @@
 ﻿using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Logisitcs.BLL.Interfaces
@@ -13,6 +14,6 @@ namespace Logisitcs.BLL.Interfaces
 
         bool UpdateArticle(IArticleData article);
 
-        bool DeleteArticle(IArticleData article);
+        bool DeleteArticle(Guid id);
     }
 }

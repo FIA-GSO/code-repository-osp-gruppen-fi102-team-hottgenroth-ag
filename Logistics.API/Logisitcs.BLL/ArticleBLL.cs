@@ -117,11 +117,11 @@ namespace Logisitcs.BLL
             }
         }
 
-        public bool DeleteArticle(IArticleData article)
+        public bool DeleteArticle(Guid id)
         {
             try
             {
-                DBCommands.DeleteArticleAndBoxAssignment(article.ArticleGuid.ToString(), article.ArticleBoxAssignment.ToString());
+                DBCommands.DeleteArticleAndBoxAssignment(id.ToString());
                 return true;
             }
             catch

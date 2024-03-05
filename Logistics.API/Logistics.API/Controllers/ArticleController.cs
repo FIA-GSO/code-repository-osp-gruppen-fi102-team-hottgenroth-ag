@@ -61,9 +61,9 @@ namespace Logistics.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(IArticleData data)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var result = BLL.DeleteArticle(data);
+            var result = BLL.DeleteArticle(id);
             if (!result)
             {
                 return NotFound();
