@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { BaseStoreService } from './base/base-store.service';
 import { environment } from '../../../environments/environment';
 import { RequestService } from '../request/request.service';
+import { IArticleData } from '../../models/IArticleData';
 
 @Injectable({ providedIn: 'root' })
-export class ArticleStoreService extends BaseStoreService<any>
+export class ArticleStoreService extends BaseStoreService<IArticleData>
 {
   private readonly _serviceURL = environment.serviceURL + environment.articleServicePath;
 
@@ -21,7 +22,7 @@ export class ArticleStoreService extends BaseStoreService<any>
         this.clear();
       }
   
-      var items: any[] = await this.request.get(this._serviceURL + "/all/" + boxId);
+      var items: IArticleData[] = await this.request.get(this._serviceURL + "/all/" + boxId);
       this.setItems(items);
   
       this.initialized = true;
@@ -34,10 +35,10 @@ export class ArticleStoreService extends BaseStoreService<any>
 
   public async delete(itemID: string): Promise<boolean> {
     try {
-      var item: any | undefined = this.getById(itemID);
+      var item: IArticleData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.delete(this._serviceURL + "/" + item.id);
+        await this.request.delete(this._serviceURL + "/" + item.articleGuid);
         this.removeItem(item);
 
         return true;
@@ -53,10 +54,10 @@ export class ArticleStoreService extends BaseStoreService<any>
   /** Update an item in db */
   public async update(itemID: string): Promise<boolean> {
     try {
-      var item: any | undefined = this.getById(itemID);
+      var item: IArticleData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.id, item);
+        await this.request.put(this._serviceURL + "/" + item.articleGuid, item);
         return true;
       }
     }
@@ -68,9 +69,9 @@ export class ArticleStoreService extends BaseStoreService<any>
   }
 
   /** Create a new window in db and save it to store */
-  public async create(item: any): Promise<any | undefined> {
+  public async create(item: IArticleData): Promise<any | undefined> {
     try {
-      var data: any | undefined = await this.request.post(this._serviceURL, item);
+      var data: IArticleData | undefined = await this.request.post(this._serviceURL, item);
 
       if (!!data) {
         this.addItem(data);
@@ -83,6 +84,11 @@ export class ArticleStoreService extends BaseStoreService<any>
     }
 
     return undefined;
+  }
+
+  public override getById(id: string): IArticleData | undefined
+  {
+    return this.getItems().find(p => p.articleGuid === id);
   }
 }
 
