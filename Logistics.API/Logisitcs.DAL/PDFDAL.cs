@@ -1,6 +1,13 @@
-﻿using iText.Kernel.Pdf;
+﻿using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Events;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
+using iText.Layout.Properties;
 using Logisitcs.DAL.Interfaces;
 using System;
 using System.IO;
@@ -10,60 +17,155 @@ namespace Logisitcs.DAL
 {
     public class PDFDAL : IPDFDAL
     {
+        int y_Achse = 0;
         public async Task<string> Create(object jsonData)
         {
-            string pdfFileName = "example.pdf";
+            string pdfFileName = "Table.pdf";
 
             return pdfFileName;
         }
 
         public async Task<byte[]> Create(string jsonData)
         {
-            // JSON-Daten deserialisieren
-            //var data = JsonConvert.DeserializeObject<MyData>(jsonData);
-
-            // Erstellen eines MemoryStreams
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                // Erstellen eines PDF-Dokuments
-                PdfDocument pdfDocument = new PdfDocument(new PdfWriter(memoryStream));
+                using (PdfWriter writer = new PdfWriter(memoryStream))
+                {
+                    using (PdfDocument pdf = new PdfDocument(writer))
+                    {
+                        // Setzen des Seitenrandes auf 2 cm
+                        Document document = new Document(pdf, PageSize.A4);
+                        document.SetMargins(20, 20, 20, 20);
 
-                // Erstellen eines Layout-Dokuments
-                Document document = new Document(pdfDocument);
+                        var pageSize = pdf.GetNumberOfPages();
 
-                // Hinzufügen von Inhalten zum Layout-Dokument
-                document.Add(new Paragraph("Hello World"));
-                //document.Add(new Paragraph(data.SomeProperty)); // Beispiel für die Verwendung von Daten aus dem JSON
+                        // Register the event handler for headers and footers
+                        pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new PdfHeaderFooterHandler());
 
-                // Schließen des Layout-Dokuments
-                document.Close();
+                        // Box hinzufügen
+                        // AddBox(document, pdf, pageSize);
+                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse);
 
-                // Rückgabe des PDFs als Bytearray
+                        pdf.AddNewPage();
+
+                        document.Close();
+                    }
+                }
+
                 return memoryStream.ToArray();
             }
         }
 
-        // Hilfsmethode zum Generieren von zufälligem Text für Paragraphen
-        private string GenerateRandomText()
+        private PdfPage AddBox(Document document, PdfDocument pdf, int pageNumber, int y_Achse)
         {
-            string[] words = { "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit" };
-            Random random = new Random();
-            int numberOfWords = random.Next(5, 20); // Zufällige Anzahl von Wörtern pro Absatz
-            string paragraphText = "";
+            PdfPage pdfPage;
 
-            for (int i = 0; i < numberOfWords; i++)
+            if (pdf.GetNumberOfPages() > 0)
             {
-                int index = random.Next(words.Length);
-                paragraphText += words[index] + " ";
+                pdfPage = pdf.GetLastPage();
+            }
+            else
+            {
+                pdfPage = pdf.AddNewPage();
             }
 
-            return paragraphText;
+            PdfCanvas pdfCanvas = new PdfCanvas(pdfPage);
+            Rectangle pageSize = pdfPage.GetPageSize();
+
+            // Schrift und Größe setzen
+            PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+            float fontSize = 12;
+
+
+            // Texte für Boxnummer und Boxkategorie
+            string boxNumber = "Box (number)";
+            string boxCategory = "Type: (BoxCategory)";
+
+            // Textbreite berechnen
+            float textWidth = font.GetWidth(boxCategory, fontSize);
+
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
+            .ShowText(boxNumber + " - " + "ProjectnameVariable" + boxCategory)
+            .EndText();
+
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
+            .ShowText(boxCategory)
+            .EndText();
+
+
+            // Zeichnen der Linie unter Boxnummer und Boxkategorie
+            // pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetBottom() + 25).LineTo(pageSize.GetRight() - 20, pageSize.GetBottom() + 25).Stroke();
+
+            return pdfPage;
         }
+
     }
 
-    public class MyData
+    public class PdfHeaderFooterHandler : IEventHandler
     {
-        public string SomeProperty { get; set; }
-        // Weitere Eigenschaften nach Bedarf
+        public void HandleEvent(Event @event)
+        {
+            PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
+            PdfDocument pdf = docEvent.GetDocument();
+            PdfPage page = docEvent.GetPage();
+            Rectangle pageSize = page.GetPageSize();
+            PdfCanvas pdfCanvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
+
+            // Aktuelles Datum erhalten und formatieren
+            DateTime today = DateTime.Today;
+            string formattedDate = today.ToString("dd.MM.yyyy");
+            Console.WriteLine(formattedDate);
+
+            // Schrift und Größe setzen
+            PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+            float fontSize = 12;
+
+            // Textbreite berechnen
+            float textWidth = font.GetWidth(formattedDate, fontSize);
+
+            // Position für den Text berechnen, so dass er am rechten Rand endet
+            float textX = pageSize.GetRight() - 20 - textWidth; // 20 ist der Rand, den Sie auch für die Linie verwendet haben
+            float textY = pageSize.GetTop() - 30;
+
+            // Aktuelles Datum hinzufügen
+            pdfCanvas.BeginText()
+                .SetFontAndSize(font, fontSize)
+                .MoveText(textX, textY)
+                .ShowText(formattedDate)
+                .EndText();
+
+            // Header
+            // Zeile Projektname
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 30)
+                .ShowText("Projectname - " + "ProjectnameVariable")
+                .EndText();
+
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+            .MoveText(pageSize.GetRight() - 20, pageSize.GetTop() - 30)
+            .ShowText("")
+            .EndText();
+
+            // Zeile Erstelldatum
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 9)
+            .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 40)
+            .SetColor(new DeviceRgb(128, 128, 128), true)
+            .ShowText("Creation Date: " + "creationDateVariable")
+            .EndText();
+
+            // Erste Linie
+            pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetTop() - 45).LineTo(pageSize.GetRight() - 20, pageSize.GetTop() - 45).Stroke();
+
+            // Footer
+            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                .MoveText(pageSize.GetWidth() / 2 - 15, pageSize.GetBottom() + 10)
+                .ShowText("Seite " + pdf.GetPageNumber(page))
+                .EndText();
+            pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetBottom() + 25).LineTo(pageSize.GetRight() - 20, pageSize.GetBottom() + 25).Stroke();
+
+            pdfCanvas.Release();
+        }
     }
 }

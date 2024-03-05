@@ -10,7 +10,7 @@ import { LoadingSpinnerComponent } from './framework/loading-spinner/loading-spi
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ToolbarComponent, NavigationRailComponent, LoadingSpinnerComponent],
+  imports: [CommonModule, RouterOutlet, ToolbarComponent, NavigationRailComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

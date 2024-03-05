@@ -1,6 +1,8 @@
-﻿using Logisitcs.BLL.Interfaces;
+﻿using Logisitcs.BLL.Helper;
+using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL.Interfaces;
-using System.Text.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
@@ -8,18 +10,17 @@ namespace Logisitcs.BLL
     public class PDFBLL : IPDFBLL
     {
         private IPDFDAL _DAL;
+        private PDFHelper _pdfHelper;
 
         public PDFBLL(IPDFDAL dal)
         {
             _DAL = dal;
+            _pdfHelper = new PDFHelper();
         }
 
-        public async Task<byte[]> Create(object data)
+        public async Task<byte[]> Create(List<ITransportBoxData> data)
         {
-            // Serialisierung des Objekts in einen JSON-String
-            var jsonData = JsonSerializer.Serialize(data);
-
-            var result = await _DAL.Create(jsonData);
+            var result = await _pdfHelper.Create(data);
 
             return result;
         }

@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
+import { ITransportBoxData } from '../../models/ITransportBoxData';
+import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 
 @Component({
   selector: 'transport-box-list',
@@ -12,24 +15,34 @@ import {MatListModule} from '@angular/material/list';
   styleUrl: './transport-box-list.component.scss'
 })
 export class TransportBoxListComponent {
-  @Output() boxSelection: EventEmitter<string> = new EventEmitter<string>();
+  @Output() boxSelection: EventEmitter<ITransportBoxData> = new EventEmitter<ITransportBoxData>();
   @Output() tabChange: EventEmitter<void> = new EventEmitter<void>();
 
-  public boxList: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers','Bootss', 'Clogas', 'Loaferds', 'Moccasfins', 'Snseakers'];
-  public _selectedBox: string | undefined;
+  @Input() public transportBoxes: ITransportBoxData[] = [];
+  
+  public _selectedBox: ITransportBoxData | undefined;
 
+  private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
-  public set selectedBox(pBox: string | undefined)
+  public set selectedBox(pBox: ITransportBoxData | undefined)
   {
-    this._selectedBox = pBox;
-
-    if(!!this._selectedBox)
+    if(this._selectedBox != pBox)
     {
-      this.boxSelection.emit(this._selectedBox);
+      this._selectedBox = pBox;
+  
+      this._spinner.show("Transportbox is loading...", new Promise<void>(async(resolve, reject) => {
+        if(!!this._selectedBox)
+        {
+          await this._logisticStore.loadArticles(this._selectedBox.boxGuid)
+          this.boxSelection.emit(this._selectedBox);
+          resolve();
+        }
+      }));
     }
   }
 
-  public get selectedBox(): string | undefined
+  public get selectedBox(): ITransportBoxData | undefined
   {
     return this._selectedBox;
   }

@@ -5,6 +5,7 @@ import { AuthService } from "../authentication/auth.service";
 import { FrameworkService } from "../framework.service";
 import { INavRailItem } from "../../models/INavRailItem";
 import { Router } from "@angular/router";
+import { PdfService } from "../pdf/pdf.service";
 
 @Injectable({ providedIn: 'root' })
 export class ButtonStoreService
@@ -12,12 +13,15 @@ export class ButtonStoreService
   private _authService: AuthService = inject(AuthService);
   private _framework: FrameworkService = inject(FrameworkService);
   private _router: Router = inject(Router);
+  private _pdfService: PdfService = inject(PdfService);
 
   public projectButton!: INavRailItem;
   public boxButton!: INavRailItem;
 
 
-  public loginButton!: IToolbarButton;
+  public logoutButton!: IToolbarButton;
+  public pdfButton!: IToolbarButton;
+  public userButton!: IToolbarButton;
 
 
   constructor()
@@ -41,11 +45,25 @@ export class ButtonStoreService
   }
   private initToolbarButtons()
   {
-    this.loginButton = this._framework.createToolbarButton(
+    this.logoutButton = this._framework.createToolbarButton(
       "logout",
       Guid.create().toString(),
       "Logout",
       () => this.logout(this)
+    )
+
+    this.pdfButton = this._framework.createToolbarButton(
+      "picture_as_pdf",
+      Guid.create().toString(),
+      "Print PDF",
+      () => this.printPDF(this)
+    )
+
+    this.userButton = this._framework.createToolbarButton(
+      "account_circle",
+      Guid.create().toString(),
+      "Account",
+      () => this.accountClicked(this)
     )
   }
 
@@ -53,6 +71,11 @@ export class ButtonStoreService
   private logout(context: ButtonStoreService)
   {
     context._authService.logout();
+  }
+
+  private accountClicked(context: ButtonStoreService)
+  {
+    context._router.navigate(["./user"]);
   }
 
   private prjClicked(context: ButtonStoreService)
@@ -64,4 +87,14 @@ export class ButtonStoreService
   {
     context._router.navigate(["./transportbox"]);
   }
+
+  private async printPDF(context: ButtonStoreService)
+  {
+    var o = {};
+    var s = await context._pdfService.createPdf(o);
+
+    this._pdfService.openBase64(s, "application/pdf;base64", "Tabelle");
+  }
+
+    
 }

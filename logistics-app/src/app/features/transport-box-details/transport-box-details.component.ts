@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ITransportBoxData } from '../../models/ITransportBoxData';
 
 @Component({
   selector: 'transport-box-details',
@@ -13,5 +14,5 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './transport-box-details.component.scss'
 })
 export class TransportBoxDetailsComponent {
-  @Input() selectedBox: any;
+  @Input() selectedBox: ITransportBoxData | undefined;
 }
