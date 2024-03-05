@@ -1,4 +1,5 @@
 ﻿using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL.Interfaces
@@ -10,5 +11,7 @@ namespace Logisitcs.BLL.Interfaces
         Task<IUserData> Register(ILoginData loginData);
 
         Task<bool> UpdateRole(IUserData user);
+
+        Task<IEnumerable<IUserData>> GetAllUser();
     }
 }

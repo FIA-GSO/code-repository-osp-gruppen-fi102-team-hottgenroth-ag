@@ -10,6 +10,7 @@
     <mat-card-subtitle>{{user.role}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <user-list></user-list>
+    <h3>List of all user: </h3>
+    <user-list [roleOptions]="roleOptions" [userList]="allUser"></user-list>
   </mat-card-content>
 </mat-card>

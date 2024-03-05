@@ -5,7 +5,10 @@ using Logisitcs.BLL.Models;
 using Logisitcs.DAL;
 using Logisitcs.DAL.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
@@ -72,6 +75,27 @@ namespace Logisitcs.BLL
             userDB.UserRoleId = userRoleId;
             DBCommands.UpdateUser(userDB);
             return true;
+        }
+
+        public async Task<IEnumerable<IUserData>> GetAllUser()
+        {
+            return await Task.Run(() =>
+            {
+               List<IUserData> result = new List<IUserData>();
+               IEnumerable<User> usersDB = DBCommands.GetAllUsers();
+               if (usersDB == null)
+               {
+                  return null;
+               }
+               foreach (User user in usersDB)
+               {
+                  UserRole userRole = DBCommands.GetUserRole((int)user.UserRoleId);
+                  var userData = new UserData(Guid.Parse(user.UserId), user.UserEmail, userRole.Role);
+                  result.Add(userData);
+               }
+
+               return result;
+            });
         }
     }
 }

@@ -1,14 +1,18 @@
 <section *ngFor="let user of userList">
-  <section class="flex flex-row justify-between">
-    <span>{{user.userEmail}}</span>
+  <section class="flex flex-row justify-between items-center pt-1">
+    <section class="flex flex-row gap-2 items-center">
+      <button mat-mini-fab [ngStyle]="getColor(user.userEmail)" 
+      class="icon-user mat-elevation-z0 pointer-events-none" *ngIf="!!user.userEmail">
+        {{getInitials(user.userEmail)}}
+      </button>
+      <span>{{user.userEmail}}</span>
+    </section>
     <mat-form-field>
-      <mat-select [(ngModel)]="user.role">
-        <mat-option [value]=""></mat-option>
-        <mat-option [value]=""></mat-option>
-        <mat-option [value]=""></mat-option>
-        <mat-option [value]=""></mat-option>
-
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="user.role" (ngModelChange)="updateRole(user)">
+        <mat-option *ngFor="let role of roleOptions" [value]="role">{{role}}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>
+  <mat-divider class="!mt-1 !mb-1"></mat-divider>
 </section>
