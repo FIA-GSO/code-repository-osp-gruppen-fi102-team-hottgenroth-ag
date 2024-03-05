@@ -21,6 +21,7 @@ export class ButtonStoreService
 
   public logoutButton!: IToolbarButton;
   public pdfButton!: IToolbarButton;
+  public userButton!: IToolbarButton;
 
 
   constructor()
@@ -57,12 +58,24 @@ export class ButtonStoreService
       "Print PDF",
       () => this.printPDF(this)
     )
+
+    this.userButton = this._framework.createToolbarButton(
+      "account_circle",
+      Guid.create().toString(),
+      "Account",
+      () => this.accountClicked(this)
+    )
   }
 
 
   private logout(context: ButtonStoreService)
   {
     context._authService.logout();
+  }
+
+  private accountClicked(context: ButtonStoreService)
+  {
+    context._router.navigate(["./user"]);
   }
 
   private prjClicked(context: ButtonStoreService)
