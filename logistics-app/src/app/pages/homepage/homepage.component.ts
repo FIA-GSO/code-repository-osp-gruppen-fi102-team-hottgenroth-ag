@@ -6,6 +6,7 @@ import { ButtonStoreService } from '../../services/stores/button-store.service';
 import { FrameworkService } from '../../services/framework.service';
 import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
+import { eRole } from '../../models/enum/eRole';
 
 @Component({
   selector: 'app-homepage',
@@ -38,7 +39,10 @@ export class HomepageComponent {
       if(!!this._framework.toolbar)
       {
         this._framework.toolbar.addToolbarButton(this._btnStore.pdfButton);
-        this._framework.toolbar.addToolbarButton(this._btnStore.userButton);
+        if(this.isAuthorized(this._login.getUserRole()))
+        {
+          this._framework.toolbar.addToolbarButton(this._btnStore.userButton);
+        }
         this._framework.toolbar.addToolbarButton(this._btnStore.logoutButton);
       }
   
@@ -53,5 +57,11 @@ export class HomepageComponent {
       this._router.navigate(["./projects"])
       resolve();
     }));
+  }
+
+
+  private isAuthorized(role: string): boolean
+  {
+    return role == eRole.admin || role == eRole.keeper || role == eRole.leader
   }
 }

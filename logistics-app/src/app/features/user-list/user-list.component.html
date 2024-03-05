@@ -1,1 +1,14 @@
-<p>user-list works!</p>
+<section *ngFor="let user of userList">
+  <section class="flex flex-row justify-between">
+    <span>{{user.userEmail}}</span>
+    <mat-form-field>
+      <mat-select [(ngModel)]="user.role">
+        <mat-option [value]=""></mat-option>
+        <mat-option [value]=""></mat-option>
+        <mat-option [value]=""></mat-option>
+        <mat-option [value]=""></mat-option>
+
+      </mat-select>
+    </mat-form-field>
+  </section>
+</section>
