@@ -6,11 +6,13 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { TransportBoxDetailsComponent } from '../../features/transport-box-details/transport-box-details.component';
 import { ITransportBoxData } from '../../models/ITransportBoxData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
+import { ArticleListComponent } from '../../features/article-list/article-list.component';
 
 @Component({
   selector: 'app-transport-box-page',
   standalone: true,
-  imports: [CommonModule, TransportBoxListComponent, MatCardModule, MatTabsModule, TransportBoxDetailsComponent],
+  imports: [CommonModule, TransportBoxListComponent, MatCardModule, 
+    MatTabsModule, TransportBoxDetailsComponent, ArticleListComponent],
   templateUrl: './transport-box-page.component.html',
   styleUrl: './transport-box-page.component.scss'
 })

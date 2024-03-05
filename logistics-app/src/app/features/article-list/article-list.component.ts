@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { IArticleData } from '../../models/IArticleData';
+import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 
 @Component({
   selector: 'article-list',
@@ -11,4 +12,10 @@ import { IArticleData } from '../../models/IArticleData';
 })
 export class ArticleListComponent {
   @Input() articles!: IArticleData;
+
+  private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
+
+  constructor(){
+    console.log(this._logisticStore.articleStore.getItems());
+  }
 }

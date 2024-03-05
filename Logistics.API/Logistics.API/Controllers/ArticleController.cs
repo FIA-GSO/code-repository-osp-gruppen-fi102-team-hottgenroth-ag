@@ -19,7 +19,7 @@ namespace Logistics.API.Controllers
         [HttpGet("all/{boxId}")]
         public async Task<IActionResult> GetAll(string boxId)
         {
-            IEnumerable<IArticleData> result = BLL.GetAllArticlesByBoxId(boxId);
+            IEnumerable<IArticleData> result = await BLL.GetAllArticlesByBoxId(boxId);
             if (result == null)
             {
                 return NotFound();
@@ -30,7 +30,7 @@ namespace Logistics.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid boxId, Guid articleId)
         {
-            IArticleData result = BLL.GetArticle(boxId.ToString(), articleId.ToString());
+            IArticleData result = await BLL.GetArticle(boxId.ToString(), articleId.ToString());
             if (result == null)
             {
                 return NotFound();

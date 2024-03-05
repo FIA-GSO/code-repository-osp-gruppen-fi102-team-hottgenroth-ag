@@ -6,6 +6,7 @@ using Logisitcs.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
 {
@@ -15,9 +16,11 @@ namespace Logisitcs.BLL
         {
         }
 
-        public IEnumerable<IArticleData> GetAllArticlesByBoxId(string boxId)
+        public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId)
         {
-            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DBCommands.GetArticleJoinAssignments(boxId);
+         return await Task.Run(async() =>
+         {
+            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = await DBCommands.GetArticleJoinAssignments(boxId);
             List<IArticleData> articleDatas = new List<IArticleData>();
             foreach (var item in articleAndBoxAssigments)
             {
@@ -41,30 +44,35 @@ namespace Logisitcs.BLL
                 });
             }
             return articleDatas;
+         });
         }
 
-        public IArticleData GetArticle(string boxId, string articleId)
+        public async Task<IArticleData> GetArticle(string boxId, string articleId)
         {
-            ArticleAndBoxAssignment articleAndBoxAssignment = DBCommands.GetArticle(boxId, articleId);
+         return await Task.Run(async() =>
+         {
+
+            ArticleAndBoxAssignment articleAndBoxAssignment = await DBCommands.GetArticle(boxId, articleId);
             string status = string.Empty;
             if (articleAndBoxAssignment.Status != null)
             {
-                status = DBCommands.GetStatusById((int)articleAndBoxAssignment.Status);
+               status = DBCommands.GetStatusById((int)articleAndBoxAssignment.Status);
             }
             IArticleData articelData = new ArticleData
             {
-                ArticleGuid = articleAndBoxAssignment.ArticleGuid,
-                ArticleName = articleAndBoxAssignment.ArticleName,
-                Description = articleAndBoxAssignment.Description,
-                Gtin = (int?)articleAndBoxAssignment.Gtin,
-                ExpiryDate = articleAndBoxAssignment.ExpireDate != null ? DateTime.Parse(articleAndBoxAssignment.ExpireDate) : null,
-                Quantity = (int?)articleAndBoxAssignment.Quantity,
-                Position = (int?)articleAndBoxAssignment.Position,
-                Status = status,
-                Unit = articleAndBoxAssignment.Unit,
-                BoxGuid = Guid.Parse(articleAndBoxAssignment.BoxGuid),
+               ArticleGuid = articleAndBoxAssignment.ArticleGuid,
+               ArticleName = articleAndBoxAssignment.ArticleName,
+               Description = articleAndBoxAssignment.Description,
+               Gtin = (int?)articleAndBoxAssignment.Gtin,
+               ExpiryDate = articleAndBoxAssignment.ExpireDate != null ? DateTime.Parse(articleAndBoxAssignment.ExpireDate) : null,
+               Quantity = (int?)articleAndBoxAssignment.Quantity,
+               Position = (int?)articleAndBoxAssignment.Position,
+               Status = status,
+               Unit = articleAndBoxAssignment.Unit,
+               BoxGuid = Guid.Parse(articleAndBoxAssignment.BoxGuid),
             };
             return articelData;
+         });
         }
 
         public bool AddArticle(IArticleData article)

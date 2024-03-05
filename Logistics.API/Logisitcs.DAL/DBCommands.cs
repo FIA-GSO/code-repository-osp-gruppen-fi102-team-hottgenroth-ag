@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Logisitcs.DAL;
 
@@ -18,8 +19,10 @@ public static class DBCommands
         return db.Articles.ToList();
     }
 
-    public static IEnumerable<ArticleAndBoxAssignment> GetArticleJoinAssignments(string boxGuid)
+    public static async Task<IEnumerable<ArticleAndBoxAssignment>> GetArticleJoinAssignments(string boxGuid)
     {
+      return await Task.Run(() =>
+      {
         using var db = new LogisticsDbContext();
         IEnumerable<ArticleAndBoxAssignment> result = db.ArticleBoxAssignments
             .Join(
@@ -39,8 +42,9 @@ public static class DBCommands
              _articleBoxAssignment.Quantity,
              _articleBoxAssignment.ExpiryDate)
             ).ToList();
-        result = result.Where(x => x.BoxGuid == boxGuid).ToList();
+         result = result.Where(x => x.BoxGuid == boxGuid).ToList();
         return result;
+      });
     }
 
     public static void AddArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
@@ -98,10 +102,13 @@ public static class DBCommands
         DeleteArticles(articleGuid);
     }
 
-    public static ArticleAndBoxAssignment GetArticle(string boxId, string articleId)
+    public static async Task<ArticleAndBoxAssignment> GetArticle(string boxId, string articleId)
     {
-        IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
-        return t.SingleOrDefault(m => m.ArticleGuid == articleId);
+      return await Task.Run(async() =>
+      {
+         IEnumerable<ArticleAndBoxAssignment> t = await GetArticleJoinAssignments(boxId);
+         return t.SingleOrDefault(m => m.ArticleGuid == articleId);
+      });
     }
 
     public static void AddArticles(Article article)
