@@ -1,8 +1,12 @@
 ﻿using Logisitcs.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Logisitcs.DAL;
+
+public record ArticleAndBoxAssignment(
+    string ArticleGuid, string ArticleName, string Description, long? Gtin, string Unit, string AssignmentGuid, string BoxGuid, double? Position, long? Status, long? Quantity, string ExpireDate);
 
 public static class DBCommands
 {
@@ -12,6 +16,92 @@ public static class DBCommands
     {
         var db = new LogisticsDbContext();
         return db.Articles.ToList();
+    }
+
+    public static IEnumerable<ArticleAndBoxAssignment> GetArticleJoinAssignments(string boxGuid)
+    {
+        using var db = new LogisticsDbContext();
+        IEnumerable<ArticleAndBoxAssignment> result = db.ArticleBoxAssignments
+            .Join(
+            db.Articles,
+            articleBoxAssignment => articleBoxAssignment.ArticleGuid,
+            article => article.ArticleGuid,
+            (_articleBoxAssignment, _article) => new ArticleAndBoxAssignment(
+             _articleBoxAssignment.ArticleGuid,
+             _article.ArticleName,
+             _article.Description,
+             _article.Gtin,
+             _article.Unit,
+             _articleBoxAssignment.AssignmentGuid,
+             _articleBoxAssignment.BoxGuid,
+             _articleBoxAssignment.Position,
+             _articleBoxAssignment.Status,
+             _articleBoxAssignment.Quantity,
+             _articleBoxAssignment.ExpiryDate)
+            ).ToList();
+        result = result.Where(x => x.BoxGuid == boxGuid).ToList();
+        return result;
+    }
+
+    public static void AddArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
+    {
+        using var db = new LogisticsDbContext();
+        Article article = new Article
+        {
+            ArticleGuid = articleAndBoxAssignment.ArticleGuid,
+            ArticleName = articleAndBoxAssignment.ArticleName,
+            Description = articleAndBoxAssignment.Description,
+            Gtin = articleAndBoxAssignment.Gtin,
+            Unit = articleAndBoxAssignment.Unit
+        };
+        AddArticles(article);
+        ArticleBoxAssignment articleBoxAssignment = new ArticleBoxAssignment
+        {
+            AssignmentGuid = articleAndBoxAssignment.AssignmentGuid,
+            ArticleGuid = articleAndBoxAssignment.ArticleGuid,
+            BoxGuid = articleAndBoxAssignment.BoxGuid,
+            Position = articleAndBoxAssignment.Position,
+            Status = articleAndBoxAssignment.Status,
+            Quantity = articleAndBoxAssignment.Quantity,
+            ExpiryDate = articleAndBoxAssignment.ExpireDate
+        };
+        AddArticleBoxAssignments(articleBoxAssignment);
+    }
+
+    public static void UpdateArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
+    {
+        Article article = new Article
+        {
+            ArticleGuid = articleAndBoxAssignment.ArticleGuid,
+            ArticleName = articleAndBoxAssignment.ArticleName,
+            Description = articleAndBoxAssignment.Description,
+            Gtin = articleAndBoxAssignment.Gtin,
+            Unit = articleAndBoxAssignment.Unit
+        };
+        UpdateArticle(article);
+        ArticleBoxAssignment articleBoxAssignment = new ArticleBoxAssignment
+        {
+            AssignmentGuid = articleAndBoxAssignment.AssignmentGuid,
+            ArticleGuid = articleAndBoxAssignment.ArticleGuid,
+            BoxGuid = articleAndBoxAssignment.BoxGuid,
+            Position = articleAndBoxAssignment.Position,
+            Status = articleAndBoxAssignment.Status,
+            Quantity = articleAndBoxAssignment.Quantity,
+            ExpiryDate = articleAndBoxAssignment.ExpireDate
+        };
+        UpdateArticleBoxAssignment(articleBoxAssignment);
+    }
+
+    public static void DeleteArticleAndBoxAssignment(string articleGuid, string assignmentGuid)
+    {
+        DeleteArticleBoxAssignments(assignmentGuid);
+        DeleteArticles(articleGuid);
+    }
+
+    public static ArticleAndBoxAssignment GetArticle(string boxId, string articleId)
+    {
+        IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
+        return t.SingleOrDefault(m => m.ArticleGuid == articleId);
     }
 
     public static void AddArticles(Article article)
@@ -37,20 +127,14 @@ public static class DBCommands
         db.SaveChanges();
     }
 
-    public static Article GetArticle(string guid)
-    {
-        using var db = new LogisticsDbContext();
-        return db.Articles.Find(guid);
-    }
-
     #endregion Article
 
     #region ArticleBoxAssignments
 
-    public static IEnumerable<ArticleBoxAssignment> GetAllTArticleBoxAssignments()
+    public static IEnumerable<ArticleBoxAssignment> GetAllArticleBoxAssignments(string boxId)
     {
         var db = new LogisticsDbContext();
-        return db.ArticleBoxAssignments.ToList();
+        return db.ArticleBoxAssignments.Where(m => m.BoxGuid == boxId).ToList();
     }
 
     public static void AddArticleBoxAssignments(ArticleBoxAssignment articleBoxAssignment)
@@ -154,10 +238,16 @@ public static class DBCommands
         db.SaveChanges();
     }
 
-    public static Status GetStatus(string guid)
+    public static string GetStatusById(int id)
     {
         using var db = new LogisticsDbContext();
-        return db.Statuses.Find(guid);
+        return db.Statuses.Find(id).Name;
+    }
+
+    public static int GetStatusByName(string name)
+    {
+        using var db = new LogisticsDbContext();
+        return int.Parse(db.Statuses.Single(x => x.Name == name).StatusId.ToString());
     }
 
     #endregion Statues

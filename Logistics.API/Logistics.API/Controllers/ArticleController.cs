@@ -17,7 +17,8 @@ namespace Logistics.API.Controllers
         [HttpGet("all/{boxId}")]
         public async Task<IActionResult> GetAll(string boxId)
         {
-            return Ok();
+            var t = BLL.GetAllArticlesByBoxId(boxId);
+            return Ok(t);
         }
 
         [HttpGet("{id}")]
