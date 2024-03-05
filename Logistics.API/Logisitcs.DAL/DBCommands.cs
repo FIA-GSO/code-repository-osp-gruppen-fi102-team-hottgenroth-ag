@@ -42,7 +42,7 @@ public static class DBCommands
              _articleBoxAssignment.Quantity,
              _articleBoxAssignment.ExpiryDate)
             ).ToList();
-         result = result.Where(x => x.BoxGuid == boxGuid).ToList();
+         result = result.Where(x => x.BoxGuid.ToUpper() == boxGuid.ToUpper()).ToList();
         return result;
       });
     }
