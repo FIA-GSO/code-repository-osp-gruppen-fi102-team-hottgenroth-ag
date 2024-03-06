@@ -19,10 +19,9 @@ public static class DBCommands
         return db.Articles.ToList();
     }
 
-    public static async Task<IEnumerable<ArticleAndBoxAssignment>> GetArticleJoinAssignments(string boxGuid)
+    public static IEnumerable<ArticleAndBoxAssignment> GetArticleJoinAssignments(string boxGuid)
     {
-      return await Task.Run(() =>
-      {
+    
         using var db = new LogisticsDbContext();
         IEnumerable<ArticleAndBoxAssignment> result = db.ArticleBoxAssignments
             .Join(
@@ -44,7 +43,7 @@ public static class DBCommands
             ).ToList();
          result = result.Where(x => x.BoxGuid.ToUpper() == boxGuid.ToUpper()).ToList();
         return result;
-      });
+    
     }
 
     public static void AddArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
@@ -106,7 +105,7 @@ public static class DBCommands
     {
       return await Task.Run(async() =>
       {
-         IEnumerable<ArticleAndBoxAssignment> t = await GetArticleJoinAssignments(boxId);
+         IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
          return t.SingleOrDefault(m => m.ArticleGuid == articleId);
       });
     }

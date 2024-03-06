@@ -7,6 +7,7 @@ import { TransportBoxDetailsComponent } from '../../features/transport-box-detai
 import { ITransportBoxData } from '../../models/ITransportBoxData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 import { ArticleListComponent } from '../../features/article-list/article-list.component';
+import { IArticleData } from '../../models/IArticleData';
 
 @Component({
   selector: 'app-transport-box-page',
@@ -24,5 +25,10 @@ export class TransportBoxPageComponent {
   public get transportBoxes(): ITransportBoxData[]
   {
     return this._logisticStore.transportboxStore.getItems();
+  }
+
+  public get articles(): IArticleData[]
+  {
+    return this._logisticStore.articleStore.getItems();
   }
 }

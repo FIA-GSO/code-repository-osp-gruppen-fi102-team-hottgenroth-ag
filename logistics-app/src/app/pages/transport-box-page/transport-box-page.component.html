@@ -18,7 +18,7 @@
   </mat-tab>
   <mat-tab [label]="'Details'" [disabled]="!!!selectedBox">
     <transport-box-details [selectedBox]="selectedBox"></transport-box-details>
-    <article-list></article-list>
+    <article-list [articles]="articles"></article-list>
   </mat-tab>
 
 </mat-tab-group>

@@ -18,9 +18,9 @@ namespace Logisitcs.BLL
 
         public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId)
         {
-         return await Task.Run(async() =>
+         return await Task.Run(() =>
          {
-            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = await DBCommands.GetArticleJoinAssignments(boxId);
+            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DBCommands.GetArticleJoinAssignments(boxId);
             List<IArticleData> articleDatas = new List<IArticleData>();
             foreach (var item in articleAndBoxAssigments)
             {

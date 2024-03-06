@@ -11,11 +11,9 @@ import { LogisticsStoreService } from '../../services/stores/logistics-store.ser
   styleUrl: './article-list.component.scss'
 })
 export class ArticleListComponent {
-  @Input() articles!: IArticleData;
+  @Input() articles!: IArticleData[];
 
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
 
-  constructor(){
-    console.log(this._logisticStore.articleStore.getItems());
-  }
+  constructor(){}
 }
