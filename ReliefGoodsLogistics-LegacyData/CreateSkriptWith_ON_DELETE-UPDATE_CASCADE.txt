@@ -1,0 +1,63 @@
+CREATE TABLE Article (
+    ArticleGUID TEXT PRIMARY KEY,
+    ArticleName TEXT,
+    Description TEXT,
+    GTIN INTEGER,
+    Unit TEXT
+);
+
+CREATE TABLE ArticleBoxAssignment (
+    AssignmentGUID TEXT PRIMARY KEY,
+    ArticleGUID TEXT,
+	BoxGUID TEXT,
+	Position REAL,
+	Status INTEGER,
+	Quantity INTEGER,
+	ExpiryDate DATE,
+    ENUM Status,
+    FOREIGN KEY (ArticleGUID) REFERENCES Article(ArticleGUID),
+    FOREIGN KEY (BoxGUID) REFERENCES Transportbox(BoxGUID),
+	FOREIGN KEY (Status) REFERENCES Status(StatusID)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
+
+CREATE TABLE Project (
+    ProjectGUID TEXT PRIMARY KEY,
+    ProjectName TEXT,
+    CreationDate DATE
+);
+
+CREATE TABLE Status (
+    StatusID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL CHECK (Name IN ('Defect', 'Lost', 'Discarded', 'Consumed', 'Donated', 'Received'))
+);
+
+CREATE TABLE Transportbox (
+    BoxGUID TEXT PRIMARY KEY,
+    Number INTEGER,
+    Description TEXT,
+    ProjectGUID TEXT, 
+    LocationTransport TEXT,
+    LocationHome TEXT,
+    LocationDeployment TEXT,
+    BoxCategory TEXT,
+    FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
+
+CREATE TABLE User(
+User_ID TEXT PRIMARY KEY,
+UserEmail TEXT,
+UserPassword TEXT,
+UserRole_Id INTEGER,
+FOREIGN KEY(UserRole_ID) References UserRole(Role_Id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE UserRole(
+Role_Id INTEGER PRIMARY KEY,
+Role TEXT
+);
