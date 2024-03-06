@@ -29,6 +29,10 @@ export class TransportBoxPageComponent {
 
   public get articles(): IArticleData[]
   {
-    return this._logisticStore.articleStore.getItems();
+    if(!!this.selectedBox)
+    {
+      return this._logisticStore.articleStore.getArticlesForBox(this.selectedBox.boxGuid);
+    }
+    return [];
   }
 }

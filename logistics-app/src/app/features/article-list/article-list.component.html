@@ -1,6 +1,13 @@
-<section *ngFor="let art of articles" class="w-full h-full flex flex-col">
-  <section class="flex flex-row justify-between items-center ml-1 mr-1">  
-    <span>{{art.position}} {{art.description}}</span>  
-    <span>{{art.quantity}} {{art.unit}}</span>
-  </section>
+
+<section class="w-full h-full flex flex-col">
+  <ng-container *ngFor="let art of getSortedArticles()">  
+    <section class="flex flex-row justify-between items-center ml-1 mr-1" [class.!ml-2]="!isArticleFirstPosition(art)">  
+      <section class="flex flex-row justify-start items-center gap-1">
+        <span>{{art.position}}</span>
+        <span>{{art.description}}</span>  
+      </section>
+      <span>{{art.quantity}} {{art.unit}}</span>
+    </section>
+    <mat-divider class="mt-1 mb-1" *ngIf="isArticleLastPosition(art)"></mat-divider>
+  </ng-container>
 </section>
