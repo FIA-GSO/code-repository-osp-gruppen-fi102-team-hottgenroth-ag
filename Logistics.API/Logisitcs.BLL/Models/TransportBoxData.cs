@@ -11,5 +11,6 @@ namespace Logisitcs.BLL.Interfaces.ModelInterfaces
         public string LocationDeployment { get; set; }
         public string LocationHome { get; set; }
         public string BoxCategory { get; set; }
+        public Guid ProjectGuid { get; set; }
     }
 }

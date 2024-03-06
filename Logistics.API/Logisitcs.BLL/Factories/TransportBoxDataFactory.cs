@@ -18,6 +18,7 @@ namespace Logisitcs.BLL.Factories
                 LocationDeployment = transportbox.LocationDeployment,
                 LocationHome = transportbox.LocationHome,
                 BoxCategory = transportbox.BoxCategory,
+                ProjectGuid = Guid.Parse(transportbox.ProjectGuid),
             };
         }
     }
