@@ -17,13 +17,21 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   {
     try
     {
-      if (this.getItems().length > 0) 
-      {
-        this.clear();
-      }
-  
       var items: IArticleData[] = await this.request.get(this._serviceURL + "/all/" + boxId);
-      this.setItems(items);
+
+      if(this.getItems().length > 0)
+      {
+        items.forEach((art: IArticleData) => {
+          if(!!!this.getById(art.articleGuid))
+          {
+            this.addItem(art);
+          }
+        });
+      }
+      else
+      {
+        this.setItems(items);
+      }
   
       this.initialized = true;
     }
@@ -89,6 +97,11 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   public override getById(id: string): IArticleData | undefined
   {
     return this.getItems().find(p => p.articleGuid === id);
+  }
+
+  public getArticlesForBox(boxId: string): IArticleData[]
+  {
+    return this.getItems().filter(p => p.boxGuid === boxId);
   }
 }
 

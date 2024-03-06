@@ -22,7 +22,6 @@ export class TransportBoxListComponent {
   
   public _selectedBox: ITransportBoxData | undefined;
 
-  private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
   public set selectedBox(pBox: ITransportBoxData | undefined)
@@ -34,7 +33,6 @@ export class TransportBoxListComponent {
       this._spinner.show("Transportbox is loading...", new Promise<void>(async(resolve, reject) => {
         if(!!this._selectedBox)
         {
-          await this._logisticStore.loadArticles(this._selectedBox.boxGuid)
           this.boxSelection.emit(this._selectedBox);
           resolve();
         }

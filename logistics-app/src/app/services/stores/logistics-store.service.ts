@@ -3,6 +3,7 @@ import { ProjectStoreService } from './project-store.service';
 import { TransportboxStoreService } from './transportbox-store.service';
 import { ArticleStoreService } from './article-store.service';
 import { IProjectData } from '../../models/IProjectData';
+import { ITransportBoxData } from '../../models/ITransportBoxData';
 
 @Injectable({ providedIn: 'root' })
 export class LogisticsStoreService
@@ -54,21 +55,13 @@ export class LogisticsStoreService
     if(!!prj)
     {
       await this._transportboxStore.loadIntitalData(prj.projectGuid);
+      this._transportboxStore.getItems().forEach(async(box: ITransportBoxData) => {
+        await this._articleStore.loadIntitalData(box.boxGuid);
+      })
       return prj;
     }
 
     return undefined;
-  }
-
-  public async loadArticles(boxId: string): Promise<boolean>
-  {
-    if(!this._initialized)
-    {
-      return false;
-    }
-
-    await this._articleStore.loadIntitalData(boxId);
-    return true;
   }
 
   public async loadIntitalData(): Promise<void>
