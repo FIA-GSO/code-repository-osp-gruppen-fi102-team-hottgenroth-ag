@@ -8,12 +8,20 @@ import { ITransportBoxData } from '../../models/ITransportBoxData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 import { ArticleListComponent } from '../../features/article-list/article-list.component';
 import { IArticleData } from '../../models/IArticleData';
+import { AuthService } from '../../services/authentication/auth.service';
+import { eRole } from '../../models/enum/eRole';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { ArticleDialogComponent } from '../../features/article-dialog/article-dialog.component';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-transport-box-page',
   standalone: true,
   imports: [CommonModule, TransportBoxListComponent, MatCardModule, 
-    MatTabsModule, TransportBoxDetailsComponent, ArticleListComponent],
+    MatTabsModule, TransportBoxDetailsComponent, ArticleListComponent,
+  MatButtonModule, MatIconModule],
   templateUrl: './transport-box-page.component.html',
   styleUrl: './transport-box-page.component.scss'
 })
@@ -35,4 +43,5 @@ export class TransportBoxPageComponent {
     }
     return [];
   }
+
 }

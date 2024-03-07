@@ -6,11 +6,12 @@ import {MatListModule} from '@angular/material/list';
 import { ITransportBoxData } from '../../models/ITransportBoxData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 import { LoadingSpinnerService } from '../../services/loading-spinner.service';
+import { TruncatePipe } from '../../framework/TruncatePipe';
 
 @Component({
   selector: 'transport-box-list',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule, TruncatePipe],
   templateUrl: './transport-box-list.component.html',
   styleUrl: './transport-box-list.component.scss'
 })

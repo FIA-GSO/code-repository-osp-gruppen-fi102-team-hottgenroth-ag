@@ -53,7 +53,7 @@ export class ProjectStoreService extends BaseStoreService<IProjectData>
       var item: IProjectData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.projectGuid, item);
+        await this.request.put(this._serviceURL, item);
         return true;
       }
     }

@@ -14,7 +14,7 @@
 
 <ng-template #box_item let-box="boxItem">
   <section class="flex flex-row justify-between items-center">
-    {{box.description}}
+    {{box.description | truncate:[30]}}
     <button mat-icon-button (click)="changeTab()">
       <mat-icon>chevron_right</mat-icon>
     </button>

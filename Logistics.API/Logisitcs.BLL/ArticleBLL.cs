@@ -35,7 +35,7 @@ namespace Logisitcs.BLL
                     ArticleName = item.ArticleName,
                     Description = item.Description,
                     Gtin = (int?)item.Gtin,
-                    ExpiryDate = item.ExpireDate != null ? DateTime.Parse(item.ExpireDate) : null,
+                    ExpiryDate = item.ExpireDate != null && item.ExpireDate != "" ? DateTime.Parse(item.ExpireDate) : null,
                     Quantity = (int?)item.Quantity,
                     Position = item.Position,
                     Status = status,

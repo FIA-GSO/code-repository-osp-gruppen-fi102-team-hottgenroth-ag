@@ -18,6 +18,16 @@
   </mat-tab>
   <mat-tab [label]="'Details'" [disabled]="!!!selectedBox">
     <transport-box-details [selectedBox]="selectedBox"></transport-box-details>
-    <article-list [articles]="articles"></article-list>
+  </mat-tab>
+  <mat-tab [label]="'Articles'" [disabled]="!!!selectedBox">
+    <mat-card class="h-[calc(100%-8px)] m-1" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{selectedBox?.description}}</mat-card-title>
+        <mat-card-subtitle>List of all articles for box</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="!overflow-y-auto flex flex-col grow">
+        <article-list [articles]="articles"></article-list>
+      </mat-card-content>
+    </mat-card>
   </mat-tab>
 </mat-tab-group>

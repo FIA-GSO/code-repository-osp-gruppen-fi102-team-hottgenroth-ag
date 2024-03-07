@@ -65,7 +65,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
       var item: IArticleData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.articleGuid, item);
+        await this.request.put(this._serviceURL, item);
         return true;
       }
     }
