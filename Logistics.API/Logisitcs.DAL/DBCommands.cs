@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Logisitcs.DAL;
 
 public record ArticleAndBoxAssignment(
-    string ArticleGuid, string ArticleName, string Description, long? Gtin, string Unit, string AssignmentGuid, string BoxGuid, double? Position, long? Status, long? Quantity, string ExpireDate);
+    string ArticleGuid, string ArticleName, string Description, long? Gtin, string Unit, string AssignmentGuid, string BoxGuid, double? Position, int? Status, int? Quantity, string ExpireDate);
 
 public static class DBCommands
 {
@@ -39,7 +40,7 @@ public static class DBCommands
              _articleBoxAssignment.Quantity,
              _articleBoxAssignment.ExpiryDate)
             ).ToList();
-        result = result.Where(x => x.BoxGuid == boxGuid).ToList();
+        result = result.Where(x => x.BoxGuid.ToUpper() == boxGuid.ToUpper()).ToList();
         return result;
     }
 
@@ -238,7 +239,7 @@ public static class DBCommands
         db.SaveChanges();
     }
 
-    public static string GetStatusById(int id)
+    public static string GetStatusById(int? id)
     {
         using var db = new LogisticsDbContext();
         return db.Statuses.Find(id).Name;
@@ -247,7 +248,7 @@ public static class DBCommands
     public static int GetStatusByName(string name)
     {
         using var db = new LogisticsDbContext();
-        return int.Parse(db.Statuses.Single(x => x.Name == name).StatusId.ToString());
+        return db.Statuses.Single(x => x.Name == name).StatusId;
     }
 
     #endregion Statues
@@ -349,7 +350,7 @@ public static class DBCommands
     public static UserRole GetUserRole(int roleId)
     {
         using var db = new LogisticsDbContext();
-        return db.UserRoles.Find((long?)roleId);
+        return db.UserRoles.Find(roleId);
     }
 
     public static int GetUserRoleByName(string role)

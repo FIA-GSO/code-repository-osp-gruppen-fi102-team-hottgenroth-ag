@@ -15,6 +15,5 @@ namespace Logisitcs.BLL.Interfaces.ModelInterfaces
         public DateTime? ExpiryDate { get; set; }
         public Guid BoxGuid { get; set; }
         public Guid ArticleBoxAssignment { get; set; }
-        Guid IArticleData.ArticleGuid { get; set; }
     }
 }

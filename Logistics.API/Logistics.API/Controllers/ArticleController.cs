@@ -1,10 +1,12 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ArticleController : ControllerBase
@@ -19,7 +21,7 @@ namespace Logistics.API.Controllers
         [HttpGet("all/{boxId}")]
         public async Task<IActionResult> GetAll(string boxId)
         {
-            IEnumerable<IArticleData> result = BLL.GetAllArticlesByBoxId(boxId);
+            IEnumerable<IArticleData> result = await BLL.GetAllArticlesByBoxId(boxId);
             if (result == null)
             {
                 return NotFound();
@@ -30,7 +32,7 @@ namespace Logistics.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid boxId, Guid articleId)
         {
-            IArticleData result = BLL.GetArticle(boxId.ToString(), articleId.ToString());
+            IArticleData result = await BLL.GetArticle(boxId.ToString(), articleId.ToString());
             if (result == null)
             {
                 return NotFound();
