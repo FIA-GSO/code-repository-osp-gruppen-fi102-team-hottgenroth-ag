@@ -253,7 +253,8 @@ public static class DBCommands
     public static int GetStatusByName(string name)
     {
         using var db = new LogisticsDbContext();
-        return int.Parse(db.Statuses.Single(x => x.Name == name).StatusId.ToString());
+        if (name == string.Empty) return 0;
+        return int.Parse(db.Statuses.FirstOrDefault(x => x.Name == name).StatusId.ToString());
     }
 
     #endregion Statues
