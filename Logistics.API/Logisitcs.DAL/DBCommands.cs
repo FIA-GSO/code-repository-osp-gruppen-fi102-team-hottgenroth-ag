@@ -350,7 +350,7 @@ public static class DBCommands
     public static UserRole GetUserRole(int roleId)
     {
         using var db = new LogisticsDbContext();
-        return db.UserRoles.Find((long?)roleId);
+        return db.UserRoles.Find(roleId);
     }
 
     public static int GetUserRoleByName(string role)
