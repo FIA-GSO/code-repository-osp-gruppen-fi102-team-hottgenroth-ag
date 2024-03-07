@@ -4,7 +4,7 @@ namespace Logisitcs.DAL.Models;
 
 public partial class Status
 {
-    public long StatusId { get; set; }
+    public int StatusId { get; set; }
 
     public string Name { get; set; }
 

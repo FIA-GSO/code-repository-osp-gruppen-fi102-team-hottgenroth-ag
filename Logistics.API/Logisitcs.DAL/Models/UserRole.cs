@@ -4,7 +4,7 @@ namespace Logisitcs.DAL.Models;
 
 public partial class UserRole
 {
-    public long RoleId { get; set; }
+    public int RoleId { get; set; }
 
     public string Role { get; set; }
 

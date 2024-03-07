@@ -12,7 +12,7 @@ namespace Logisitcs.BLL.Factories
             return new TransportBoxData
             {
                 BoxGuid = Guid.Parse(transportbox.BoxGuid),
-                Number = int.Parse(transportbox.Number.ToString()),
+                Number = transportbox.Number,
                 Description = transportbox.Description,
                 LocationTransport = transportbox.LocationTransport,
                 LocationDeployment = transportbox.LocationDeployment,

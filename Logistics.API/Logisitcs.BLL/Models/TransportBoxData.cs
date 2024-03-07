@@ -5,7 +5,7 @@ namespace Logisitcs.BLL.Interfaces.ModelInterfaces
     public class TransportBoxData : ITransportBoxData
     {
         public Guid BoxGuid { get; set; }
-        public int Number { get; set; }
+        public int? Number { get; set; }
         public string Description { get; set; }
         public string LocationTransport { get; set; }
         public string LocationDeployment { get; set; }

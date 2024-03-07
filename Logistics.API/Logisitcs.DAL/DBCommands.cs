@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Logisitcs.DAL;
 
 public record ArticleAndBoxAssignment(
-    string ArticleGuid, string ArticleName, string Description, long? Gtin, string Unit, string AssignmentGuid, string BoxGuid, double? Position, long? Status, long? Quantity, string ExpireDate);
+    string ArticleGuid, string ArticleName, string Description, long? Gtin, string Unit, string AssignmentGuid, string BoxGuid, double? Position, int? Status, int? Quantity, string ExpireDate);
 
 public static class DBCommands
 {
@@ -21,7 +21,6 @@ public static class DBCommands
 
     public static IEnumerable<ArticleAndBoxAssignment> GetArticleJoinAssignments(string boxGuid)
     {
-    
         using var db = new LogisticsDbContext();
         IEnumerable<ArticleAndBoxAssignment> result = db.ArticleBoxAssignments
             .Join(
@@ -41,9 +40,8 @@ public static class DBCommands
              _articleBoxAssignment.Quantity,
              _articleBoxAssignment.ExpiryDate)
             ).ToList();
-         result = result.Where(x => x.BoxGuid.ToUpper() == boxGuid.ToUpper()).ToList();
+        result = result.Where(x => x.BoxGuid.ToUpper() == boxGuid.ToUpper()).ToList();
         return result;
-    
     }
 
     public static void AddArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
@@ -101,13 +99,10 @@ public static class DBCommands
         DeleteArticles(articleGuid);
     }
 
-    public static async Task<ArticleAndBoxAssignment> GetArticle(string boxId, string articleId)
+    public static ArticleAndBoxAssignment GetArticle(string boxId, string articleId)
     {
-      return await Task.Run(async() =>
-      {
-         IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
-         return t.SingleOrDefault(m => m.ArticleGuid == articleId);
-      });
+        IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
+        return t.SingleOrDefault(m => m.ArticleGuid == articleId);
     }
 
     public static void AddArticles(Article article)
@@ -244,7 +239,7 @@ public static class DBCommands
         db.SaveChanges();
     }
 
-    public static string GetStatusById(int id)
+    public static string GetStatusById(int? id)
     {
         using var db = new LogisticsDbContext();
         return db.Statuses.Find(id).Name;
@@ -253,8 +248,7 @@ public static class DBCommands
     public static int GetStatusByName(string name)
     {
         using var db = new LogisticsDbContext();
-        if (name == string.Empty) return 0;
-        return int.Parse(db.Statuses.FirstOrDefault(x => x.Name == name).StatusId.ToString());
+        return db.Statuses.Single(x => x.Name == name).StatusId;
     }
 
     #endregion Statues

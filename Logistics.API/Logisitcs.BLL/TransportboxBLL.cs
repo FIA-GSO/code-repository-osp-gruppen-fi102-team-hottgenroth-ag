@@ -19,7 +19,7 @@ namespace Logisitcs.BLL
 
         public TransportboxBLL(ITransportBoxDataFactory dataFactory, ITransportboxFactory boxFactory)
         {
-            transportDataFactory =  dataFactory;
+            transportDataFactory = dataFactory;
             transportboxFactory = boxFactory;
         }
 
@@ -38,11 +38,11 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Transportbox transportbox = DBCommands.GetTransportbox(guid.ToString());
-                /*If no box is found, return null*/
-                if(transportbox != null)
+                //If no box is found, return null
+                if (transportbox != null)
                 {
-                     ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
-                     return transportboxData;
+                    ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
+                    return transportboxData;
                 }
                 return null;
             });
