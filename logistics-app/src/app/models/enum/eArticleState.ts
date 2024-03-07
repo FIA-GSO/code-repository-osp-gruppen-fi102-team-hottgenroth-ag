@@ -4,5 +4,6 @@ export enum eArticleState{
   discarded = "Discarded",
   consumed = "Consumed",
   donated = "Donated",
-  received = "Received"
+  received = "Received",
+  none = "None"
 }

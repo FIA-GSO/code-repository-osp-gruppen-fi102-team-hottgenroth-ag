@@ -29,7 +29,7 @@ export class ArticleDialogComponent {
       eArticleState.defect,
       eArticleState.consumed, eArticleState.discarded, 
       eArticleState.donated, eArticleState.lost, 
-      eArticleState.received
+      eArticleState.received, eArticleState.none
     ]
   }
 
