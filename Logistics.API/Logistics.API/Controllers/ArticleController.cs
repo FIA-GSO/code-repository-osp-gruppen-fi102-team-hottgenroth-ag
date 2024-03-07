@@ -1,10 +1,12 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ArticleController : ControllerBase

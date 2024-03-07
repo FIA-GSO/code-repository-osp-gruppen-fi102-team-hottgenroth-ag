@@ -76,7 +76,7 @@ export class ArticleListComponent{
       console.log(result)
       if(!!result)
       {
-        // this._logisticStore.articleStore.update(result.articleGuid)
+        this._logisticStore.articleStore.update(result.articleGuid);
       }
     })
   }

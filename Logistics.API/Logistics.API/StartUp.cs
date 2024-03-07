@@ -1,10 +1,13 @@
 using Logisitcs.BLL;
+using Logisitcs.BLL.Factories;
 using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.BLL.Models;
 using Logisitcs.DAL;
 using Logisitcs.DAL.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -36,36 +39,19 @@ namespace Logistics.API
                 options.EnableForHttps = true;
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-             .AddJwtBearer(options =>
-             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = true,
-                     ValidateAudience = true,
-                     ValidateLifetime = true,
-                     ValidateIssuerSigningKey = true,
-                     ValidIssuer = Configuration["Jwt:Issuer"],
-                     ValidAudience = Configuration["Jwt:Issuer"],
-                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                 };
-             });
-
-            services.AddMvc();
-
             #region BLL_DAL_DI
 
             //DAL
-            services.AddTransient<IProjectDAL>(provider => new ProjectDAL());
-            services.AddTransient<ITransportboxDAL>(provider => new TransportboxDAL());
-            services.AddTransient<IPDFDAL>(provider => new PDFDAL());
-            services.AddTransient<IArticleDAL>(provider => new ArticleDAL());
+            services.AddTransient<IProjectDataFactory>(provider => new ProjectDataFactory());
+            services.AddTransient<IProjectFactory>(provider => new ProjectFactory());
+            services.AddTransient<ITransportBoxDataFactory>(provider => new TransportBoxDataFactory());
+            services.AddTransient<ITransportboxFactory>(provider => new TransportboxFactory());
 
             //BLL
-            services.AddTransient<IProjectBll>(provider => new ProjectBll());
-            services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportboxDAL>()));
+            services.AddTransient<IProjectBll>(provider => new ProjectBll(provider.GetService<IProjectDataFactory>(), provider.GetService<IProjectFactory>()));
+            services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportBoxDataFactory>(), provider.GetService<ITransportboxFactory>()));
             services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
-            services.AddTransient<IArticleBll>(provider => new ArticleBll(provider.GetService<IArticleDAL>()));
+            services.AddTransient<IArticleBll>(provider => new ArticleBll());
             services.AddTransient<ILoginBll>(provider => new LoginBll());
 
             #endregion BLL_DAL_DI
@@ -82,6 +68,7 @@ namespace Logistics.API
                 options.SerializerSettings.Converters.Add(new JsonConverter<IProjectData, ProjectData>());
                 options.SerializerSettings.Converters.Add(new JsonConverter<ITransportBoxData, TransportBoxData>());
                 options.SerializerSettings.Converters.Add(new JsonConverter<IPdfData, PdfData>());
+                options.SerializerSettings.Converters.Add(new JsonConverter<IArticleData, ArticleData>());
 
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -90,22 +77,9 @@ namespace Logistics.API
 
             #endregion Json
 
-            services.AddSwaggerGen(opt =>
-            {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Logistics.API", Version = "v1" });
-                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "bearer"
-                });
-
                 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-              .AddJwtBearer(options =>
-              {
+               .AddJwtBearer(options =>
+               {
                   options.TokenValidationParameters = new TokenValidationParameters
                   {
                       ValidateIssuer = true,
@@ -116,46 +90,14 @@ namespace Logistics.API
                       ValidAudience = Configuration["Jwt:Issuer"],
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                   };
-              });
+               });
 
                 services.AddMvc();
 
-                #region BLL_DAL_DI
-
-                //DAL
-                services.AddTransient<IProjectDAL>(provider => new ProjectDAL());
-                services.AddTransient<ITransportboxDAL>(provider => new TransportboxDAL());
-                services.AddTransient<IPDFDAL>(provider => new PDFDAL());
-                services.AddTransient<IArticleDAL>(provider => new ArticleDAL());
-
-                //BLL
-                services.AddTransient<IProjectBll>(provider => new ProjectBll());
-                services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportboxDAL>()));
-                services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
-                services.AddTransient<IArticleBll>(provider => new ArticleBll(provider.GetService<IArticleDAL>()));
-                services.AddTransient<ILoginBll>(provider => new LoginBll());
-
-                #endregion BLL_DAL_DI
-
-                #region Json
-
-                // Add Newtonsoft JSON
-                services.AddControllers().AddNewtonsoftJson(options =>
-             {
-                 // Configure a custom converter
-                 /*options.SerializerSettings.Converters.Add(new JsonConverter<INTERFACE, OBJECT>());*/
-                 options.SerializerSettings.Converters.Add(new JsonConverter<IUserData, UserData>());
-                 options.SerializerSettings.Converters.Add(new JsonConverter<ILoginData, LoginData>());
-
-                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                 options.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
-             });
-
-                #endregion Json
+          
 
                 services.AddSwaggerGen(opt =>
-             {
+                  {
                  opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Logistics.API", Version = "v1" });
                  opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                  {
@@ -167,7 +109,7 @@ namespace Logistics.API
                      Scheme = "bearer"
                  });
                  opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-                  {
+                 {
                   {
                      new OpenApiSecurityScheme
                      {
@@ -178,13 +120,12 @@ namespace Logistics.API
                         }
                      },
                      new string[] { }
-                  }
+                     }
                   });
-                 opt.CustomSchemaIds(type => type.ToString());
-             });
+                  opt.CustomSchemaIds(type => type.ToString());
+                });
 
                 services.AddHttpClient();
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

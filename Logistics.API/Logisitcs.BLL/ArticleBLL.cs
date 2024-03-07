@@ -12,7 +12,7 @@ namespace Logisitcs.BLL
 {
     public class ArticleBll : IArticleBll
     {
-        public ArticleBll(IArticleDAL dal)
+        public ArticleBll()
         {
         }
 
@@ -41,6 +41,7 @@ namespace Logisitcs.BLL
                     Status = status,
                     Unit = item.Unit,
                     BoxGuid = Guid.Parse(item.BoxGuid),
+                    ArticleBoxAssignment = Guid.Parse(item.AssignmentGuid)
                 });
             }
             return articleDatas;

@@ -4,7 +4,7 @@ namespace Logisitcs.BLL.Interfaces.ModelInterfaces
 {
     public interface IArticleData
     {
-        Guid ArticleGuid { get; set; }
+        string ArticleGuid { get; set; }
         string ArticleName { get; set; }
         string Description { get; set; }
         int? Gtin { get; set; }

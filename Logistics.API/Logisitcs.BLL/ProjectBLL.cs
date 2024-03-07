@@ -1,5 +1,6 @@
 ﻿using Logisitcs.BLL.Factories;
 using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
 using Logisitcs.DAL.Models;
@@ -12,13 +13,13 @@ namespace Logisitcs.BLL
 {
     public class ProjectBll : IProjectBll
     {
-        private readonly ProjectDataFactory projectDataFactory;
-        private readonly ProjectFactory projectFactory;
+        private readonly IProjectDataFactory projectDataFactory;
+        private readonly IProjectFactory projectFactory;
 
-        public ProjectBll()
+        public ProjectBll(IProjectDataFactory projectDataFactory, IProjectFactory projectFactory)
         {
-            projectDataFactory = new ProjectDataFactory();
-            projectFactory = new ProjectFactory();
+            this.projectDataFactory = projectDataFactory;
+            this.projectFactory = projectFactory;
         }
 
         public async Task<IEnumerable<IProjectData>> GetAllProjects()
