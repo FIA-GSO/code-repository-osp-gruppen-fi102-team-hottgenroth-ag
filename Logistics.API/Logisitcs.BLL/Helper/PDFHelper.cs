@@ -11,13 +11,16 @@ using System.Threading.Tasks;
 using System;
 using iText.Layout;
 using System.Collections.Generic;
+using Org.BouncyCastle.Utilities;
 
 namespace Logisitcs.BLL.Helper
 {
     public class PDFHelper
     {
-        private int y_Achse = 0;
+        public double y_Achse = 0;
         public string projectName = "Testprojekt";
+
+        int _marginAllSites = 20;
 
         public async Task<string> Create(object jsonData)
         {
@@ -45,7 +48,7 @@ namespace Logisitcs.BLL.Helper
 
                         // Box hinzufügen
                         // AddBox(document, pdf, pageSize);
-                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse, box[0]);
+                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse, box);
 
                         pdf.AddNewPage();
 
@@ -58,7 +61,7 @@ namespace Logisitcs.BLL.Helper
         }
 
         private PdfPage AddBox(Document document, PdfDocument pdf, int pageNumber, 
-            int y_Achse, ITransportBoxData box)
+            double y_Achse, List<ITransportBoxData> box)
         {
             PdfPage pdfPage;
 
@@ -77,45 +80,54 @@ namespace Logisitcs.BLL.Helper
             // Schrift und Größe setzen
             PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             float fontSize = 12;
+            y_Achse = pageSize.GetTop() - 70;
 
-            // Texte für Boxnummer und Boxkategorie
-            string boxNumber = "Box " + box.Number;
-            string boxCategory = "Type: " + box.BoxCategory;
+            foreach (var b in box)
+            {
 
-            // Textbreite berechnen
-            float textWidth = font.GetWidth(boxCategory, fontSize);
+                // Texte für Boxnummer und Boxkategorie
+                string boxNumber = "Box " + b.Number;
+                string boxCategory = "Type: " + b.BoxCategory;
 
-            // BoxNumber
-            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-            .MoveText(pageSize.GetLeft() + 20, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
-            .ShowText(boxNumber)
-            .EndText();
+                // Textbreite berechnen
+                float textWidth = font.GetWidth(boxCategory, fontSize);
 
-            // BoxCategory
-            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-            .MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 70).SetColor(new DeviceRgb(0, 0, 0), true)
-            .ShowText(boxCategory)
-            .EndText();
+                // BoxNumber
+                pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                .MoveText(pageSize.GetLeft() + 20, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                .ShowText(boxNumber)
+                .EndText();
 
-            // Description
-            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-            .MoveText(pageSize.GetLeft() + 30, pageSize.GetTop() - 90).SetColor(new DeviceRgb(128, 128, 128), true)
-            .ShowText(box.Description)
-            .EndText();
+                // BoxCategory
+                pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                .MoveText(pageSize.GetRight() - 20 - textWidth, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                .ShowText(boxCategory)
+                .EndText();
 
-            // Article Linke Seite
-            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-            .MoveText(pageSize.GetLeft() + 30, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
-            .ShowText("- ArticleName Status: Status ")
-            .EndText();
+                y_Achse -= 20;
 
-            textWidth = font.GetWidth("Anzahl: zahl Einheit: unit ", fontSize);
+                // Description
+                pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                .MoveText(pageSize.GetLeft() + 30, y_Achse).SetColor(new DeviceRgb(128, 128, 128), true)
+                .ShowText(b.Description)
+                .EndText();
 
-            // Article Rechte Seite
-            pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-            .MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
-            .ShowText("Anzahl: zahl Einheit: unit ")
-            .EndText();
+                y_Achse -= 15;
+
+                // Article Linke Seite
+                //pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                //.MoveText(pageSize.GetLeft() + 30, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                //.ShowText("- ArticleName Status: Status ")
+                //.EndText();
+
+                textWidth = font.GetWidth("Anzahl: zahl Einheit: unit ", fontSize);
+
+                // Article Rechte Seite
+                //pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                //.MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
+                //.ShowText("Anzahl: zahl Einheit: unit ")
+                //.EndText();
+            }
 
             // Zeichnen der Linie unter Boxnummer und Boxkategorie
             // pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetBottom() + 25).LineTo(pageSize.GetRight() - 20, pageSize.GetBottom() + 25).Stroke();
