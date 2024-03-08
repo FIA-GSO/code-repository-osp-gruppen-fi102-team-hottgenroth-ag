@@ -1,9 +1,11 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class TransportboxController : ControllerBase

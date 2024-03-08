@@ -8,7 +8,7 @@ public partial class User
 
     public string UserPassword { get; set; }
 
-    public long? UserRoleId { get; set; }
+    public int? UserRoleId { get; set; }
 
     public virtual UserRole UserRole { get; set; }
 }

@@ -1,0 +1,24 @@
+.date-picker-input
+{
+  background: url("/assets/icons/calendar-alt.svg")  97% 50% no-repeat ;
+  background-size: 16px 16px;
+  border-radius: 4px;
+  border: 1px solid #c4c4c4;
+  padding: 3px 5px;
+}
+
+.date-picker-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.date-picker-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.picker-color
+{
+  background-color: white;
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}

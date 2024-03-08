@@ -9,48 +9,48 @@ db_path = 'logisticsDB.sqlite'
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-# Inhalt von Article und Transportbox löschen
-cursor.execute('DROP TABLE IF EXISTS Article')
-cursor.execute('DROP TABLE IF EXISTS Transportbox')
-cursor.execute('DROP TABLE IF EXISTS ArticleBoxAssignment')
+# # Inhalt von Article und Transportbox löschen
+# cursor.execute('DROP TABLE IF EXISTS Article')
+# cursor.execute('DROP TABLE IF EXISTS Transportbox')
+# cursor.execute('DROP TABLE IF EXISTS ArticleBoxAssignment')
 
-# Article und Transportbox neu erstellen
-cursor.execute('''
-CREATE TABLE Transportbox (
-    BoxGUID TEXT PRIMARY KEY,
-    Number INTEGER,
-    Description TEXT,
-    ProjectGUID TEXT, 
-    LocationTransport TEXT,
-    LocationHome TEXT,
-    LocationDeployment TEXT,
-    BoxCategory TEXT,
-    FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
-)''')
+# # Article und Transportbox neu erstellen
+# cursor.execute('''
+# CREATE TABLE Transportbox (
+#     BoxGUID TEXT PRIMARY KEY,
+#     Number INTEGER,
+#     Description TEXT,
+#     ProjectGUID TEXT, 
+#     LocationTransport TEXT,
+#     LocationHome TEXT,
+#     LocationDeployment TEXT,
+#     BoxCategory TEXT,
+#     FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
+# )''')
 
-cursor.execute('''
-CREATE TABLE Article (
-    ArticleGUID TEXT PRIMARY KEY,
-    ArticleName TEXT,
-    Description TEXT,
-    GTIN INTEGER,
-    Unit TEXT
-)''')
+# cursor.execute('''
+# CREATE TABLE Article (
+#     ArticleGUID TEXT PRIMARY KEY,
+#     ArticleName TEXT,
+#     Description TEXT,
+#     GTIN INTEGER,
+#     Unit TEXT
+# )''')
 
-cursor.execute('''
-CREATE TABLE ArticleBoxAssignment (
-    AssignmentGUID TEXT PRIMARY KEY,
-    ArticleGUID TEXT,
-	BoxGUID TEXT,
-	Position REAL,
-	Status INTEGER,
-	Quantity INTEGER,
-	ExpiryDate DATE,
-    ENUM Status,
-    FOREIGN KEY (ArticleGUID) REFERENCES Article(ArticleGUID),
-    FOREIGN KEY (BoxGUID) REFERENCES Transportbox(BoxGUID),
-	FOREIGN KEY (Status) REFERENCES Status(StatusID)
-)''')
+# cursor.execute('''
+# CREATE TABLE ArticleBoxAssignment (
+#     AssignmentGUID TEXT PRIMARY KEY,
+#     ArticleGUID TEXT,
+# 	BoxGUID TEXT,
+# 	Position REAL,
+# 	Status INTEGER,
+# 	Quantity INTEGER,
+# 	ExpiryDate DATE,
+#     ENUM Status,
+#     FOREIGN KEY (ArticleGUID) REFERENCES Article(ArticleGUID),
+#     FOREIGN KEY (BoxGUID) REFERENCES Transportbox(BoxGUID),
+# 	FOREIGN KEY (Status) REFERENCES Status(StatusID)
+# )''')
 
 # Funktion zum Importieren von Daten aus der CSV-Datei in die Transportbox-Tabelle
 def import_transportbox(csv_file_path):
@@ -62,7 +62,7 @@ def import_transportbox(csv_file_path):
                 INSERT INTO Transportbox (BoxGUID, Number, Description, BoxCategory) 
                 VALUES (?, ?, ?, ?)
                 ''', (
-                    row['BoxGUID'],
+                    row['BoxGUID'].lower(),
                     int(row['Number']),
                     row['Description'],
                     row['Category']
@@ -94,7 +94,7 @@ def import_article(csv_file_path):
             GTIN=excluded.GTIN,
             Unit=excluded.Unit
             ''', (
-                row['ArticleGUID'],
+                row['ArticleGUID'].lower(),
                 row.get('ArticleName', None),
                 row.get('Description', None),
                 gtin,
@@ -107,8 +107,8 @@ def import_article(csv_file_path):
             VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', (
                 assignment_guid,
-                row['ArticleGUID'],
-                row.get('BoxGUID', None),
+                row['ArticleGUID'].lower(),
+                row.get('BoxGUID', None).lower(),
                 float(row['Position']) if row['Position'] else None,
                 None,  # ENUM Status, 
                 int(row['Quantity']) if row['Quantity'] else None,

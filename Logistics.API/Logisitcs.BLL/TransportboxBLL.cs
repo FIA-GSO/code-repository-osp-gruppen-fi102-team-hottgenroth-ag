@@ -14,15 +14,13 @@ namespace Logisitcs.BLL
 {
     public class TransportboxBLL : ITransportboxBll
     {
-        private ITransportboxDAL _DAL;
         private readonly ITransportBoxDataFactory transportDataFactory;
         private readonly ITransportboxFactory transportboxFactory;
 
-        public TransportboxBLL(ITransportboxDAL dal)
+        public TransportboxBLL(ITransportBoxDataFactory dataFactory, ITransportboxFactory boxFactory)
         {
-            _DAL = dal;
-            transportDataFactory = new TransportBoxDataFactory();
-            transportboxFactory = new TransportboxFactory();
+            transportDataFactory = dataFactory;
+            transportboxFactory = boxFactory;
         }
 
         public async Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesByPrjGuid(string prj)
@@ -40,11 +38,11 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Transportbox transportbox = DBCommands.GetTransportbox(guid.ToString());
-                /*If no box is found, return null*/
-                if(transportbox != null)
+                //If no box is found, return null
+                if (transportbox != null)
                 {
-                     ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
-                     return transportboxData;
+                    ITransportBoxData transportboxData = transportDataFactory.Create(transportbox);
+                    return transportboxData;
                 }
                 return null;
             });

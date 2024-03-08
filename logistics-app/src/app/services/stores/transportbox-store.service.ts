@@ -56,7 +56,7 @@ export class TransportboxStoreService extends BaseStoreService<ITransportBoxData
       var item: ITransportBoxData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.put(this._serviceURL + "/" + item.boxGuid, item);
+        await this.request.put(this._serviceURL, item);
         return true;
       }
     }

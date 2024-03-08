@@ -2,8 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, ViewChild, inject } from '@an
 import { CommonModule } from '@angular/common';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { INavRailItem } from '../../models/INavRailItem';
-import { Guid } from 'guid-typescript';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({

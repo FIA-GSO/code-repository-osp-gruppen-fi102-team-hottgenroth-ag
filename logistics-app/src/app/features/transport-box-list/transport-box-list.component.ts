@@ -6,11 +6,12 @@ import {MatListModule} from '@angular/material/list';
 import { ITransportBoxData } from '../../models/ITransportBoxData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
 import { LoadingSpinnerService } from '../../services/loading-spinner.service';
+import { TruncatePipe } from '../../framework/TruncatePipe';
 
 @Component({
   selector: 'transport-box-list',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule, TruncatePipe],
   templateUrl: './transport-box-list.component.html',
   styleUrl: './transport-box-list.component.scss'
 })
@@ -22,7 +23,6 @@ export class TransportBoxListComponent {
   
   public _selectedBox: ITransportBoxData | undefined;
 
-  private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
   public set selectedBox(pBox: ITransportBoxData | undefined)
@@ -34,7 +34,6 @@ export class TransportBoxListComponent {
       this._spinner.show("Transportbox is loading...", new Promise<void>(async(resolve, reject) => {
         if(!!this._selectedBox)
         {
-          await this._logisticStore.loadArticles(this._selectedBox.boxGuid)
           this.boxSelection.emit(this._selectedBox);
           resolve();
         }

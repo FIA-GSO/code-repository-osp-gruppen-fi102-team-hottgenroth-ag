@@ -8,6 +8,8 @@ import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './app/services/authentication/auth-interceptor.service';
 import { AuthGuard } from './app/services/authentication/authguard';
+import { DatePipe } from '@angular/common';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -19,6 +21,8 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', subscriptSizing: 'dynamic' } },
     provideHttpClient(withInterceptors([authInterceptor])),
-    AuthGuard
+    AuthGuard,
+    DatePipe,
+    provideNativeDateAdapter()
   ],
 }).catch((err) => console.error(err));

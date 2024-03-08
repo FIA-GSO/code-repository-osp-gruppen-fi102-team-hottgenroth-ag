@@ -6,7 +6,7 @@ public partial class Transportbox
 {
     public string BoxGuid { get; set; }
 
-    public long? Number { get; set; }
+    public int? Number { get; set; }
 
     public string Description { get; set; }
 
