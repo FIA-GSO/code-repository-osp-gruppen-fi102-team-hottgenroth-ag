@@ -17,22 +17,12 @@ namespace Logistics.API.Controllers
             BLL = bll;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            return Ok();
-        }
+   
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] PDF_Data data)
+        public async Task<IActionResult> Create([FromBody] IPdfData data)
         {
-            var result = await BLL.Create(data.transportbox, data.project, data.articles);
+            var result = await BLL.Create(data.Transportbox, data.Project);
 
             if (result == null)
             {
@@ -41,24 +31,5 @@ namespace Logistics.API.Controllers
 
             return Ok(result);
         }
-
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] object data)
-        {
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            return Ok();
-        }
     }
-}
-
-public struct PDF_Data
-{
-    public List<ITransportBoxData> transportbox { get; set; }
-    public IProjectData project { get; set; }
-    public List<IArticleData> articles { get; set; }
 }

@@ -1,9 +1,7 @@
-﻿using Logisitcs.BLL.Factories;
-using Logisitcs.BLL.Interfaces;
+﻿using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
-using Logisitcs.DAL.Interfaces;
 using Logisitcs.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
 {
-    public class TransportboxBLL : ITransportboxBll
+   public class TransportboxBLL : ITransportboxBll
     {
         private readonly ITransportBoxDataFactory transportDataFactory;
         private readonly ITransportboxFactory transportboxFactory;

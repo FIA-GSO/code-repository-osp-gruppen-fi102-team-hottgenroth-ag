@@ -1,13 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, inject } from '@angular/core';
 import { IArticleData } from '../../models/IArticleData';
 import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
-import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSelectModule } from '@angular/material/select';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { TruncatePipe } from '../../framework/TruncatePipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ArticleDialogComponent } from '../article-dialog/article-dialog.component';
@@ -32,10 +27,9 @@ export class ArticleListComponent{
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _dialog: MatDialog = inject(MatDialog);
   private _auth: AuthService = inject(AuthService);
+  private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-  constructor(){
-    
-  }
+  constructor(){}
 
   public getSortedArticles()
   {
@@ -54,17 +48,29 @@ export class ArticleListComponent{
 
   public isArticleFirstPosition(article: IArticleData): boolean
   {
-    var samePositionList = this.getAllArticlesFromSamePositions(article);
-    if(samePositionList.length > 0 && samePositionList[0].articleGuid == article.articleGuid)
+    var firstPositionList = this.getAllFirstPositions();
+    if(firstPositionList.length > 0)
     {
-      return true;
+      return !!firstPositionList.find(art => art.articleGuid === article.articleGuid);
     }
     return false;
   }
 
   public getAllArticlesFromSamePositions(article: IArticleData): IArticleData[]
   {
-    return this.getSortedArticles().filter(item => item.position.toString()[0] === article.position.toString()[0])
+    let artpos: string = article.position.toString();
+    let articles = this.getSortedArticles();
+    return articles.filter(item => this.getPosNumber(item.position) === artpos && item.position.toString().includes("."));
+  }
+
+  private getPosNumber(pos: number): string
+  {
+    return pos.toString().substring(0, pos.toString().indexOf("."))
+  }
+
+  public getAllFirstPositions(): IArticleData[]
+  {
+    return this.getSortedArticles().filter(item => !item.position.toString().includes("."))
   }
 
   public openArticleDialog(article: IArticleData)
@@ -76,7 +82,8 @@ export class ArticleListComponent{
       console.log(result)
       if(!!result)
       {
-        this._logisticStore.articleStore.update(result.articleGuid);
+        this._logisticStore.articleStore.update(result);
+        this._cd.detectChanges()
       }
     })
   }

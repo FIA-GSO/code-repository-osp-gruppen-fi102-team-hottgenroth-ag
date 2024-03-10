@@ -17,7 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Logisitcs.BLL.Interfaces\Logisitcs.BLL.Interfaces.csproj" />
     <ProjectReference Include="..\Logisitcs.BLL\Logisitcs.BLL.csproj" />
-    <ProjectReference Include="..\Logisitcs.DAL.Interfaces\Logisitcs.DAL.Interfaces.csproj" />
     <ProjectReference Include="..\Logisitcs.DAL\Logisitcs.DAL.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,4 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-
+﻿
 namespace Logisitcs.DAL.Models;
 
 public partial class ArticleBoxAssignment

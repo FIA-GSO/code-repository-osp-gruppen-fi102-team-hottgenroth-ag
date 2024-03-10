@@ -9,12 +9,12 @@ namespace Logisitcs.BLL.Interfaces
     {
         Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId);
 
-      Task<IArticleData> GetArticle(string boxId, string articleId);
+        Task<IArticleData> GetArticle(string boxId, string articleId);
 
-        bool AddArticle(IArticleData article);
+        Task<bool> AddArticle(IArticleData article);
 
-        bool UpdateArticle(IArticleData article);
+        Task<bool> UpdateArticle(IArticleData article);
 
-        bool DeleteArticle(Guid id);
+        Task<bool> DeleteArticle(Guid id);
     }
 }

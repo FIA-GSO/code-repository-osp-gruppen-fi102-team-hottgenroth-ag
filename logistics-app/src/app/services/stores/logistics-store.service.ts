@@ -51,17 +51,22 @@ export class LogisticsStoreService
       return undefined;
     }
 
+    this._articleStore.clear();
+    this._transportboxStore.clear();
+    
     var prj: IProjectData | undefined = await this._projectStore.loadProject(projectId);
     if(!!prj)
     {
       await this._transportboxStore.loadIntitalData(prj.projectGuid);
-      this._transportboxStore.getItems().forEach(async(box: ITransportBoxData) => {
-        await this._articleStore.loadIntitalData(box.boxGuid);
-      })
       return prj;
     }
 
     return undefined;
+  }
+
+  public async loadArticleForBox(boxGuid: string): Promise<void>
+  {
+    await this._articleStore.loadIntitalData(boxGuid);
   }
 
   public async loadIntitalData(): Promise<void>

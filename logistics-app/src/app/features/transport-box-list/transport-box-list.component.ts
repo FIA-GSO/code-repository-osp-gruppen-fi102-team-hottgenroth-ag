@@ -21,10 +21,10 @@ export class TransportBoxListComponent {
 
   @Input() public transportBoxes: ITransportBoxData[] = [];
   
-  public _selectedBox: ITransportBoxData | undefined;
-
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
-
+  private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
+  
+  private _selectedBox: ITransportBoxData | undefined;
   public set selectedBox(pBox: ITransportBoxData | undefined)
   {
     if(this._selectedBox != pBox)
@@ -34,9 +34,11 @@ export class TransportBoxListComponent {
       this._spinner.show("Transportbox is loading...", new Promise<void>(async(resolve, reject) => {
         if(!!this._selectedBox)
         {
+          await this._logisticStore.loadArticleForBox(this._selectedBox.boxGuid);
           this.boxSelection.emit(this._selectedBox);
           resolve();
         }
+        else reject();
       }));
     }
   }

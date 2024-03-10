@@ -13,14 +13,12 @@ export class ButtonStoreService
   private _authService: AuthService = inject(AuthService);
   private _framework: FrameworkService = inject(FrameworkService);
   private _router: Router = inject(Router);
-  private _pdfService: PdfService = inject(PdfService);
 
   public projectButton!: INavRailItem;
   public boxButton!: INavRailItem;
 
 
   public logoutButton!: IToolbarButton;
-  public pdfButton!: IToolbarButton;
   public userButton!: IToolbarButton;
 
 
@@ -52,13 +50,6 @@ export class ButtonStoreService
       () => this.logout(this)
     )
 
-    this.pdfButton = this._framework.createToolbarButton(
-      "picture_as_pdf",
-      Guid.create().toString(),
-      "Print PDF",
-      () => this.printPDF(this)
-    )
-
     this.userButton = this._framework.createToolbarButton(
       "account_circle",
       Guid.create().toString(),
@@ -86,13 +77,5 @@ export class ButtonStoreService
   private boxClicked(context: ButtonStoreService)
   {
     context._router.navigate(["./transportbox"]);
-  }
-
-  private async printPDF(context: ButtonStoreService)
-  {
-    var pdfByteArray = await context._pdfService.createPdf();
-
-    this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Tabelle");
-  }
-    
+  }    
 }

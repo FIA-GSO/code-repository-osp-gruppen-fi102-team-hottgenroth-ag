@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Logisitcs.BLL.Interfaces.ModelInterfaces
 {
-    public interface IPdfData
+   public interface IPdfData
     {
-        ITransportBoxData transportbox { get; set; }
-        IProjectData project { get; set; }
+        List<ITransportBoxData> Transportbox { get; set; }
+        IProjectData Project { get; set; }
     }
 }

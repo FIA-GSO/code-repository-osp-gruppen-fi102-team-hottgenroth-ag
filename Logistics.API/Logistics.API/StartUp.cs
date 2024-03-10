@@ -1,11 +1,10 @@
 using Logisitcs.BLL;
 using Logisitcs.BLL.Factories;
+using Logisitcs.BLL.Helper;
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.BLL.Models;
-using Logisitcs.DAL;
-using Logisitcs.DAL.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -46,12 +45,17 @@ namespace Logistics.API
             services.AddTransient<IProjectFactory>(provider => new ProjectFactory());
             services.AddTransient<ITransportBoxDataFactory>(provider => new TransportBoxDataFactory());
             services.AddTransient<ITransportboxFactory>(provider => new TransportboxFactory());
+            services.AddTransient<IArticleAndBoxAssignmentFactory>(provider => new ArticleAndBoxAssignmentFactory());
+            services.AddTransient<IArticleDataFactory>(provider => new ArticleDataFactory());
+
+            //Helper
+            services.AddTransient<PdfHelper>(provider => new PdfHelper());
 
             //BLL
             services.AddTransient<IProjectBll>(provider => new ProjectBll(provider.GetService<IProjectDataFactory>(), provider.GetService<IProjectFactory>()));
             services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportBoxDataFactory>(), provider.GetService<ITransportboxFactory>()));
-            services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
-            services.AddTransient<IArticleBll>(provider => new ArticleBll());
+            services.AddTransient<IArticleBll>(provider => new ArticleBll(provider.GetService<IArticleAndBoxAssignmentFactory>(), provider.GetService<IArticleDataFactory>()));
+            services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<PdfHelper>()));
             services.AddTransient<ILoginBll>(provider => new LoginBll());
 
             #endregion BLL_DAL_DI
@@ -77,39 +81,37 @@ namespace Logistics.API
 
             #endregion Json
 
-                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+           .AddJwtBearer(options =>
+           {
+               options.TokenValidationParameters = new TokenValidationParameters
                {
-                  options.TokenValidationParameters = new TokenValidationParameters
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = Configuration["Jwt:Issuer"],
+                   ValidAudience = Configuration["Jwt:Issuer"],
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+               };
+           });
+
+            services.AddMvc();
+
+            services.AddSwaggerGen(opt =>
+              {
+                  opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Logistics.API", Version = "v1" });
+                  opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                   {
-                      ValidateIssuer = true,
-                      ValidateAudience = true,
-                      ValidateLifetime = true,
-                      ValidateIssuerSigningKey = true,
-                      ValidIssuer = Configuration["Jwt:Issuer"],
-                      ValidAudience = Configuration["Jwt:Issuer"],
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                  };
-               });
-
-                services.AddMvc();
-
-          
-
-                services.AddSwaggerGen(opt =>
-                  {
-                 opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Logistics.API", Version = "v1" });
-                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                 {
-                     In = ParameterLocation.Header,
-                     Description = "Please enter token",
-                     Name = "Authorization",
-                     Type = SecuritySchemeType.Http,
-                     BearerFormat = "JWT",
-                     Scheme = "bearer"
-                 });
-                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-                 {
+                      In = ParameterLocation.Header,
+                      Description = "Please enter token",
+                      Name = "Authorization",
+                      Type = SecuritySchemeType.Http,
+                      BearerFormat = "JWT",
+                      Scheme = "bearer"
+                  });
+                  opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+             {
                   {
                      new OpenApiSecurityScheme
                      {
@@ -121,11 +123,11 @@ namespace Logistics.API
                      },
                      new string[] { }
                      }
-                  });
+              });
                   opt.CustomSchemaIds(type => type.ToString());
-                });
+              });
 
-                services.AddHttpClient();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.DAL", "Logisitcs.DAL\Logisitcs.DAL.csproj", "{24EC16C8-3270-425A-8E08-AE95178B03AF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{590BB191-FC03-4F85-A951-469FCAC885FC} = {590BB191-FC03-4F85-A951-469FCAC885FC}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.BLL", "Logisitcs.BLL\Logisitcs.BLL.csproj", "{362EA008-490D-4613-BE36-AC9BE27ABEC8}"
 EndProject
@@ -15,8 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.BLL.Interfaces", "Logisitcs.BLL.Interfaces\Logisitcs.BLL.Interfaces.csproj", "{D57B6B7E-80AA-4A2C-9CD1-1D4747775A8C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.DAL.Tests", "Logisitcs.DAL.Tests\Logisitcs.DAL.Tests.csproj", "{2C4104D0-11BB-4417-8A83-BF52940A7D86}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logisitcs.DAL.Interfaces", "Logisitcs.DAL.Interfaces\Logisitcs.DAL.Interfaces.csproj", "{590BB191-FC03-4F85-A951-469FCAC885FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistics.API", "Logistics.API\Logistics.API.csproj", "{655804CA-A42A-4396-8EDA-AE42BEE386B9}"
 EndProject
@@ -68,14 +63,6 @@ Global
 		{2C4104D0-11BB-4417-8A83-BF52940A7D86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C4104D0-11BB-4417-8A83-BF52940A7D86}.Release|x64.ActiveCfg = Release|Any CPU
 		{2C4104D0-11BB-4417-8A83-BF52940A7D86}.Release|x64.Build.0 = Release|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Debug|x64.Build.0 = Debug|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Release|x64.ActiveCfg = Release|Any CPU
-		{590BB191-FC03-4F85-A951-469FCAC885FC}.Release|x64.Build.0 = Release|Any CPU
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{655804CA-A42A-4396-8EDA-AE42BEE386B9}.Debug|x64.ActiveCfg = Debug|x64

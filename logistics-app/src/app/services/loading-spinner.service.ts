@@ -1,6 +1,5 @@
 import { Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
 import { ComponentRef, Injectable, inject } from "@angular/core";
-import { Observable, Subject } from "rxjs";
 import { LoadingSpinnerComponent } from "../framework/loading-spinner/loading-spinner.component";
 import { ComponentPortal } from "@angular/cdk/portal";
 import { ISpinnerEvent } from "../models/ISpinnerEvent";
@@ -26,13 +25,10 @@ export class LoadingSpinnerService {
 
   public set message(pMessage: string)
   {
-    if(this._message !== pMessage)
-    {
-      this._message = pMessage;
+    this._message = pMessage;
 
-      if (!!this._component) {
-        this._component.instance.message = pMessage;
-      }
+    if (!!this._component) {
+      this._component.instance.message = pMessage;
     }
   }
   
