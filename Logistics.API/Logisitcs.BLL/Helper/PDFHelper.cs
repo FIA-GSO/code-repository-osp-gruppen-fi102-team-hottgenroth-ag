@@ -147,9 +147,13 @@ namespace Logisitcs.BLL.Helper
                     y_Achse -= 12;
 
                     // Status
-                    pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 10)
-                    .MoveText(positionRight + 10, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
-                    .ShowText("Status: " + article.Status)
+                    pdfCanvas.BeginText()
+                    .SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 10)
+                    .MoveText(positionRight + 10, y_Achse)
+                    .SetColor(new DeviceRgb(0, 0, 0), true) // Farbe für "Status:" auf Schwarz setzen
+                    .ShowText("Status: ")
+                    .SetColor(GetStatusColor(article.Status), true) 
+                    .ShowText(article.Status)
                     .EndText();
 
                     y_Achse -= 18;
@@ -180,22 +184,22 @@ namespace Logisitcs.BLL.Helper
             return articles.Where(article => article.BoxGuid.ToString() == boxGuid).ToList();
         }
 
-        private Color GetStatusColor(int status)
+        private Color GetStatusColor(string status)
         {
             switch (status)
             {
-                case 0:
-                    return new DeviceRgb(255, 0, 0); // Rot
-                case 1:
-                    return new DeviceRgb(128, 128, 128); // Grau
-                case 2:
-                    return new DeviceRgb(255, 165, 0); // Orange
-                case 3:
+                case "Defect":
+                    return new DeviceRgb(240, 0, 0); // Rot
+                case "Lost":
+                    return new DeviceRgb(240, 0, 0); 
+                case "Discarded":
+                    return new DeviceRgb(255, 0, 0); 
+                case "Consumed":
                     return new DeviceRgb(0, 128, 0); // Grün
-                case 4:
-                    return new DeviceRgb(0, 0, 255); // Blau
-                case 5:
-                    return new DeviceRgb(0, 255, 255); // Cyan
+                case "Donated":
+                    return new DeviceRgb(0, 128, 0); 
+                case "Received":
+                    return new DeviceRgb(0, 128, 0); 
                 default:
                     return new DeviceRgb(0, 0, 0); // Standard: Schwarz
             }
