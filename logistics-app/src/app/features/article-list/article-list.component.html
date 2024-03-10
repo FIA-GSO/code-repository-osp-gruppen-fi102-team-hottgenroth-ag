@@ -1,8 +1,8 @@
 
 <section class="w-full h-full flex flex-col">
   <mat-accordion appearance="outlined">
-    <mat-expansion-panel *ngFor="let art of getSortedArticles()"  [hideToggle]="getAllArticlesFromSamePositions(art).length <= 1"
-    [class.pointer-events-none]="getAllArticlesFromSamePositions(art).length <= 1">
+    <mat-expansion-panel *ngFor="let art of getSortedArticles()"  [hideToggle]="getAllArticlesFromSamePositions(art).length <= 0"
+    [class.pointer-events-none]="getAllArticlesFromSamePositions(art).length <= 0">
       <mat-expansion-panel-header *ngIf="isArticleFirstPosition(art)">
         <mat-panel-title class="flex flex-row grow">
           {{art.position}} {{art.description | truncate:[50]}}

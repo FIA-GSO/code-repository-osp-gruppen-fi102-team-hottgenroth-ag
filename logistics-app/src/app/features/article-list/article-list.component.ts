@@ -54,17 +54,29 @@ export class ArticleListComponent{
 
   public isArticleFirstPosition(article: IArticleData): boolean
   {
-    var samePositionList = this.getAllArticlesFromSamePositions(article);
-    if(samePositionList.length > 0 && samePositionList[0].articleGuid == article.articleGuid)
+    var firstPositionList = this.getAllFirstPositions();
+    if(firstPositionList.length > 0)
     {
-      return true;
+      return !!firstPositionList.find(art => art.articleGuid === article.articleGuid);
     }
     return false;
   }
 
   public getAllArticlesFromSamePositions(article: IArticleData): IArticleData[]
   {
-    return this.getSortedArticles().filter(item => item.position.toString()[0] === article.position.toString()[0])
+    let artpos: string = article.position.toString();
+    let articles = this.getSortedArticles();
+    return articles.filter(item => this.getPosNumber(item.position) === artpos && item.position.toString().includes("."));
+  }
+
+  private getPosNumber(pos: number): string
+  {
+    return pos.toString().substring(0, pos.toString().indexOf("."))
+  }
+
+  public getAllFirstPositions(): IArticleData[]
+  {
+    return this.getSortedArticles().filter(item => !item.position.toString().includes("."))
   }
 
   public openArticleDialog(article: IArticleData)

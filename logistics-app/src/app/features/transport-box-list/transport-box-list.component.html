@@ -1,13 +1,11 @@
 <section class="!h-full">
   <mat-list class="w-full !overflow-auto !h-full">
-    @for (box of transportBoxes; track box) 
-    {
-      <mat-list-item (click)="selectedBox = box;" [class.selected]="selectedBox?.boxGuid === box.boxGuid">
+    <ng-container *ngFor="let box of transportBoxes">
+      <mat-list-item (click)="selectedBox = box;" [ngClass]="!!selectedBox && selectedBox.boxGuid === box.boxGuid ? 'selected' : ''">
         <ng-container [ngTemplateOutlet]="box_item" [ngTemplateOutletContext]="{boxItem: box}"></ng-container>
       </mat-list-item>
-    }
+    </ng-container>
   </mat-list>
-
 </section>
 
 

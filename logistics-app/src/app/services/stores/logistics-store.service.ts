@@ -55,13 +55,15 @@ export class LogisticsStoreService
     if(!!prj)
     {
       await this._transportboxStore.loadIntitalData(prj.projectGuid);
-      this._transportboxStore.getItems().forEach(async(box: ITransportBoxData) => {
-        await this._articleStore.loadIntitalData(box.boxGuid);
-      })
       return prj;
     }
 
     return undefined;
+  }
+
+  public async loadArticleForBox(boxGuid: string): Promise<void>
+  {
+    await this._articleStore.loadIntitalData(boxGuid);
   }
 
   public async loadIntitalData(): Promise<void>
