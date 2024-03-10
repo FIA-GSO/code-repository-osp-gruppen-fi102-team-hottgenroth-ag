@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -82,28 +81,28 @@ namespace Logistics.API.Controllers
             return response;
         }
 
-      [Authorize]
-      [HttpGet]
-      public async Task<IActionResult> GetAllUser()
-      {
-         IActionResult response = Unauthorized();
-         var role = GetUserRole(await HttpContext.GetTokenAsync("access_token"));
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser()
+        {
+            IActionResult response = Unauthorized();
+            var role = GetUserRole(await HttpContext.GetTokenAsync("access_token"));
 
-         //user ist z.b Lagerist und darf die rolle von anderen leuten ändern
-         if (ValidateUserRole(role))
-         {
-            IEnumerable<IUserData> userList = await bll.GetAllUser();
-            if(userList == null)
+            //user ist z.b Lagerist und darf die rolle von anderen leuten ändern
+            if (ValidateUserRole(role))
             {
-               return NotFound();
+                IEnumerable<IUserData> userList = await bll.GetAllUser();
+                if (userList == null)
+                {
+                    return NotFound();
+                }
+                response = Ok(userList);
             }
-            response = Ok(userList);
-         }
 
-         return response;
-      }
+            return response;
+        }
 
-      private static bool ValidateUserRole(string role)
+        private static bool ValidateUserRole(string role)
         {
             return role == "Admin" || role == "Storekeeper" || role == "TeamLeader";
         }

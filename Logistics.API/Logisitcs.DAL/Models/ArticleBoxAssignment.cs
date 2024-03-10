@@ -1,5 +1,4 @@
-﻿
-namespace Logisitcs.DAL.Models;
+﻿namespace Logisitcs.DAL.Models;
 
 public partial class ArticleBoxAssignment
 {

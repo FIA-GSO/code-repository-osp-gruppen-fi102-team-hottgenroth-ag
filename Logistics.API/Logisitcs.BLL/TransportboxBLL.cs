@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
 {
-   public class TransportboxBLL : ITransportboxBll
+    public class TransportboxBLL : ITransportboxBll
     {
         private readonly ITransportBoxDataFactory transportDataFactory;
         private readonly ITransportboxFactory transportboxFactory;

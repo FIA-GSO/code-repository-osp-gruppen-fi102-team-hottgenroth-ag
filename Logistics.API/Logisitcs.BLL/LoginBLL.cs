@@ -5,10 +5,8 @@ using Logisitcs.BLL.Models;
 using Logisitcs.DAL;
 using Logisitcs.DAL.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
@@ -81,20 +79,20 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-               List<IUserData> result = new List<IUserData>();
-               IEnumerable<User> usersDB = DbCommandsUser.GetAllUsers();
-               if (usersDB == null)
-               {
-                  return null;
-               }
-               foreach (User user in usersDB)
-               {
-                  UserRole userRole = DbCommandsUser.GetUserRole((int)user.UserRoleId);
-                  var userData = new UserData(Guid.Parse(user.UserId), user.UserEmail, userRole.Role);
-                  result.Add(userData);
-               }
+                List<IUserData> result = new List<IUserData>();
+                IEnumerable<User> usersDB = DbCommandsUser.GetAllUsers();
+                if (usersDB == null)
+                {
+                    return null;
+                }
+                foreach (User user in usersDB)
+                {
+                    UserRole userRole = DbCommandsUser.GetUserRole((int)user.UserRoleId);
+                    var userData = new UserData(Guid.Parse(user.UserId), user.UserEmail, userRole.Role);
+                    result.Add(userData);
+                }
 
-               return result;
+                return result;
             });
         }
     }
