@@ -11,17 +11,17 @@ namespace Logistics.API.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
-        protected IArticleBll BLL { get; }
+        protected IArticleBll articleBll { get; }
 
-        public ArticleController(IArticleBll bll)
+        public ArticleController(IArticleBll articleBll)
         {
-            BLL = bll;
+            this.articleBll = articleBll;
         }
 
         [HttpGet("all/{boxId}")]
         public async Task<IActionResult> GetAll(string boxId)
         {
-            IEnumerable<IArticleData> result = await BLL.GetAllArticlesByBoxId(boxId);
+            IEnumerable<IArticleData> result = await articleBll.GetAllArticlesByBoxId(boxId);
             if (result == null)
             {
                 return NotFound();
@@ -32,7 +32,7 @@ namespace Logistics.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid boxId, Guid articleId)
         {
-            IArticleData result = await BLL.GetArticle(boxId.ToString(), articleId.ToString());
+            IArticleData result = await articleBll.GetArticle(boxId.ToString(), articleId.ToString());
             if (result == null)
             {
                 return NotFound();
@@ -43,7 +43,7 @@ namespace Logistics.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] IArticleData data)
         {
-            var result = BLL.AddArticle(data);
+            var result = await articleBll.AddArticle(data);
             if (!result)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace Logistics.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] IArticleData data)
         {
-            var result = BLL.UpdateArticle(data);
+            var result = await articleBll.UpdateArticle(data);
             if (!result)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace Logistics.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = BLL.DeleteArticle(id);
+            var result = await articleBll.DeleteArticle(id);
             if (!result)
             {
                 return NotFound();

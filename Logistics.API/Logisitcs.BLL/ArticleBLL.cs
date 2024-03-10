@@ -1,4 +1,5 @@
 ﻿using Logisitcs.BLL.Interfaces;
+using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
 using System;
@@ -9,8 +10,13 @@ namespace Logisitcs.BLL
 {
     public class ArticleBll : IArticleBll
     {
-        public ArticleBll()
+        private readonly IArticleAndBoxAssignmentFactory articleAndBoxAssignmentFactory;
+        private readonly IArticleDataFactory articleDataFactory;
+
+        public ArticleBll(IArticleAndBoxAssignmentFactory articleAndBoxAssignmentFactory, IArticleDataFactory articleDataFactory)
         {
+            this.articleAndBoxAssignmentFactory = articleAndBoxAssignmentFactory;
+            this.articleDataFactory = articleDataFactory;
         }
 
         public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId)
@@ -26,20 +32,7 @@ namespace Logisitcs.BLL
                     {
                         status = DBCommands.GetStatusById((int)item.Status);
                     }
-                    articleDatas.Add(new ArticleData
-                    {
-                        ArticleGuid = item.ArticleGuid,
-                        ArticleName = item.ArticleName,
-                        Description = item.Description,
-                        Gtin = (int?)item.Gtin,
-                        ExpiryDate = item.ExpireDate != null && item.ExpireDate != "" ? DateTime.Parse(item.ExpireDate) : null,
-                        Quantity = item.Quantity,
-                        Position = item.Position,
-                        Status = status,
-                        Unit = item.Unit,
-                        BoxGuid = Guid.Parse(item.BoxGuid),
-                        ArticleBoxAssignment = Guid.Parse(item.AssignmentGuid)
-                    });
+                    articleDatas.Add(articleDataFactory.Create(item));
                 }
                 return articleDatas;
             });
@@ -55,84 +48,59 @@ namespace Logisitcs.BLL
                 {
                     status = DBCommands.GetStatusById(articleAndBoxAssignment.Status);
                 }
-                IArticleData articelData = new ArticleData
-                {
-                    ArticleGuid = articleAndBoxAssignment.ArticleGuid,
-                    ArticleName = articleAndBoxAssignment.ArticleName,
-                    Description = articleAndBoxAssignment.Description,
-                    Gtin = (int?)articleAndBoxAssignment.Gtin,
-                    ExpiryDate = articleAndBoxAssignment.ExpireDate != null ? DateTime.Parse(articleAndBoxAssignment.ExpireDate) : null,
-                    Quantity = articleAndBoxAssignment.Quantity,
-                    Position = articleAndBoxAssignment.Position,
-                    Status = status,
-                    Unit = articleAndBoxAssignment.Unit,
-                    BoxGuid = Guid.Parse(articleAndBoxAssignment.BoxGuid),
-                };
+                IArticleData articelData = articleDataFactory.Create(articleAndBoxAssignment);
                 return articelData;
             });
         }
 
-        public bool AddArticle(IArticleData article)
+        public async Task<bool> AddArticle(IArticleData article)
         {
-            ArticleAndBoxAssignment articleAndBoxAssignment = new ArticleAndBoxAssignment
-            (Guid.NewGuid().ToString(),
-             article.ArticleName,
-             article.Description,
-             article.Gtin,
-             article.Unit,
-             Guid.NewGuid().ToString(),
-             article.BoxGuid.ToString(),
-             article.Position,
-             DBCommands.GetStatusByName(article.Status),
-             article.Quantity,
-             article.ExpiryDate.ToString());
-            try
+            return await Task.Run(async () =>
             {
-                DBCommands.AddArticleAndBoxAssignment(articleAndBoxAssignment);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateAdd(article);
+                try
+                {
+                    DBCommands.AddArticleAndBoxAssignment(articleAndBoxAssignment);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
         }
 
-        public bool UpdateArticle(IArticleData article)
+        public async Task<bool> UpdateArticle(IArticleData article)
         {
-            ArticleAndBoxAssignment articleAndBoxAssignment = new ArticleAndBoxAssignment
-            (article.ArticleGuid.ToString(),
-             article.ArticleName,
-             article.Description,
-             article.Gtin,
-             article.Unit,
-             article.ArticleBoxAssignment.ToString(),
-             article.BoxGuid.ToString(),
-             article.Position,
-             DBCommands.GetStatusByName(article.Status),
-             article.Quantity,
-             article.ExpiryDate.ToString());
-            try
+            return await Task.Run(async () =>
             {
-                DBCommands.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateUpdate(article);
+                try
+                {
+                    DBCommands.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
         }
 
-        public bool DeleteArticle(Guid id)
+        public async Task<bool> DeleteArticle(Guid id)
         {
-            try
+            return await Task.Run(async () =>
             {
-                DBCommands.DeleteArticleAndBoxAssignment(id.ToString());
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                try
+                {
+                    DBCommands.DeleteArticleAndBoxAssignment(id.ToString());
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
         }
     }
 }
