@@ -1,10 +1,11 @@
 ﻿using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using System.Collections.Generic;
 
 namespace Logisitcs.BLL.Models
 {
-    public class PdfData
+    public class PdfData: IPdfData
     {
-        public ITransportBoxData transportbox { get; set; }
-        public IProjectData project { get; set; }
+        public List<ITransportBoxData> Transportbox { get; set; }
+        public IProjectData Project { get; set; }
     }
 }

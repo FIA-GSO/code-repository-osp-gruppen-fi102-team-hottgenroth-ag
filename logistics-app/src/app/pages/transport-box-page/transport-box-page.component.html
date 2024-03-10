@@ -6,7 +6,7 @@
         <mat-icon>search</mat-icon>
       </button>
       <h2 *ngIf="!isSearching">List of all tranport boxes</h2>
-      <button mat-icon-button *ngIf="!isSearching" (click)="isSearching = false">
+      <button mat-icon-button *ngIf="!isSearching" (click)="printPDF()">
         <mat-icon>picture_as_pdf</mat-icon>
       </button>
       <ng-container *ngIf="isSearching" [ngTemplateOutlet]="search"></ng-container>

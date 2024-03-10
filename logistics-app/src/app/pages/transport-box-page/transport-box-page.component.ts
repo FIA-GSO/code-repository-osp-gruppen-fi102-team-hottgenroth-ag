@@ -15,6 +15,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PdfService } from '../../services/pdf/pdf.service';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 
 @Component({
   selector: 'app-transport-box-page',
@@ -27,6 +29,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class TransportBoxPageComponent {
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
+  private _pdfService: PdfService = inject(PdfService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
   public selectedBox: ITransportBoxData | undefined;
 
@@ -87,5 +91,21 @@ export class TransportBoxPageComponent {
       console.log(searchValue)
       this.searchingValue = searchValue;
     });
+  }
+
+  public printPDF(): void
+  {
+    this._spinner.show("Pdf is creating...", new Promise<void>(async(resolve, reject) => {
+      try
+      {
+        var pdfByteArray: string = await  this._pdfService.createPdf();
+        this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Tabelle");
+        resolve();
+      }
+      catch(err: any)
+      {
+        reject();
+      }
+    }))
   }
 }

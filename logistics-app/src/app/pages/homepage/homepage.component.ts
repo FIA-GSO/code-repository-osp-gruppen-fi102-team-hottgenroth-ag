@@ -38,7 +38,6 @@ export class HomepageComponent {
   
       if(!!this._framework.toolbar)
       {
-        this._framework.toolbar.addToolbarButton(this._btnStore.pdfButton);
         if(this.isAuthorized(this._login.getUserRole()))
         {
           this._framework.toolbar.addToolbarButton(this._btnStore.userButton);
