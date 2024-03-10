@@ -68,7 +68,7 @@ namespace Logisitcs.BLL.Helper
             foreach (var b in box)
             {
                 // Prüfen, ob genügend Platz für die aktuelle Box vorhanden ist
-                float lineHeight = 20 + 25; // Höhe einer BoxNumber + BoxCategory + Description
+                float lineHeight = 20 + 35; // Höhe einer BoxNumber + BoxCategory + Description
                 if (y_Achse < pageSize.GetBottom() + lineHeight)
                 {
                     // Wenn nicht genügend Platz vorhanden ist, fügen Sie eine neue Seite hinzu
