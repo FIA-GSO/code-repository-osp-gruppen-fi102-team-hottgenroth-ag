@@ -18,9 +18,9 @@ namespace Logisitcs.BLL
             _pdfHelper = new PDFHelper();
         }
 
-        public async Task<byte[]> Create(List<ITransportBoxData> data)
+        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
-            var result = await _pdfHelper.Create(data);
+            var result = await _pdfHelper.Create(box,project, articles);
 
             return result;
         }

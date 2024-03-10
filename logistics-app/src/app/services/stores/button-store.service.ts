@@ -90,11 +90,9 @@ export class ButtonStoreService
 
   private async printPDF(context: ButtonStoreService)
   {
-    var o = {};
-    var s = await context._pdfService.createPdf(o);
+    var pdfByteArray = await context._pdfService.createPdf();
 
-    this._pdfService.openBase64(s, "application/pdf;base64", "Tabelle");
+    this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Tabelle");
   }
-
     
 }
