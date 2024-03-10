@@ -1,11 +1,10 @@
 using Logisitcs.BLL;
 using Logisitcs.BLL.Factories;
+using Logisitcs.BLL.Helper;
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.BLL.Models;
-using Logisitcs.DAL;
-using Logisitcs.DAL.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -47,11 +46,14 @@ namespace Logistics.API
             services.AddTransient<ITransportBoxDataFactory>(provider => new TransportBoxDataFactory());
             services.AddTransient<ITransportboxFactory>(provider => new TransportboxFactory());
 
+            //Helper
+            services.AddTransient<PdfHelper>(provider => new PdfHelper());
+
             //BLL
             services.AddTransient<IProjectBll>(provider => new ProjectBll(provider.GetService<IProjectDataFactory>(), provider.GetService<IProjectFactory>()));
             services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportBoxDataFactory>(), provider.GetService<ITransportboxFactory>()));
-            services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<IPDFDAL>()));
             services.AddTransient<IArticleBll>(provider => new ArticleBll());
+            services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<PdfHelper>()));
             services.AddTransient<ILoginBll>(provider => new LoginBll());
 
             #endregion BLL_DAL_DI

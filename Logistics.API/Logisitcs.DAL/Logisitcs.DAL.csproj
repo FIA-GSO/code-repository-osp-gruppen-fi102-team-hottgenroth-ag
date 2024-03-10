@@ -14,8 +14,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Logisitcs.DAL.Interfaces\Logisitcs.DAL.Interfaces.csproj" />
-  </ItemGroup>
-
 </Project>

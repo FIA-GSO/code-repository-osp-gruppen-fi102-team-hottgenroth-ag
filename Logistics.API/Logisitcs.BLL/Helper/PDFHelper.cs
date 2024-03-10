@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Logisitcs.BLL.Helper
 {
-    public class PDFHelper
+    public class PdfHelper
     {
         public double y_Achse = 0;
         public string projectName = "Testprojekt";

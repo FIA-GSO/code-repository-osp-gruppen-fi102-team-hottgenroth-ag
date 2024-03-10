@@ -1,11 +1,8 @@
 ﻿using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
-using Logisitcs.DAL.Interfaces;
-using Logisitcs.DAL.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Logisitcs.BLL
