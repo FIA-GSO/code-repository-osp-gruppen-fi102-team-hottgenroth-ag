@@ -13,7 +13,7 @@ namespace Logisitcs.BLL.Factories
 
             if (articleAndBoxAssignment.Status != null)
             {
-                status = DBCommands.GetStatusById(articleAndBoxAssignment.Status);
+                status = DbCommandsState.GetStatusById(articleAndBoxAssignment.Status);
             }
             return new ArticleData
             {

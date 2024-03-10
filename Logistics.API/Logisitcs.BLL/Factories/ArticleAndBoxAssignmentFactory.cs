@@ -18,7 +18,7 @@ namespace Logisitcs.BLL.Factories
              Guid.NewGuid().ToString(),
              articleData.BoxGuid.ToString(),
              articleData.Position,
-             DBCommands.GetStatusByName(articleData.Status),
+             DbCommandsState.GetStatusByName(articleData.Status),
              articleData.Quantity,
              articleData.ExpiryDate.ToString());
         }
@@ -35,7 +35,7 @@ namespace Logisitcs.BLL.Factories
              articleData.ArticleBoxAssignment.ToString(),
              articleData.BoxGuid.ToString(),
              articleData.Position,
-             DBCommands.GetStatusByName(articleData.Status),
+             DbCommandsState.GetStatusByName(articleData.Status),
              articleData.Quantity,
              expiryDate
              );

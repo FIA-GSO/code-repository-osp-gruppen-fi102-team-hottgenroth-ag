@@ -23,14 +23,14 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DBCommands.GetArticleJoinAssignments(boxId);
+                IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DbCommandsArticle.GetArticleJoinAssignments(boxId);
                 List<IArticleData> articleDatas = new List<IArticleData>();
                 foreach (var item in articleAndBoxAssigments)
                 {
                     string status = string.Empty;
                     if (item.Status != null)
                     {
-                        status = DBCommands.GetStatusById((int)item.Status);
+                        status = DbCommandsState.GetStatusById((int)item.Status);
                     }
                     articleDatas.Add(articleDataFactory.Create(item));
                 }
@@ -42,11 +42,11 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(async () =>
             {
-                ArticleAndBoxAssignment articleAndBoxAssignment = DBCommands.GetArticle(boxId, articleId);
+                ArticleAndBoxAssignment articleAndBoxAssignment = DbCommandsArticle.GetArticle(boxId, articleId);
                 string status = string.Empty;
                 if (articleAndBoxAssignment.Status != null)
                 {
-                    status = DBCommands.GetStatusById(articleAndBoxAssignment.Status);
+                    status = DbCommandsState.GetStatusById(articleAndBoxAssignment.Status);
                 }
                 IArticleData articelData = articleDataFactory.Create(articleAndBoxAssignment);
                 return articelData;
@@ -60,7 +60,7 @@ namespace Logisitcs.BLL
                 ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateAdd(article);
                 try
                 {
-                    DBCommands.AddArticleAndBoxAssignment(articleAndBoxAssignment);
+                    DbCommandsArticle.AddArticleAndBoxAssignment(articleAndBoxAssignment);
                     return true;
                 }
                 catch
@@ -77,7 +77,7 @@ namespace Logisitcs.BLL
                 ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateUpdate(article);
                 try
                 {
-                    DBCommands.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
+                    DbCommandsArticle.UpdateArticleAndBoxAssignment(articleAndBoxAssignment);
                     return true;
                 }
                 catch
@@ -93,7 +93,7 @@ namespace Logisitcs.BLL
             {
                 try
                 {
-                    DBCommands.DeleteArticleAndBoxAssignment(id.ToString());
+                    DbCommandsArticle.DeleteArticleAndBoxAssignment(id.ToString());
                     return true;
                 }
                 catch

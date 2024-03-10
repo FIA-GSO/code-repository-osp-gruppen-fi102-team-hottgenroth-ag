@@ -25,7 +25,7 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                IEnumerable<Transportbox> transportBox = DBCommands.GetAllTransportBoxesByPrjGuid(prj);
+                IEnumerable<Transportbox> transportBox = DbCommandsTransportBox.GetAllTransportBoxesByPrjGuid(prj);
                 IEnumerable<ITransportBoxData> projectDatas = transportBox.Select(x => transportDataFactory.Create(x));
                 return projectDatas;
             });
@@ -35,7 +35,7 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                Transportbox transportbox = DBCommands.GetTransportbox(guid.ToString());
+                Transportbox transportbox = DbCommandsTransportBox.GetTransportbox(guid.ToString());
                 //If no box is found, return null
                 if (transportbox != null)
                 {
@@ -51,7 +51,7 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Transportbox transportbox = transportboxFactory.Create(transportBoxData);
-                DBCommands.AddTransportbox(transportbox);
+                DbCommandsTransportBox.AddTransportbox(transportbox);
                 ITransportBoxData transportBoxDataDb = transportDataFactory.Create(transportbox);
                 return transportBoxDataDb;
             });
@@ -61,13 +61,13 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                var dbProject = DBCommands.GetTransportbox(transportBoxData.BoxGuid.ToString());
+                var dbProject = DbCommandsTransportBox.GetTransportbox(transportBoxData.BoxGuid.ToString());
                 if (dbProject == null)
                 {
                     return false;
                 }
                 Transportbox transportbox = transportboxFactory.Create(transportBoxData);
-                DBCommands.UpdateTransportbox(transportbox);
+                DbCommandsTransportBox.UpdateTransportbox(transportbox);
                 return true;
             });
         }
@@ -76,12 +76,12 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                Transportbox transportbox = DBCommands.GetTransportbox(guid.ToString());
+                Transportbox transportbox = DbCommandsTransportBox.GetTransportbox(guid.ToString());
                 if (transportbox == null)
                 {
                     return false;
                 }
-                DBCommands.DeleteTransportbox(guid.ToString());
+                DbCommandsTransportBox.DeleteTransportbox(guid.ToString());
                 return true;
             });
         }

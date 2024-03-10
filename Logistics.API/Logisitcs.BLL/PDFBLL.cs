@@ -45,14 +45,14 @@ namespace Logisitcs.BLL
       {
          return await Task.Run(() =>
          {
-            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DBCommands.GetArticleJoinAssignments(boxId);
+            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DbCommandsArticle.GetArticleJoinAssignments(boxId);
             List<IArticleData> articleDatas = new List<IArticleData>();
             foreach (var item in articleAndBoxAssigments)
             {
                string status = string.Empty;
                if (item.Status != null)
                {
-                  status = DBCommands.GetStatusById((int)item.Status);
+                  status = DbCommandsState.GetStatusById((int)item.Status);
                }
                articleDatas.Add(new ArticleData
                {
