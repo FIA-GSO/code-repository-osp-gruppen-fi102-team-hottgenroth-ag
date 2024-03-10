@@ -16,19 +16,18 @@ export class PdfService {
 
   constructor() {   }
 
-  public async createPdf(jsonData: any): Promise<any> {
+  public async createPdf(): Promise<any> {
     const url = this._serviceURL;
 
     var transferObject: IPdfData = { 
       transportbox: this._logisticStore.transportboxStore.getItems(),
-      project: this._logisticStore.projectStore.getLoadedProject()
+      project: this._logisticStore.projectStore.getLoadedProject(),
+      articles: this._logisticStore.articleStore.getItems()
     }
 
-    var allBoxes = this._logisticStore.transportboxStore.getItems()
-    var projectInfo = this._logisticStore.projectStore.getLoadedProject()
-
-    console.log(allBoxes)
-    console.log(projectInfo)
+/*     console.log("Boxes", transferObject.transportbox)
+    console.log("Projectinfo", transferObject.project)
+    console.log("Articles", transferObject.articles) */
 
     try {
       const pdfData = await this._request.post(url, transferObject);
@@ -43,11 +42,11 @@ export class PdfService {
     const blob = new Blob([byteArray], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
 
-    // Öffnen Sie das PDF in einem neuen Browser-Tab
+    // Öffne das PDF in einem neuen Browser-Tab
     const pdfWindow = window.open();
     pdfWindow!.location.href = url;
 
-    // Optional: Benennen Sie das PDF um
+    // Optional: Benenne das PDF um
     pdfWindow!.document.title = fileName;
   }
 
@@ -55,8 +54,7 @@ export class PdfService {
   public openBase64(inputString: string, format: string, name: string): void {
     let byteCharacters: string = atob(inputString);
     let byteNumbers: number[] = new Array(byteCharacters.length);
-    console.log(byteCharacters)
-    console.log(byteNumbers)
+
     for (var i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }

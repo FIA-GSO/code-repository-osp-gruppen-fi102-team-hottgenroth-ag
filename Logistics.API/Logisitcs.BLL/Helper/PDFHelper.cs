@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System;
 using iText.Layout;
 using System.Collections.Generic;
-using Org.BouncyCastle.Utilities;
+using System.Linq;
 
 namespace Logisitcs.BLL.Helper
 {
@@ -22,14 +22,7 @@ namespace Logisitcs.BLL.Helper
 
         int _marginAllSites = 20;
 
-        public async Task<string> Create(object jsonData)
-        {
-            string pdfFileName = "Table.pdf";
-
-            return pdfFileName;
-        }
-
-        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project)
+        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -47,10 +40,7 @@ namespace Logisitcs.BLL.Helper
                         pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new PdfHeaderFooterHandler(project));
 
                         // Box hinzufügen
-                        // AddBox(document, pdf, pageSize);
-                        PdfPage page = AddBox(document, pdf, pdf.GetNumberOfPages(), y_Achse, box);
-
-                        pdf.AddNewPage();
+                        PdfPage page = AddBox(document, pdf, box, articles);
 
                         document.Close();
                     }
@@ -60,19 +50,12 @@ namespace Logisitcs.BLL.Helper
             }
         }
 
-        private PdfPage AddBox(Document document, PdfDocument pdf, int pageNumber, 
-            double y_Achse, List<ITransportBoxData> box)
+        private PdfPage AddBox(Document document, PdfDocument pdf, 
+            List<ITransportBoxData> box, List<IArticleData> articles)
         {
             PdfPage pdfPage;
 
-            if (pdf.GetNumberOfPages() > 0)
-            {
-                pdfPage = pdf.GetLastPage();
-            }
-            else
-            {
-                pdfPage = pdf.AddNewPage();
-            }
+            pdfPage = pdf.AddNewPage();
 
             PdfCanvas pdfCanvas = new PdfCanvas(pdfPage);
             Rectangle pageSize = pdfPage.GetPageSize();
@@ -84,6 +67,16 @@ namespace Logisitcs.BLL.Helper
 
             foreach (var b in box)
             {
+                // Prüfen, ob genügend Platz für die aktuelle Box vorhanden ist
+                float lineHeight = 20 + 25; // Höhe einer BoxNumber + BoxCategory + Description
+                if (y_Achse < pageSize.GetBottom() + lineHeight)
+                {
+                    // Wenn nicht genügend Platz vorhanden ist, fügen Sie eine neue Seite hinzu
+                    pdfPage = pdf.AddNewPage();
+                    pdfCanvas = new PdfCanvas(pdfPage);
+                    pageSize = pdfPage.GetPageSize();
+                    y_Achse = pageSize.GetTop() - 70; // Setzen Sie die Y-Position für den Anfang der neuen Seite
+                }
 
                 // Texte für Boxnummer und Boxkategorie
                 string boxNumber = "Box " + b.Number;
@@ -114,25 +107,98 @@ namespace Logisitcs.BLL.Helper
 
                 y_Achse -= 15;
 
-                // Article Linke Seite
-                //pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-                //.MoveText(pageSize.GetLeft() + 30, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
-                //.ShowText("- ArticleName Status: Status ")
-                //.EndText();
+                // Artikel für diese Box erhalten
+                var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString());
 
-                textWidth = font.GetWidth("Anzahl: zahl Einheit: unit ", fontSize);
+                var positionRight = pageSize.GetLeft() + 40;
 
-                // Article Rechte Seite
-                //pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-                //.MoveText(pageSize.GetRight() - 20 - textWidth, pageSize.GetTop() - 105).SetColor(new DeviceRgb(0, 0, 0), true)
-                //.ShowText("Anzahl: zahl Einheit: unit ")
-                //.EndText();
+                foreach (var article in boxArticles)
+                {
+                    if ((double)(int)article.Position == article.Position)
+                    {         
+                        positionRight = pageSize.GetLeft() + 40;
+                    } else
+                    {
+                        positionRight = pageSize.GetLeft() + 50;
+                    }
+
+                    // Maximale Breite des Beschreibungstextes basierend auf 3/4 der Seitenbreite
+                    float maxDescriptionWidth = 80; //(pageSize.GetRight() - pageSize.GetLeft()) * 0.75f;
+
+                    // Kürzen und '...' hinzufügen, falls erforderlich
+                    string truncatedDescription = article.Description.Length > maxDescriptionWidth ?
+                        article.Description.Substring(0, (int)maxDescriptionWidth - 3) + "..." :
+                        article.Description;
+
+                    // Article Linke Seite
+                    pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                    .MoveText(positionRight, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                    .ShowText(article.Position.ToString() + " " + truncatedDescription)
+                    .EndText();
+
+                    textWidth = font.GetWidth(article.Quantity + " " + article.Unit, fontSize);
+
+                    // Article Rechte Seite
+                    pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
+                    .MoveText(pageSize.GetRight() - 20 - textWidth, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                    .ShowText(article.Quantity + " " + article.Unit)
+                    .EndText();
+
+                    y_Achse -= 12;
+
+                    // Status
+                    pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 10)
+                    .MoveText(positionRight + 10, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
+                    .ShowText("Status: " + article.Status)
+                    .EndText();
+
+                    y_Achse -= 18;
+
+                    // Überprüfen, ob genügend Platz für den nächsten Artikel auf der Seite vorhanden ist
+                    if (y_Achse < pageSize.GetBottom() + lineHeight)
+                    {
+                        // Wenn nicht genügend Platz vorhanden ist, füge eine neue Seite hinzu
+                        pdfPage = pdf.AddNewPage();
+                        pdfCanvas = new PdfCanvas(pdfPage);
+                        pageSize = pdfPage.GetPageSize();
+                        y_Achse = pageSize.GetTop() - 70; // Setze die Y-Position für den Anfang der neuen Seite
+                    }
+                }
+
+                pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 40, y_Achse).LineTo(pageSize.GetRight() - 40, y_Achse).Stroke();
+
+                y_Achse -= 20; // Aktualisiere y_Achse für den nächsten Absatz
+
             }
 
-            // Zeichnen der Linie unter Boxnummer und Boxkategorie
-            // pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 20, pageSize.GetBottom() + 25).LineTo(pageSize.GetRight() - 20, pageSize.GetBottom() + 25).Stroke();
-
             return pdfPage;
+        }
+
+        private List<IArticleData> GetArticlesForBox(List<IArticleData> articles, string boxGuid)
+        {
+            // Filter die Artikel nach der gegebenen boxGuid
+            return articles.Where(article => article.BoxGuid.ToString() == boxGuid).ToList();
+        }
+
+        private Color GetStatusColor(int status)
+        {
+            switch (status)
+            {
+                case 0:
+                    return new DeviceRgb(255, 0, 0); // Rot
+                case 1:
+                    return new DeviceRgb(128, 128, 128); // Grau
+                case 2:
+                    return new DeviceRgb(255, 165, 0); // Orange
+                case 3:
+                    return new DeviceRgb(0, 128, 0); // Grün
+                case 4:
+                    return new DeviceRgb(0, 0, 255); // Blau
+                case 5:
+                    return new DeviceRgb(0, 255, 255); // Cyan
+                default:
+                    return new DeviceRgb(0, 0, 0); // Standard: Schwarz
+            }
         }
     }
 
@@ -166,7 +232,7 @@ namespace Logisitcs.BLL.Helper
             float textWidth = font.GetWidth("Print Date: " + formattedDate, fontSize);
 
             // Position für den Text berechnen, so dass er am rechten Rand endet
-            float textX = pageSize.GetRight() - 20 - textWidth; // 20 ist der Rand, den Sie auch für die Linie verwendet haben
+            float textX = pageSize.GetRight() - 20 - textWidth; // 20 ist der Rand, der auch für die Linie verwendet wird
             float textY = pageSize.GetTop() - 30;
 
             // Aktuelles Datum hinzufügen
