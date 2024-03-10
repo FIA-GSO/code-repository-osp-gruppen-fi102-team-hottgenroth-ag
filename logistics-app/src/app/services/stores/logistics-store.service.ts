@@ -51,6 +51,9 @@ export class LogisticsStoreService
       return undefined;
     }
 
+    this._articleStore.clear();
+    this._transportboxStore.clear();
+    
     var prj: IProjectData | undefined = await this._projectStore.loadProject(projectId);
     if(!!prj)
     {

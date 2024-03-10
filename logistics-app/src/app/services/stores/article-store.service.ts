@@ -19,7 +19,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
     {
       var items: IArticleData[] = await this.request.get(this._serviceURL + "/all/" + boxId);
 
-      if(this.getItems().length > 0)
+      if(this.getItems().length > 0 && items.length > 0)
       {
         items.forEach((art: IArticleData) => {
           if(!!!this.getById(art.articleGuid))
@@ -60,12 +60,15 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   }
 
   /** Update an item in db */
-  public async update(itemID: string): Promise<boolean> {
-    try {
-      var item: IArticleData | undefined = this.getById(itemID);
+  public async update(item: IArticleData): Promise<boolean> {
+    try 
+    {
+      this.replaceItem(item);
 
-      if (!!item) {
-        await this.request.put(this._serviceURL, item);
+      var art: IArticleData | undefined = this.getById(item.articleGuid);
+      if (!!art) 
+      {
+        await this.request.put(this._serviceURL, art);
         return true;
       }
     }
@@ -102,6 +105,17 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   public getArticlesForBox(boxId: string): IArticleData[]
   {
     return this.getItems().filter(p => p.boxGuid === boxId);
+  }
+
+  private replaceItem(item: IArticleData): void
+  {
+    var allItems = this.getItems();
+    var index = allItems.findIndex(art => art.articleGuid === item.articleGuid);
+
+    if (index !== -1) 
+    {
+      allItems[index] = item;
+    }
   }
 }
 

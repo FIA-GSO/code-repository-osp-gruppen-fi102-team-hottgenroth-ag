@@ -25,6 +25,7 @@ namespace Logisitcs.BLL.Factories
 
         public ArticleAndBoxAssignment CreateUpdate(IArticleData articleData)
         {
+            var expiryDate = articleData.ExpiryDate != null ? articleData.ExpiryDate.ToString() : null;
             return new ArticleAndBoxAssignment
             (articleData.ArticleGuid.ToString(),
              articleData.ArticleName,
@@ -36,7 +37,8 @@ namespace Logisitcs.BLL.Factories
              articleData.Position,
              DBCommands.GetStatusByName(articleData.Status),
              articleData.Quantity,
-             articleData.ExpiryDate.ToString());
+             expiryDate
+             );
         }
     }
 }

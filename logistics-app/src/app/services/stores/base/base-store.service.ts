@@ -45,7 +45,6 @@ export abstract class BaseStoreService<T>
     return this.getItems().find(f => (f as any).identifier === id);
   }
 
-  public abstract update(itemID: string): Promise<boolean>;
   public abstract delete(itemID: string): Promise<boolean>;
 
   protected setItems(items: T[]): void {

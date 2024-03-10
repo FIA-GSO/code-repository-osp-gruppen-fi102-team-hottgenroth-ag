@@ -5,7 +5,10 @@
     [class.pointer-events-none]="getAllArticlesFromSamePositions(art).length <= 0">
       <mat-expansion-panel-header *ngIf="isArticleFirstPosition(art)">
         <mat-panel-title class="flex flex-row grow">
-          {{art.position}} {{art.description | truncate:[50]}}
+          <section class="flex flex-col">
+            {{art.position}} {{art.description | truncate:[50]}}
+            <span>state: {{art.status}}</span>
+          </section>
         </mat-panel-title>
         <button mat-icon-button class="pointer-events-auto" *ngIf="!isReadOnly()"
         (click)="openArticleDialog(art);$event.stopPropagation()">
@@ -26,9 +29,13 @@
 
 <ng-template #article_item let-article="article">
   <section class="flex flex-row justify-between items-center">
-    {{article.position}} {{article.description}}
+    <section class="flex flex-col">
+      {{article.position}} {{article.description}}
+      <span>state: {{article.status}}</span>
+    </section>
     <button mat-icon-button (click)="openArticleDialog(article)" *ngIf="!isReadOnly()">
       <mat-icon>edit</mat-icon>
     </button>
   </section>
+  <mat-divider class="!mb-1"></mat-divider>
 </ng-template>

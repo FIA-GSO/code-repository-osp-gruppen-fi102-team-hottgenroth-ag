@@ -99,7 +99,7 @@ export class TransportBoxPageComponent {
       try
       {
         var pdfByteArray: string = await  this._pdfService.createPdf();
-        this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Tabelle");
+        this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Inventarliste");
         resolve();
       }
       catch(err: any)

@@ -27,6 +27,7 @@ namespace Logisitcs.BLL.Factories
                 Status = status,
                 Unit = articleAndBoxAssignment.Unit,
                 BoxGuid = Guid.Parse(articleAndBoxAssignment.BoxGuid),
+                ArticleBoxAssignment = Guid.Parse(articleAndBoxAssignment.AssignmentGuid)
             };
         }
     }
