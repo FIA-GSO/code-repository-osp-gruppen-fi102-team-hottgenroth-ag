@@ -27,12 +27,10 @@ namespace Logisitcs.BLL.Tests
         public void Test_GetAllProjects()
         {
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-
+            //Liste aller vorhandener Projekte abholen
             IEnumerable<IProjectData> result = projectBll.GetAllProjects().Result;
-
-            result.Should().NotBeNull();
+            //Schauen ob alle Projekte vorhanden sind und Namen Prüfen
             result.Should().HaveCount(2);
-
             result.ElementAt(0).ProjectName.Should().Be("Madagascar");
             result.ElementAt(1).ProjectName.Should().Be("ABC");
         }
@@ -43,7 +41,7 @@ namespace Logisitcs.BLL.Tests
             Guid guid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
 
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-
+            //Schauen ob ein vorhandenes Projekt abgeholt werden kann
             IProjectData result = projectBll.GetProject(guid).Result;
             result.ProjectName.Should().Be("Madagascar");
         }
@@ -62,22 +60,22 @@ namespace Logisitcs.BLL.Tests
             };
 
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-
+            //AddProject ausführen
             IProjectData result = projectBll.AddProject(projectData).Result;
-
+            //Schauen ob die Properties richtig gesetzt wurden
             result.ProjectName.Should().Be(expectedProjectName);
             result.CreationDate.Should().Be(expectedDate);
             result.ProjectGuid.Should().Be(guid.ToString());
-
+            //In der Datenbank schauen ob das neue Projekt angelegt wurde
             result = projectBll.GetProject(guid).Result;
 
             result.ProjectName.Should().Be(expectedProjectName);
             result.CreationDate.Should().Be(expectedDate);
             result.ProjectGuid.Should().Be(guid.ToString());
-
+            //Aufräumen
             bool deleteResult = projectBll.DeleteProject(guid).Result;
             deleteResult.Should().BeTrue();
-
+            //Prüfen ob aufräumen funktioniert hat
             result = projectBll.GetProject(guid).Result;
             result.Should().BeNull();
         }
@@ -135,7 +133,7 @@ namespace Logisitcs.BLL.Tests
             };
 
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-
+            //Update des Projektes mit nicht vorhanden DB Eintrag sollte false ausgeben
             bool result = projectBll.UpdateProject(projectData).Result;
             result.Should().BeFalse();
         }
@@ -146,7 +144,7 @@ namespace Logisitcs.BLL.Tests
             Guid wrongGuid = Guid.Parse("18500286-0000-4240-8ec8-ffe1d3a4e77d");
 
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-
+            //Delete des Projektes mit nicht vorhanden DB Eintrag sollte false ausgeben
             bool deleteResult = projectBll.DeleteProject(wrongGuid).Result;
             deleteResult.Should().BeFalse();
         }
