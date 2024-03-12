@@ -12,4 +12,15 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Logisitcs.BLL.Interfaces\Logisitcs.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\Logisitcs.BLL\Logisitcs.BLL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Fileserver\logisticsDB.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

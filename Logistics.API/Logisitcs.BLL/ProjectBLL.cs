@@ -26,9 +26,8 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                ProjectDataFactory projetDataFactory = new ProjectDataFactory();
                 IEnumerable<Project> projects = DbCommandsProject.GetAllProjects();
-                IEnumerable<IProjectData> projectDatas = projects.Select(x => projetDataFactory.Create(x));
+                IEnumerable<IProjectData> projectDatas = projects.Select(x => projectDataFactory.Create(x));
                 return projectDatas;
             });
         }
