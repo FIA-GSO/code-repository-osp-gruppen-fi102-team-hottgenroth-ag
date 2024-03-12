@@ -18,8 +18,6 @@ namespace Logisitcs.BLL.Helper
     public class PdfHelper
     {
         public double y_Achse = 0;
-        public string projectName = "Testprojekt";
-
         int _marginAllSites = 20;
 
         public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
