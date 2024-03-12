@@ -100,12 +100,18 @@ namespace Logisitcs.DAL
             return t.SingleOrDefault(m => m.ArticleGuid == articleId);
         }
 
-        public static void AddArticles(Article article)
-        {
-            using var db = new LogisticsDbContext();
-            db.Articles.Add(article);
-            db.SaveChanges();
-        }
+      public static Article GetArticle(string articleId)
+      {
+         using var db = new LogisticsDbContext();
+         return db.Articles.SingleOrDefault(art => art.ArticleGuid == articleId);
+      }
+
+      public static void AddArticles(Article article)
+      {
+         using var db = new LogisticsDbContext();
+         db.Articles.Add(article);
+         db.SaveChanges();
+      }
 
         public static void DeleteArticles(string guid)
         {

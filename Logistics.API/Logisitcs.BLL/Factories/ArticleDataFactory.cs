@@ -1,6 +1,7 @@
 ﻿using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
+using Logisitcs.DAL.Models;
 using System;
 
 namespace Logisitcs.BLL.Factories
@@ -29,6 +30,24 @@ namespace Logisitcs.BLL.Factories
                 BoxGuid = Guid.Parse(articleAndBoxAssignment.BoxGuid),
                 ArticleBoxAssignment = Guid.Parse(articleAndBoxAssignment.AssignmentGuid)
             };
+        }
+
+        public IArticleData Create(Article article)
+        {
+           return new ArticleData
+           {
+              ArticleGuid = article.ArticleGuid,
+              ArticleName = article.ArticleName,
+              Description = article.Description,
+              Gtin = (int?)article.Gtin,
+              ExpiryDate = null,
+              Quantity = null,
+              Position = null,
+              Status = DbCommandsState.GetStatusById(7),
+              Unit = article.Unit,
+              BoxGuid = Guid.Empty,
+              ArticleBoxAssignment = Guid.Empty
+           };
         }
     }
 }

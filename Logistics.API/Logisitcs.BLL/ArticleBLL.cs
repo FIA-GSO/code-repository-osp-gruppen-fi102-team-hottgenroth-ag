@@ -2,6 +2,7 @@
 using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL;
+using Logisitcs.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,21 @@ namespace Logisitcs.BLL
         {
             this.articleAndBoxAssignmentFactory = articleAndBoxAssignmentFactory;
             this.articleDataFactory = articleDataFactory;
+        }
+
+
+        public async Task<IEnumerable<IArticleData>> GetAllArticles()
+        {
+           return await Task.Run(() =>
+           {
+              IEnumerable<Article> articles = DbCommandsArticle.GetAllArticle();
+              List<IArticleData> articleDatas = new List<IArticleData>();
+              foreach (var item in articles)
+              { 
+                 articleDatas.Add(articleDataFactory.Create(item));
+              }
+              return articleDatas;
+           });
         }
 
         public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId)

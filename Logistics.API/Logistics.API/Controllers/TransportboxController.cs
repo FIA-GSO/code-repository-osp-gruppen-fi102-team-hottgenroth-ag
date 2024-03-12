@@ -28,6 +28,17 @@ namespace Logistics.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllWithoutPrj()
+        {
+           var result = await transportboxBll.GetAllTransportBoxesWithoutPrjGuid();
+           if (result == null)
+           {
+              return NotFound();
+           }
+           return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {

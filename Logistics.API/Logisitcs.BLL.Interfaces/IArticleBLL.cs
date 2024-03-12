@@ -8,6 +8,7 @@ namespace Logisitcs.BLL.Interfaces
     public interface IArticleBll
     {
         Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId);
+        Task<IEnumerable<IArticleData>> GetAllArticles();
 
         Task<IArticleData> GetArticle(string boxId, string articleId);
 

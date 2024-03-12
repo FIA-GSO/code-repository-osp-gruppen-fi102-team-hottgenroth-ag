@@ -31,6 +31,16 @@ namespace Logisitcs.BLL
             });
         }
 
+        public async Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesWithoutPrjGuid()
+        {
+           return await Task.Run(() =>
+           {
+              IEnumerable<Transportbox> transportBox = DbCommandsTransportBox.GetAllTransportBoxesWithoutPrjGuid();
+              IEnumerable<ITransportBoxData> boxData = transportBox.Select(x => transportDataFactory.Create(x));
+              return boxData;
+           });
+        }
+
         public async Task<ITransportBoxData> GetTransportbox(Guid guid)
         {
             return await Task.Run(() =>

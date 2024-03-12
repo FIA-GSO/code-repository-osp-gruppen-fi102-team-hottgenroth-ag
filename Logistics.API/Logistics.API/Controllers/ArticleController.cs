@@ -28,7 +28,18 @@ namespace Logistics.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+         [HttpGet("all")]
+         public async Task<IActionResult> GetAll()
+         {
+            IEnumerable<IArticleData> result = await articleBll.GetAllArticles();
+            if (result == null)
+            {
+               return NotFound();
+            }
+            return Ok(result);
+         }
+
+      [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid boxId, Guid articleId)
         {
             IArticleData result = await articleBll.GetArticle(boxId.ToString(), articleId.ToString());
