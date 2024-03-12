@@ -3,6 +3,7 @@ import { ProjectStoreService } from './project-store.service';
 import { TransportboxStoreService } from './transportbox-store.service';
 import { ArticleStoreService } from './article-store.service';
 import { IProjectData } from '../../models/IProjectData';
+import { ITransportBoxData } from '../../models/ITransportBoxData';
 
 @Injectable({ providedIn: 'root' })
 export class LogisticsStoreService
@@ -50,6 +51,9 @@ export class LogisticsStoreService
       return undefined;
     }
 
+    this._articleStore.clear();
+    this._transportboxStore.clear();
+    
     var prj: IProjectData | undefined = await this._projectStore.loadProject(projectId);
     if(!!prj)
     {
@@ -60,15 +64,9 @@ export class LogisticsStoreService
     return undefined;
   }
 
-  public async loadArticles(boxId: string): Promise<boolean>
+  public async loadArticleForBox(boxGuid: string): Promise<void>
   {
-    if(!this._initialized)
-    {
-      return false;
-    }
-
-    await this._articleStore.loadIntitalData(boxId);
-    return true;
+    await this._articleStore.loadIntitalData(boxGuid);
   }
 
   public async loadIntitalData(): Promise<void>

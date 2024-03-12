@@ -1,9 +1,11 @@
 using Logisitcs.BLL.Interfaces;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logistics.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class TransportboxController : ControllerBase
@@ -24,6 +26,17 @@ namespace Logistics.API.Controllers
                 return NotFound();
             }
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllWithoutPrj()
+        {
+           var result = await transportboxBll.GetAllTransportBoxesWithoutPrjGuid();
+           if (result == null)
+           {
+              return NotFound();
+           }
+           return Ok(result);
         }
 
         [HttpGet("{id}")]

@@ -6,31 +6,34 @@
     <section class="flex flex-col gap-2 max-w-xl !mt-2">
       <mat-form-field class="w-full">
         <mat-label>description</mat-label>
-        <input matInput [value]="selectedBox.description">
+        <input matInput [value]="description" (change)="description = $any($event.target).value"
+        [disabled]="!isAuthorized()">
       </mat-form-field>
       <section class="flex flex-row w-full gap-2">
         <mat-form-field class="w-[calc(66.66%-4px)]">
           <mat-label>box category</mat-label>
-          <mat-select [value]="selectedBox.boxCategory">
-            <mat-option></mat-option>
-          </mat-select>
+          <input matInput [value]="selectedBox.boxCategory" [disabled]="true"/>
         </mat-form-field>
         <mat-form-field class="w-[calc(33.33%-4px)] !min-w-24">
           <mat-label>box number</mat-label>
-          <input matInput [value]="selectedBox.number">
+          <input matInput [value]="number" [disabled]="!isAuthorized()"
+          (change)="number = $any($event.target).value" type="number">
         </mat-form-field>
       </section>
       <mat-form-field>
         <mat-label>location at home</mat-label>
-        <input matInput [value]="selectedBox.locationHome">
+        <input matInput [value]="locationHome" (change)="locationHome = $any($event.target).value"
+        [disabled]="isReadOnly()">
       </mat-form-field>
       <mat-form-field>
         <mat-label>location in transport</mat-label>
-        <input matInput [value]="selectedBox.locationTransport">
+        <input matInput [value]="locationTransport" [disabled]="isReadOnly()"
+        (change)="locationTransport = $any($event.target).value"> 
       </mat-form-field>
       <mat-form-field>
         <mat-label>location in deployment</mat-label>
-        <input matInput [value]="selectedBox.locationDeployment">
+        <input matInput [disabled]="isReadOnly()"
+        [value]="locationDeployment" (change)="locationDeployment = $any($event.target).value">
       </mat-form-field>
     </section>
   </mat-card-content>

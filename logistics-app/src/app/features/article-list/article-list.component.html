@@ -1,0 +1,41 @@
+
+<section class="w-full h-full flex flex-col">
+  <mat-accordion appearance="outlined">
+    <mat-expansion-panel *ngFor="let art of getSortedArticles()"  [hideToggle]="getAllArticlesFromSamePositions(art).length <= 0"
+    [class.pointer-events-none]="getAllArticlesFromSamePositions(art).length <= 0">
+      <mat-expansion-panel-header *ngIf="isArticleFirstPosition(art)">
+        <mat-panel-title class="flex flex-row grow">
+          <section class="flex flex-col">
+            {{art.position}} {{art.description | truncate:[50]}}
+            <span>state: {{art.status}}</span>
+          </section>
+        </mat-panel-title>
+        <button mat-icon-button class="pointer-events-auto" *ngIf="!isReadOnly()"
+        (click)="openArticleDialog(art);$event.stopPropagation()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <mat-list>
+        @for(a of getAllArticlesFromSamePositions(art);track a) 
+        {
+          <mat-list-item *ngIf="a.articleGuid != art.articleGuid" class="!pl-0 !pr-0">
+            <ng-container [ngTemplateOutlet]="article_item" [ngTemplateOutletContext]="{article: a}"></ng-container>
+          </mat-list-item>
+        }
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</section>
+
+<ng-template #article_item let-article="article">
+  <section class="flex flex-row justify-between items-center">
+    <section class="flex flex-col">
+      {{article.position}} {{article.description}}
+      <span>state: {{article.status}}</span>
+    </section>
+    <button mat-icon-button (click)="openArticleDialog(article)" *ngIf="!isReadOnly()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </section>
+  <mat-divider class="!mb-1"></mat-divider>
+</ng-template>

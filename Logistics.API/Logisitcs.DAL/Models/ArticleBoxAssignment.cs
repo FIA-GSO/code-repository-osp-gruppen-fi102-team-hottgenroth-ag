@@ -1,8 +1,4 @@
-﻿using Logisitcs.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-
-namespace Logisitcs.DAL.Models;
+﻿namespace Logisitcs.DAL.Models;
 
 public partial class ArticleBoxAssignment
 {
@@ -14,11 +10,11 @@ public partial class ArticleBoxAssignment
 
     public double? Position { get; set; }
 
-    public long? Status { get; set; }
+    public int? Status { get; set; }
 
-    public long? Quantity { get; set; }
+    public int? Quantity { get; set; }
 
-    public byte[] ExpiryDate { get; set; }
+    public string ExpiryDate { get; set; }
 
     public virtual Article Article { get; set; }
 

@@ -126,4 +126,18 @@ export class AuthService
     }
     return "";
   }
+
+  public async getAllUser(): Promise<IUserData[]>
+  {
+    try
+    {
+      let result: any = await this._request.get(environment.serviceURL + environment.loginServicePath);
+      return result;
+    }
+    catch(err: any)
+    {
+      console.log(err);
+      return [];
+    }
+  }
 }

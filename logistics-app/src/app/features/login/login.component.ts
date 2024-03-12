@@ -27,6 +27,8 @@ export class LoginComponent {
   public userName: string = "";
   public userPassword: string = "";
 
+  public errorMessage: string = "";
+
   constructor()
   {
 
@@ -34,7 +36,7 @@ export class LoginComponent {
 
   public async login(): Promise<void>
   {
-    if(!!this.userName && this.userName != "" || !!this.userPassword && this.userPassword != "")
+    if(!!this.userName && this.userName != "" && !!this.userPassword && this.userPassword != "")
     {
       this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
         try
@@ -44,14 +46,20 @@ export class LoginComponent {
             password: this.userPassword
           }
           await this._loginService.login(user);
+          this.errorMessage = "";
           resolve();
         }
         catch(err: any)
         {
-          console.log(err)
+          console.log(err);
+          this.errorMessage = "Email or password incorrect";
           reject();
         }
       }));
+    }
+    else
+    {
+      this.errorMessage = "Email and password cannot be empty!";
     }
   }
 }

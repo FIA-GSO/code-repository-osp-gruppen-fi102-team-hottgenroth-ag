@@ -8,6 +8,7 @@ namespace Logisitcs.BLL.Interfaces
     public interface ITransportboxBll
     {
         Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesByPrjGuid(string prj);
+        Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesWithoutPrjGuid();
 
         Task<ITransportBoxData> GetTransportbox(Guid guid);
 

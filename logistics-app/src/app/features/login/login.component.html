@@ -20,6 +20,7 @@
           </button>
         </mat-form-field>
       </section>
+      <section *ngIf="errorMessage != ''" class="text-red-700">{{errorMessage}}</section>
       <a [routerLink]="'/register'">Registrieren</a>
     </mat-card-content>
     <mat-card-actions>

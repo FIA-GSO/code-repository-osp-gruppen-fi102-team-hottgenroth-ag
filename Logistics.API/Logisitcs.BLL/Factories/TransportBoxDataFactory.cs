@@ -12,12 +12,13 @@ namespace Logisitcs.BLL.Factories
             return new TransportBoxData
             {
                 BoxGuid = Guid.Parse(transportbox.BoxGuid),
-                Number = int.Parse(transportbox.Number.ToString()),
+                Number = transportbox.Number,
                 Description = transportbox.Description,
                 LocationTransport = transportbox.LocationTransport,
                 LocationDeployment = transportbox.LocationDeployment,
                 LocationHome = transportbox.LocationHome,
                 BoxCategory = transportbox.BoxCategory,
+                ProjectGuid = transportbox.ProjectGuid != null ? Guid.Parse(transportbox.ProjectGuid) : Guid.Empty,
             };
         }
     }
