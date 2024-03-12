@@ -134,7 +134,7 @@ namespace Logistics.API
         {
             app.UseResponseCompression();
             app.UseCors(options =>
-               options.WithOrigins("http://localhost:4200", "https://localhost:44349")
+               options.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
 

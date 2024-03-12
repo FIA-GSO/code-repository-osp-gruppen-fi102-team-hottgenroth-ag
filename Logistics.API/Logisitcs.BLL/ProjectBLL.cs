@@ -37,8 +37,12 @@ namespace Logisitcs.BLL
             return await Task.Run(() =>
             {
                 Project project = DbCommandsProject.GetProject(guid.ToString());
-                IProjectData projectData = projectDataFactory.Create(project);
-                return projectData;
+                if (project != null)
+                {
+                    IProjectData projectData = projectDataFactory.Create(project);
+                    return projectData;
+                }
+                return null;
             });
         }
 
