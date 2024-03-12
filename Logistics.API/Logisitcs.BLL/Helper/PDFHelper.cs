@@ -83,10 +83,14 @@ namespace Logisitcs.BLL.Helper
                 // Textbreite berechnen
                 float textWidth = font.GetWidth(boxCategory, fontSize);
 
+                string truncatedBoxDescription = b.Description.Length > 75 ?
+                b.Description.Substring(0, (int)70 - 3) + "..." :
+                b.Description;
+
                 // BoxNumber
                 pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
                 .MoveText(pageSize.GetLeft() + 20, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
-                .ShowText(boxNumber)
+                .ShowText(boxNumber + " - " + truncatedBoxDescription)
                 .EndText();
 
                 // BoxCategory
@@ -97,27 +101,19 @@ namespace Logisitcs.BLL.Helper
 
                 y_Achse -= 20;
 
-                // Description
-                pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-                .MoveText(pageSize.GetLeft() + 30, y_Achse).SetColor(new DeviceRgb(128, 128, 128), true)
-                .ShowText(b.Description)
-                .EndText();
-
-                y_Achse -= 15;
-
                 // Artikel für diese Box erhalten
                 var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString());
 
-                var positionRight = pageSize.GetLeft() + 40;
+                var positionRight = pageSize.GetLeft() + 30;
 
                 foreach (var article in boxArticles)
                 {
                     if ((double)(int)article.Position == article.Position)
                     {         
-                        positionRight = pageSize.GetLeft() + 40;
+                        positionRight = pageSize.GetLeft() + 30;
                     } else
                     {
-                        positionRight = pageSize.GetLeft() + 50;
+                        positionRight = pageSize.GetLeft() + 40;
                     }
 
                     // Maximale Breite des Beschreibungstextes basierend auf 3/4 der Seitenbreite
