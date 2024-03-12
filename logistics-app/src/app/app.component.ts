@@ -5,7 +5,6 @@ import { ToolbarComponent } from './framework/toolbar/toolbar.component';
 import { NavigationRailComponent } from './framework/navigation-rail/navigation-rail.component';
 import { FrameworkService } from './services/framework.service';
 import { AuthService } from './services/authentication/auth.service';
-import { LoadingSpinnerComponent } from './framework/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-root',
