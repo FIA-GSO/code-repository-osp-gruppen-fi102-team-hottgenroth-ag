@@ -17,8 +17,6 @@ namespace Logistics.API.Controllers
             BLL = bll;
         }
 
-   
-
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] IPdfData data)
         {
