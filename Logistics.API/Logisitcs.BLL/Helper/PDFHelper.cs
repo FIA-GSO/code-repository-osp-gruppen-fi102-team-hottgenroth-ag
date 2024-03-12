@@ -102,7 +102,7 @@ namespace Logisitcs.BLL.Helper
                 y_Achse -= 20;
 
                 // Artikel für diese Box erhalten
-                var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString());
+                var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString()).OrderBy(article => article.Position);
 
                 var positionRight = pageSize.GetLeft() + 30;
 
