@@ -22,6 +22,7 @@ namespace Logisitcs.BLL
             this.projectFactory = projectFactory;
         }
 
+        //Get a List of AllProjects in DB
         public async Task<IEnumerable<IProjectData>> GetAllProjects()
         {
             return await Task.Run(() =>
@@ -32,16 +33,20 @@ namespace Logisitcs.BLL
             });
         }
 
-        public async Task<IProjectData> GetProject(Guid guid)
+        //Get one project by projectGuid
+        public async Task<IProjectData> GetProject(Guid projectGuid)
         {
             return await Task.Run(() =>
             {
-                Project project = DbCommandsProject.GetProject(guid.ToString());
+                //Search for Project in DB
+                Project project = DbCommandsProject.GetProject(projectGuid.ToString());
+                //If Project ist founded Create IProjectData and return
                 if (project != null)
                 {
                     IProjectData projectData = projectDataFactory.Create(project);
                     return projectData;
                 }
+                //Should the Project be null return null
                 return null;
             });
         }
@@ -50,8 +55,10 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
+                // Map projectData to Project DB Class
                 Project project = projectFactory.Create(projectData);
                 DbCommandsProject.AddProject(project);
+                // Map project DB Class to projectData for response
                 IProjectData projectDataResult = projectDataFactory.Create(project);
                 return projectDataResult;
             });
@@ -61,27 +68,34 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
+                //Check if projectData is in DB
                 Project dbProject = DbCommandsProject.GetProject(projectData.ProjectGuid.ToString());
+                //Return false if Project is not in DB
                 if (dbProject == null)
                 {
                     return false;
                 }
+                //Else Map projektData to Project DB and Update it
                 Project project = projectFactory.Create(projectData);
                 DbCommandsProject.UpdateProject(project);
+                //Return True after UpdateProject
                 return true;
             });
         }
 
-        public async Task<bool> DeleteProject(Guid guid)
+        public async Task<bool> DeleteProject(Guid projectGuid)
         {
             return await Task.Run(() =>
             {
-                Project project = DbCommandsProject.GetProject(guid.ToString());
+                //Check if projectData is in DB
+                Project project = DbCommandsProject.GetProject(projectGuid.ToString());
+                //Return false if Project is not in DB
                 if (project == null)
                 {
                     return false;
                 }
-                DbCommandsProject.DeleteProject(guid.ToString());
+                DbCommandsProject.DeleteProject(projectGuid.ToString());
+                //Return true after Projekt is removed from DB
                 return true;
             });
         }

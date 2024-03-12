@@ -139,5 +139,16 @@ namespace Logisitcs.BLL.Tests
             bool result = projectBll.UpdateProject(projectData).Result;
             result.Should().BeFalse();
         }
+
+        [Test]
+        public void TestDeleteProject_Should_Return_False()
+        {
+            Guid wrongGuid = Guid.Parse("18500286-0000-4240-8ec8-ffe1d3a4e77d");
+
+            IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
+
+            bool deleteResult = projectBll.DeleteProject(wrongGuid).Result;
+            deleteResult.Should().BeFalse();
+        }
     }
 }
