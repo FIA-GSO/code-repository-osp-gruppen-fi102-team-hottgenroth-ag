@@ -61,7 +61,7 @@ namespace Logisitcs.BLL
         {
             return await Task.Run(() =>
             {
-                var dbProject = DbCommandsProject.GetProject(projectData.ProjectGuid.ToString());
+                Project dbProject = DbCommandsProject.GetProject(projectData.ProjectGuid.ToString());
                 if (dbProject == null)
                 {
                     return false;

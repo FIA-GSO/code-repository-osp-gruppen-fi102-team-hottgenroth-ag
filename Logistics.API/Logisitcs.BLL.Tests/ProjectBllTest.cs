@@ -24,14 +24,12 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestGetAllProjects()
+        public void Test_GetAllProjects()
         {
-            // Arrange
             IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
-            // Act
+
             IEnumerable<IProjectData> result = projectBll.GetAllProjects().Result;
 
-            // Assert
             result.Should().NotBeNull();
             result.Should().HaveCount(2);
 
@@ -40,7 +38,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestGetProjects()
+        public void Test_GetProjects()
         {
             Guid guid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
 
@@ -51,11 +49,11 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestAddProject()
+        public void Test_AddProject_And_Delete()
         {
-            var expectedDate = DateTime.Now;
-            var guid = Guid.NewGuid();
-            var expectedProjectName = "Project Name";
+            DateTime expectedDate = DateTime.Now;
+            Guid guid = Guid.NewGuid();
+            string expectedProjectName = "Project Name";
             IProjectData projectData = new ProjectData()
             {
                 CreationDate = expectedDate,
@@ -85,8 +83,61 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestUpdateProject()
+        public void TestAdd_And_UpdateProject()
         {
+            DateTime expectedDate = DateTime.Now;
+            Guid guid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
+            string projectName = "Madagascar";
+            IProjectData projectData = new ProjectData()
+            {
+                CreationDate = expectedDate,
+                ProjectGuid = guid,
+                ProjectName = projectName
+            };
+
+            IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
+
+            //AddProject mit Guid die schon vorhanden ist soll eine Exception werfen
+            projectBll.AddProject(projectData).Invoking(x => x.Result).Should().Throw<Exception>();
+
+            //setzen einer neuen Guid und danach ein AddProject ausführen
+            Guid expectedNewGuid = Guid.NewGuid();
+            projectData.ProjectGuid = expectedNewGuid;
+            IProjectData addedProject = projectBll.AddProject(projectData).Result;
+            addedProject.ProjectGuid.Should().Be(expectedNewGuid);
+
+            //Namen umsetzen auf neuen Namen und UpdateProject
+            string newProject = "Neues Projekt";
+            projectData.ProjectName = newProject;
+            bool updateResult = projectBll.UpdateProject(projectData).Result;
+            updateResult.Should().BeTrue();
+
+            //Prüfen ob ProjectName geändert wurde
+            IProjectData updatedResult = projectBll.GetProject(expectedNewGuid).Result;
+            updatedResult.ProjectName.Should().Be(newProject);
+
+            //Löschen des neuen Projekts
+            bool deleteResult = projectBll.DeleteProject(expectedNewGuid).Result;
+            deleteResult.Should().BeTrue();
+        }
+
+        [Test]
+        public void TestUpdateProject_With_Wrong_Guid_Should_Return_False()
+        {
+            DateTime expectedDate = DateTime.Now;
+            Guid wrongGuid = Guid.Parse("18500286-0000-4240-8ec8-ffe1d3a4e77d");
+            string projectName = "Madagascar";
+            IProjectData projectData = new ProjectData()
+            {
+                CreationDate = expectedDate,
+                ProjectGuid = wrongGuid,
+                ProjectName = projectName
+            };
+
+            IProjectBll projectBll = new ProjectBll(projectDataFactory, projectFactory);
+
+            bool result = projectBll.UpdateProject(projectData).Result;
+            result.Should().BeFalse();
         }
     }
 }
