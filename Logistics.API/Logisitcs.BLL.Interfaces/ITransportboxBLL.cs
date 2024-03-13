@@ -7,15 +7,16 @@ namespace Logisitcs.BLL.Interfaces
 {
     public interface ITransportboxBll
     {
-        Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesByPrjGuid(string prj);
+        Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesByProjectGuid(string projectGuid);
+
         Task<IEnumerable<ITransportBoxData>> GetAllTransportBoxesWithoutPrjGuid();
 
-        Task<ITransportBoxData> GetTransportbox(Guid guid);
+        Task<ITransportBoxData> GetTransportbox(Guid transportboxGuid);
 
         Task<ITransportBoxData> AddTransportbox(ITransportBoxData transportBoxData);
 
         Task<bool> UpdateTransportbox(ITransportBoxData transportBoxData);
 
-        Task<bool> DeleteTransportbox(Guid guid);
+        Task<bool> DeleteTransportbox(Guid transportboxGuid);
     }
 }
