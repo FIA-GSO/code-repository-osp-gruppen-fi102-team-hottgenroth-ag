@@ -10,7 +10,7 @@
             <span>state: {{art.status}}</span>
           </section>
         </mat-panel-title>
-        <section *ngIf="!!art.expiryDate || !isReadOnly()" class="flex flex-row">
+        <section *ngIf="(!!art.expiryDate && isDateExpired($any(art.expiryDate))) || !isReadOnly()" class="flex flex-row">
           <button mat-icon-button (click)="openInfo();$event.stopPropagation()" class="pointer-events-auto"
           *ngIf="!!art.expiryDate && isDateExpired($any(art.expiryDate))">
             <mat-icon>error</mat-icon>

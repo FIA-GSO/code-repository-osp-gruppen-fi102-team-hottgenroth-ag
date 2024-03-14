@@ -26,6 +26,27 @@ export class ArticleDialogComponent {
 
   public get states(): eArticleState[]
   {
+    if(this._auth.getUserRole() === eRole.keeper)
+    {
+      return [
+        eArticleState.available,
+        eArticleState.unavailable,
+        eArticleState.expired,
+        eArticleState.defect,
+        eArticleState.none
+      ]
+    }
+    if(this._auth.getUserRole() === eRole.admin)
+    {
+      return [
+        eArticleState.defect,
+        eArticleState.consumed, eArticleState.discarded, 
+        eArticleState.donated, eArticleState.lost, 
+        eArticleState.received, eArticleState.none,
+        eArticleState.available,
+        eArticleState.unavailable, eArticleState.expired,
+      ]
+    }
     return [
       eArticleState.defect,
       eArticleState.consumed, eArticleState.discarded, 

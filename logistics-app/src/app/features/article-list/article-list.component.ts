@@ -85,7 +85,7 @@ export class ArticleListComponent{
     return role == eRole.user;
   }
 
-  public openInfo()
+  public openInfo(): void
   {
     this._snackbar.open("expiry date is expired!", undefined, {duration: 4000})
   } 
@@ -97,5 +97,10 @@ export class ArticleListComponent{
     today.setHours(0,0,0,0);
 
     return expireDate <= today
+  }
+
+  public isStorekeeper(): boolean
+  {
+    return this._auth.getUserRole() == eRole.keeper || this._auth.getUserRole() == eRole.admin;
   }
 }
