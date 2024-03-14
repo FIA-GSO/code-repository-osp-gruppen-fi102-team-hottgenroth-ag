@@ -17,6 +17,15 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PdfService } from '../../services/pdf/pdf.service';
 import { LoadingSpinnerService } from '../../services/loading-spinner.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddBoxSelectionListComponent } from '../../features/add-box-selection-list/add-box-selection-list.component';
+import { SharedDialogComponent } from '../../framework/shared-dialog/shared-dialog.component';
+import { IProjectData } from '../../models/IProjectData';
+import { AuthService } from '../../services/authentication/auth.service';
+import { eRole } from '../../models/enum/eRole';
+import { AddArticleSelectionListComponent } from '../../features/add-article-selection-list/add-article-selection-list.component';
+import { Guid } from 'guid-typescript';
+import { eArticleState } from '../../models/enum/eArticleState';
 
 @Component({
   selector: 'app-transport-box-page',
@@ -31,8 +40,24 @@ export class TransportBoxPageComponent {
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _pdfService: PdfService = inject(PdfService);
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
+  private _dialog: MatDialog = inject(MatDialog);
+  private _auth: AuthService = inject(AuthService);
 
-  public selectedBox: ITransportBoxData | undefined;
+  private _selectedBox: ITransportBoxData | undefined;
+  public get selectedBox(): ITransportBoxData | undefined
+  {
+    return this._selectedBox;
+  }
+
+  public set selectedBox(box: ITransportBoxData | undefined)
+  {
+    this._selectedBox = box;
+
+    if(!!this._selectedBox)
+    {
+      this._articles = this._logisticStore.articleStore.getArticlesForBox(this._selectedBox.boxGuid);
+    }
+  }
 
   private _transportBoxes!: ITransportBoxData[];
   public get transportBoxes(): ITransportBoxData[]
@@ -44,11 +69,12 @@ export class TransportBoxPageComponent {
     return this._transportBoxes;
   }
 
+  private _articles!: IArticleData[];
   public get articles(): IArticleData[]
   {
-    if(!!this.selectedBox)
+    if(!!this._articles)
     {
-      return this._logisticStore.articleStore.getArticlesForBox(this.selectedBox.boxGuid);
+      return this._articles;
     }
     return [];
   }
@@ -59,6 +85,9 @@ export class TransportBoxPageComponent {
   private _searchTextChanged = new Subject<string>();
 
   private _subscription!: Subscription;
+  private _dialogSubscription!: Subscription;
+  private _dialogArtSubscription!: Subscription;
+
   constructor()
   {
     this._transportBoxes = this._logisticStore.transportboxStore.getItems();
@@ -107,5 +136,127 @@ export class TransportBoxPageComponent {
         reject();
       }
     }))
+  }
+
+
+  public async addTransportBoxToProject()
+  {
+    this._spinner.show("Loading boxes...", new Promise<void>(async(res, rej) => {
+      var boxes = await this._logisticStore.transportboxStore.getAllBoxesWithoutPrj();
+      res();
+  
+      if(boxes.length > 0)
+      {
+        const dialogRef = this._dialog.open(AddBoxSelectionListComponent,
+          {
+            data: boxes
+          });
+
+        if(!!this._dialogSubscription)
+        {
+          this._dialogSubscription.unsubscribe();
+        }
+
+        this._dialogSubscription = dialogRef.afterClosed().subscribe((boxList: ITransportBoxData[]) => {
+          var prj: IProjectData | undefined = this._logisticStore.projectStore.getLoadedProject();
+          if(!!boxList && boxList.length > 0 && !!prj)
+          {
+            this._spinner.show("Adding boxes...", new Promise<void>(async(res, rej) => {
+              for(let i = 0;boxList.length > i;i++)
+              {
+                let item = boxList[i];
+                item.projectGuid = prj!.projectGuid;
+                await this._logisticStore.transportboxStore.updateToProject(item);
+              }
+        
+              //load prj because added new boxes
+              await this._logisticStore.loadProject(prj!.projectGuid);
+              this._transportBoxes = this._logisticStore.transportboxStore.getItems();
+              res();
+            }))
+          }
+        })
+      }
+      else
+      {
+        this._dialog.open(SharedDialogComponent, {
+          data:
+          {
+            icon: "warning",
+            title: "Not Found",
+            text: "No box without project exists!",
+            okButtonText: "Close",
+          }
+        })
+      }
+    }));
+  }
+
+  public isAuthorized(): boolean
+  {
+    let role: string = this._auth.getUserRole();
+
+    if(role == eRole.admin || role == eRole.keeper || role == eRole.leader)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public addArticlesToBox()
+  {
+    this._spinner.show("Loading article...", new Promise<void>(async(res, rej) => {
+      var arts = await this._logisticStore.articleStore.getAllBaseArticles();
+      res();
+  
+      if(arts.length > 0)
+      {
+        const dialogRef = this._dialog.open(AddArticleSelectionListComponent,
+          {
+            data: arts
+          });
+
+        if(!!this._dialogArtSubscription)
+        {
+          this._dialogArtSubscription.unsubscribe();
+        }
+
+        this._dialogArtSubscription = dialogRef.afterClosed().subscribe((artList: IArticleData[]) => {
+          if(!!artList && artList.length > 0 && !!this.selectedBox)
+          {
+            this._spinner.show("Adding articles...", new Promise<void>(async(res, rej) => {
+              for(let i = 0;artList.length > i;i++)
+              {
+                let item: IArticleData = artList[i];
+                item.boxGuid = this.selectedBox!.projectGuid;
+                item.articleBoxAssignment = Guid.create().toString();
+                item.position = 0;
+                item.expiryDate = undefined;
+                item.status = eArticleState.none;
+                item.quantity = 0;
+                let article: IArticleData | undefined = await this._logisticStore.articleStore.createArtToBox(item);
+                if(!!article)
+                {
+                  this._articles.push(article);
+                }
+              }
+              res();
+            }))
+          }
+        })
+      }
+      else
+      {
+        this._dialog.open(SharedDialogComponent, {
+          data:
+          {
+            icon: "warning",
+            title: "Not Found",
+            text: "No article exists!",
+            okButtonText: "Close",
+          }
+        })
+      }
+    }));
   }
 }

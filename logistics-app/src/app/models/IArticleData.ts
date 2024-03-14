@@ -12,5 +12,5 @@ export interface IArticleData
   quantity: number; 
   boxGuid: string;  
   articleBoxAssignment: string;
-  expiryDate: Date; 
+  expiryDate?: Date; 
 }
