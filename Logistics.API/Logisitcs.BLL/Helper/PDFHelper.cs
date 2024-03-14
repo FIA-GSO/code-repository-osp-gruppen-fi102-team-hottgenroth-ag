@@ -18,9 +18,8 @@ namespace Logisitcs.BLL.Helper
     public class PdfHelper
     {
         public double y_Achse = 0;
-        int _marginAllSites = 20;
 
-        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
+        public virtual async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -38,7 +37,7 @@ namespace Logisitcs.BLL.Helper
                         pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new PdfHeaderFooterHandler(project));
 
                         // Box hinzufügen
-                        PdfPage page = AddBox(document, pdf, box, articles);
+                        PdfPage page = AddBox(pdf, box, articles);
 
                         document.Close();
                     }
@@ -48,7 +47,7 @@ namespace Logisitcs.BLL.Helper
             }
         }
 
-        private PdfPage AddBox(Document document, PdfDocument pdf, 
+        private PdfPage AddBox(PdfDocument pdf,
             List<ITransportBoxData> box, List<IArticleData> articles)
         {
             PdfPage pdfPage;
@@ -109,9 +108,10 @@ namespace Logisitcs.BLL.Helper
                 foreach (var article in boxArticles)
                 {
                     if ((double)(int)article.Position == article.Position)
-                    {         
+                    {
                         positionRight = pageSize.GetLeft() + 30;
-                    } else
+                    }
+                    else
                     {
                         positionRight = pageSize.GetLeft() + 40;
                     }
@@ -146,7 +146,7 @@ namespace Logisitcs.BLL.Helper
                     .MoveText(positionRight + 10, y_Achse)
                     .SetColor(new DeviceRgb(0, 0, 0), true) // Farbe für "Status:" auf Schwarz setzen
                     .ShowText("Status: ")
-                    .SetColor(GetStatusColor(article.Status), true) 
+                    .SetColor(GetStatusColor(article.Status), true)
                     .ShowText(article.Status)
                     .EndText();
 
@@ -166,7 +166,6 @@ namespace Logisitcs.BLL.Helper
                 pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 40, y_Achse).LineTo(pageSize.GetRight() - 40, y_Achse).Stroke();
 
                 y_Achse -= 20; // Aktualisiere y_Achse für den nächsten Absatz
-
             }
 
             return pdfPage;
@@ -185,15 +184,19 @@ namespace Logisitcs.BLL.Helper
                 case "Defect":
                     return new DeviceRgb(240, 0, 0); // Rot
                 case "Lost":
-                    return new DeviceRgb(240, 0, 0); 
+                    return new DeviceRgb(240, 0, 0);
+
                 case "Discarded":
-                    return new DeviceRgb(255, 0, 0); 
+                    return new DeviceRgb(255, 0, 0);
+
                 case "Consumed":
                     return new DeviceRgb(0, 128, 0); // Grün
                 case "Donated":
-                    return new DeviceRgb(0, 128, 0); 
+                    return new DeviceRgb(0, 128, 0);
+
                 case "Received":
-                    return new DeviceRgb(0, 128, 0); 
+                    return new DeviceRgb(0, 128, 0);
+
                 default:
                     return new DeviceRgb(0, 0, 0); // Standard: Schwarz
             }
