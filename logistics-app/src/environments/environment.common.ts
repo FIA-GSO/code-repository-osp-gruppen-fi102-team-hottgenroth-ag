@@ -8,5 +8,6 @@ export const commonEnv = {
   pdfServicePath: "/PDF",
   articleServicePath: "/Article",
   loginServicePath: "/Login",
+  exportServicePath: "/ExportDatabase",
 
 };

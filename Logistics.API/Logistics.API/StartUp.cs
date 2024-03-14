@@ -56,6 +56,7 @@ namespace Logistics.API
             services.AddTransient<IArticleBll>(provider => new ArticleBll(provider.GetService<IArticleAndBoxAssignmentFactory>(), provider.GetService<IArticleDataFactory>()));
             services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<PdfHelper>()));
             services.AddTransient<ILoginBll>(provider => new LoginBll());
+            services.AddTransient<IExportDatabaseBll>(provider => new ExportDatabaseBll());
 
             #endregion BLL_DAL_DI
 

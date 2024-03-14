@@ -68,6 +68,23 @@ export class RequestService {
     });
   }
 
+  public getBlob(url: string, headers: HttpHeaders | undefined = undefined,
+    params: HttpParams | undefined = undefined): Promise<any | HttpErrorResponse> {
+    return new Promise((resolve, reject) => {
+      this.http.get(url, { headers: headers, params: params, responseType: 'blob' }).pipe(
+        catchError(error => {
+          return throwError(() => {
+            console.error(error.message || 'server Error');
+            this.errorReceived.emit(error);
+            reject(error);
+          });
+        })
+      ).subscribe((data: any) => {
+        resolve(data);
+      });
+    });
+  }
+
   public post(url: string, data: any, headers: HttpHeaders | undefined = undefined,
     params: HttpParams | undefined = undefined): Promise<any> {
     return new Promise((resolve, reject) => {

@@ -8,6 +8,7 @@ export class SecuredRoutes
       domainUrl + "/Article",
       domainUrl + "/PDF",    
       domainUrl + "/Login",      
+      domainUrl + "/ExportDatabase",      
 
     ]);
   }
