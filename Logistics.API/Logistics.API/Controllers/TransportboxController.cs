@@ -20,7 +20,7 @@ namespace Logistics.API.Controllers
         [HttpGet("all/{prjId}")]
         public async Task<IActionResult> GetAll(string prjId)
         {
-            var result = await transportboxBll.GetAllTransportBoxesByPrjGuid(prjId);
+            var result = await transportboxBll.GetAllTransportBoxesByProjectGuid(prjId);
             if (result == null)
             {
                 return NotFound();

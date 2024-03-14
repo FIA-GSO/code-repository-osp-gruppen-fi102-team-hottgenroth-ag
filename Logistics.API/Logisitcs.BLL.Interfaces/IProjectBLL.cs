@@ -9,12 +9,12 @@ namespace Logisitcs.BLL.Interfaces
     {
         Task<IEnumerable<IProjectData>> GetAllProjects();
 
-        Task<IProjectData> GetProject(Guid guid);
+        Task<IProjectData> GetProject(Guid projectGuid);
 
         Task<IProjectData> AddProject(IProjectData projectData);
 
         Task<bool> UpdateProject(IProjectData projectData);
 
-        Task<bool> DeleteProject(Guid guid);
+        Task<bool> DeleteProject(Guid projectGuid);
     }
 }
