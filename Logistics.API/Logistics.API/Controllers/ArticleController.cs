@@ -53,8 +53,8 @@ namespace Logistics.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] IArticleData data)
         {
-            var result = await articleBll.AddArticle(data);
-            if (!result)
+            IArticleData result = await articleBll.AddArticle(data);
+            if (result == null)
             {
                 return NotFound();
             }

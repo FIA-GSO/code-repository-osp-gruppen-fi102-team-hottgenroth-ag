@@ -22,7 +22,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
       if(this.getItems().length > 0 && items.length > 0)
       {
         items.forEach((art: IArticleData) => {
-          if(!!!this.getById(art.articleGuid))
+          if(!!!this.getById(art.articleBoxAssignment))
           {
             this.addItem(art);
           }
@@ -46,7 +46,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
       var item: IArticleData | undefined = this.getById(itemID);
 
       if (!!item) {
-        await this.request.delete(this._serviceURL + "/" + item.articleGuid);
+        await this.request.delete(this._serviceURL + "/" + item.articleBoxAssignment);
         this.removeItem(item);
 
         return true;
@@ -65,7 +65,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
     {
       this.replaceItem(item);
 
-      var art: IArticleData | undefined = this.getById(item.articleGuid);
+      var art: IArticleData | undefined = this.getById(item.articleBoxAssignment);
       if (!!art) 
       {
         await this.request.put(this._serviceURL, art);
@@ -99,7 +99,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
 
   public override getById(id: string): IArticleData | undefined
   {
-    return this.getItems().find(p => p.articleGuid === id);
+    return this.getItems().find(p => p.articleBoxAssignment === id);
   }
 
   public getArticlesForBox(boxId: string): IArticleData[]
@@ -138,7 +138,7 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   private replaceItem(item: IArticleData): void
   {
     var allItems = this.getItems();
-    var index = allItems.findIndex(art => art.articleGuid === item.articleGuid);
+    var index = allItems.findIndex(art => art.articleBoxAssignment === item.articleBoxAssignment);
 
     if (index !== -1) 
     {

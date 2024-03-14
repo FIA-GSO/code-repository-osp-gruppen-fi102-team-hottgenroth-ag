@@ -52,11 +52,6 @@ export class TransportBoxPageComponent {
   public set selectedBox(box: ITransportBoxData | undefined)
   {
     this._selectedBox = box;
-
-    if(!!this._selectedBox)
-    {
-      this._articles = this._logisticStore.articleStore.getArticlesForBox(this._selectedBox.boxGuid);
-    }
   }
 
   private _transportBoxes!: ITransportBoxData[];
@@ -69,12 +64,11 @@ export class TransportBoxPageComponent {
     return this._transportBoxes;
   }
 
-  private _articles!: IArticleData[];
   public get articles(): IArticleData[]
   {
-    if(!!this._articles)
+    if(!!this._selectedBox)
     {
-      return this._articles;
+      return this._logisticStore.articleStore.getArticlesForBox(this._selectedBox.boxGuid);
     }
     return [];
   }
@@ -228,18 +222,16 @@ export class TransportBoxPageComponent {
               for(let i = 0;artList.length > i;i++)
               {
                 let item: IArticleData = artList[i];
-                item.boxGuid = this.selectedBox!.projectGuid;
+                item.boxGuid = this.selectedBox!.boxGuid;
                 item.articleBoxAssignment = Guid.create().toString();
                 item.position = 0;
                 item.expiryDate = undefined;
                 item.status = eArticleState.none;
                 item.quantity = 0;
-                let article: IArticleData | undefined = await this._logisticStore.articleStore.createArtToBox(item);
-                if(!!article)
-                {
-                  this._articles.push(article);
-                }
+                await this._logisticStore.articleStore.createArtToBox(item);
               }
+
+              this._logisticStore.loadArticleForBox(this._selectedBox!.boxGuid)
               res();
             }))
           }

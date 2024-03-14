@@ -69,11 +69,11 @@ export class ArticleListComponent{
       data: article
     })
     dialogRef.afterClosed().subscribe((result: IArticleData) => {
-      console.log(result)
       if(!!result)
       {
         this._logisticStore.articleStore.update(result);
-        this._cd.detectChanges()
+        this._cd.detectChanges();
+
       }
     })
   }
