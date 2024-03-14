@@ -52,7 +52,7 @@ namespace Logistics.API
 
             //BLL
             services.AddTransient<IProjectBll>(provider => new ProjectBll(provider.GetService<IProjectDataFactory>(), provider.GetService<IProjectFactory>()));
-            services.AddTransient<ITransportboxBll>(provider => new TransportboxBLL(provider.GetService<ITransportBoxDataFactory>(), provider.GetService<ITransportboxFactory>()));
+            services.AddTransient<ITransportboxBll>(provider => new TransportboxBll(provider.GetService<ITransportBoxDataFactory>(), provider.GetService<ITransportboxFactory>()));
             services.AddTransient<IArticleBll>(provider => new ArticleBll(provider.GetService<IArticleAndBoxAssignmentFactory>(), provider.GetService<IArticleDataFactory>()));
             services.AddTransient<IPDFBLL>(provider => new PDFBLL(provider.GetService<PdfHelper>()));
             services.AddTransient<ILoginBll>(provider => new LoginBll());
@@ -134,7 +134,7 @@ namespace Logistics.API
         {
             app.UseResponseCompression();
             app.UseCors(options =>
-               options.WithOrigins("http://localhost:4200", "https://localhost:44349")
+               options.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
 

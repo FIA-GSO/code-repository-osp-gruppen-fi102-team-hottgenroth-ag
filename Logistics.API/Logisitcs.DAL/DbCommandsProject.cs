@@ -40,7 +40,7 @@ namespace Logisitcs.DAL
         public static Project GetProject(string guid)
         {
             using var db = new LogisticsDbContext();
-            return db.Projects.Find(guid);
+            return db.Projects.FirstOrDefault(x => x.ProjectGuid == guid);
         }
 
         #endregion Project

@@ -19,7 +19,7 @@ namespace Logisitcs.BLL.Helper
     {
         public double y_Achse = 0;
 
-        public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
+        public virtual async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {

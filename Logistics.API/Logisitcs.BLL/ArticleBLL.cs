@@ -20,26 +20,25 @@ namespace Logisitcs.BLL
             this.articleDataFactory = articleDataFactory;
         }
 
-
         public async Task<IEnumerable<IArticleData>> GetAllArticles()
-        {
-           return await Task.Run(() =>
-           {
-              IEnumerable<Article> articles = DbCommandsArticle.GetAllArticle();
-              List<IArticleData> articleDatas = new List<IArticleData>();
-              foreach (var item in articles)
-              { 
-                 articleDatas.Add(articleDataFactory.Create(item));
-              }
-              return articleDatas;
-           });
-        }
-
-        public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxId)
         {
             return await Task.Run(() =>
             {
-                IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DbCommandsArticle.GetArticleJoinAssignments(boxId);
+                IEnumerable<Article> articles = DbCommandsArticle.GetAllArticle();
+                List<IArticleData> articleDatas = new List<IArticleData>();
+                foreach (var item in articles)
+                {
+                    articleDatas.Add(articleDataFactory.Create(item));
+                }
+                return articleDatas;
+            });
+        }
+
+        public async Task<IEnumerable<IArticleData>> GetAllArticlesByBoxId(string boxGuid)
+        {
+            return await Task.Run(() =>
+            {
+                IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssigments = DbCommandsArticle.GetArticleJoinAssignments(boxGuid);
                 List<IArticleData> articleDatas = new List<IArticleData>();
                 foreach (var item in articleAndBoxAssigments)
                 {
@@ -54,41 +53,42 @@ namespace Logisitcs.BLL
             });
         }
 
-        public async Task<IArticleData> GetArticle(string boxId, string articleId)
+        public async Task<IArticleData> GetArticle(string boxGuid, string assignmentGuid)
         {
-            return await Task.Run(async () =>
+            return await Task.Run(() =>
             {
-                ArticleAndBoxAssignment articleAndBoxAssignment = DbCommandsArticle.GetArticle(boxId, articleId);
+                ArticleAndBoxAssignment articleAndBoxAssignment = DbCommandsArticle.GetArticle(boxGuid, assignmentGuid);
                 string status = string.Empty;
-                if (articleAndBoxAssignment.Status != null)
+                if (articleAndBoxAssignment != null && articleAndBoxAssignment.Status != null)
                 {
                     status = DbCommandsState.GetStatusById(articleAndBoxAssignment.Status);
+                    IArticleData articelData = articleDataFactory.Create(articleAndBoxAssignment);
+                    return articelData;
                 }
-                IArticleData articelData = articleDataFactory.Create(articleAndBoxAssignment);
-                return articelData;
+                return null;
             });
         }
 
-        public async Task<bool> AddArticle(IArticleData article)
+        public async Task<IArticleData> AddArticle(IArticleData article)
         {
-            return await Task.Run(async () =>
+            return await Task.Run(() =>
             {
                 ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateAdd(article);
                 try
                 {
                     DbCommandsArticle.AddArticleAndBoxAssignment(articleAndBoxAssignment);
-                    return true;
+                    return article;
                 }
                 catch
                 {
-                    return false;
+                    return null;
                 }
             });
         }
 
         public async Task<bool> UpdateArticle(IArticleData article)
         {
-            return await Task.Run(async () =>
+            return await Task.Run(() =>
             {
                 ArticleAndBoxAssignment articleAndBoxAssignment = articleAndBoxAssignmentFactory.CreateUpdate(article);
                 try
@@ -103,13 +103,13 @@ namespace Logisitcs.BLL
             });
         }
 
-        public async Task<bool> DeleteArticle(Guid id)
+        public async Task<bool> DeleteArticle(Guid articleBoxAssignmentsGuid)
         {
-            return await Task.Run(async () =>
+            return await Task.Run(() =>
             {
                 try
                 {
-                    DbCommandsArticle.DeleteArticleAndBoxAssignment(id.ToString());
+                    DbCommandsArticleBoxAssignment.DeleteArticleBoxAssignments(articleBoxAssignmentsGuid.ToString());
                     return true;
                 }
                 catch

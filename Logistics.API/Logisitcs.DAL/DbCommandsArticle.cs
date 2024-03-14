@@ -41,16 +41,6 @@ namespace Logisitcs.DAL
 
         public static void AddArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
         {
-            using var db = new LogisticsDbContext();
-            Article article = new Article
-            {
-                ArticleGuid = articleAndBoxAssignment.ArticleGuid,
-                ArticleName = articleAndBoxAssignment.ArticleName,
-                Description = articleAndBoxAssignment.Description,
-                Gtin = articleAndBoxAssignment.Gtin,
-                Unit = articleAndBoxAssignment.Unit
-            };
-            AddArticles(article);
             ArticleBoxAssignment articleBoxAssignment = new ArticleBoxAssignment
             {
                 AssignmentGuid = articleAndBoxAssignment.AssignmentGuid,
@@ -66,15 +56,6 @@ namespace Logisitcs.DAL
 
         public static void UpdateArticleAndBoxAssignment(ArticleAndBoxAssignment articleAndBoxAssignment)
         {
-            Article article = new Article
-            {
-                ArticleGuid = articleAndBoxAssignment.ArticleGuid,
-                ArticleName = articleAndBoxAssignment.ArticleName,
-                Description = articleAndBoxAssignment.Description,
-                Gtin = articleAndBoxAssignment.Gtin,
-                Unit = articleAndBoxAssignment.Unit
-            };
-            UpdateArticle(article);
             ArticleBoxAssignment articleBoxAssignment = new ArticleBoxAssignment
             {
                 AssignmentGuid = articleAndBoxAssignment.AssignmentGuid,
@@ -88,30 +69,29 @@ namespace Logisitcs.DAL
             DbCommandsArticleBoxAssignment.UpdateArticleBoxAssignment(articleBoxAssignment);
         }
 
-        public static void DeleteArticleAndBoxAssignment(string articleGuid)
+        public static void DeleteArticleAndBoxAssignment(string assignmentGuid)
         {
-            DbCommandsArticleBoxAssignment.DeleteArticleBoxAssignments(articleGuid);
-            DeleteArticles(articleGuid);
+            DbCommandsArticleBoxAssignment.DeleteArticleBoxAssignments(assignmentGuid);
         }
 
-        public static ArticleAndBoxAssignment GetArticle(string boxId, string articleId)
+        public static ArticleAndBoxAssignment GetArticle(string boxId, string assigmentGuid)
         {
-            IEnumerable<ArticleAndBoxAssignment> t = GetArticleJoinAssignments(boxId);
-            return t.SingleOrDefault(m => m.ArticleGuid == articleId);
+            IEnumerable<ArticleAndBoxAssignment> articleAndBoxAssignment = GetArticleJoinAssignments(boxId);
+            return articleAndBoxAssignment.SingleOrDefault(m => m.AssignmentGuid == assigmentGuid);
         }
 
-      public static Article GetArticle(string articleId)
-      {
-         using var db = new LogisticsDbContext();
-         return db.Articles.SingleOrDefault(art => art.ArticleGuid == articleId);
-      }
+        public static Article GetArticle(string articleId)
+        {
+            using var db = new LogisticsDbContext();
+            return db.Articles.SingleOrDefault(art => art.ArticleGuid == articleId);
+        }
 
-      public static void AddArticles(Article article)
-      {
-         using var db = new LogisticsDbContext();
-         db.Articles.Add(article);
-         db.SaveChanges();
-      }
+        public static void AddArticles(Article article)
+        {
+            using var db = new LogisticsDbContext();
+            db.Articles.Add(article);
+            db.SaveChanges();
+        }
 
         public static void DeleteArticles(string guid)
         {
