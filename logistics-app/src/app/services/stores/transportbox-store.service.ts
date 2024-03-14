@@ -85,6 +85,34 @@ export class TransportboxStoreService extends BaseStoreService<ITransportBoxData
     return undefined;
   }
 
+  public async getAllBoxesWithoutPrj(): Promise<ITransportBoxData[]>
+  {
+    try
+    {
+      let items: ITransportBoxData[] = await this.request.get(this._serviceURL);
+      return !!items ? items : [];
+    }
+    catch(err: any)
+    {
+      console.log(err);
+    }
+    return [];
+  }
+
+  public async updateToProject(item: ITransportBoxData): Promise<void>
+  {
+    try 
+    {
+      if (!!item) 
+      {
+        await this.request.put(this._serviceURL, item);
+      }
+    }
+    catch (reason: any) {
+      console.log(reason);
+    }
+  }
+
   public override getById(id: string): ITransportBoxData | undefined
   {
     return this.getItems().find(p => p.boxGuid === id);

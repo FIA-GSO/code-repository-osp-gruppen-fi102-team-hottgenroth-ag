@@ -2,6 +2,8 @@ import { commonEnv } from "./environment.common";
 import { SecuredRoutes } from "./securedRoutes";
 
 const domainUrl :string = "https://localhost:44349";
+// const domainUrl :string = "https://192.168.91.162:44349";
+
 
 const securedRoutes = SecuredRoutes.getSecuredRoutes(domainUrl);
 

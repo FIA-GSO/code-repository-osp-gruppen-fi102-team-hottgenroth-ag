@@ -6,9 +6,14 @@
         <mat-icon>search</mat-icon>
       </button>
       <h2 *ngIf="!isSearching">List of all tranport boxes</h2>
-      <button mat-icon-button *ngIf="!isSearching" (click)="printPDF()">
-        <mat-icon>picture_as_pdf</mat-icon>
-      </button>
+      <section class="flex flex-row" *ngIf="!isSearching && isAuthorized()">
+        <button mat-icon-button (click)="addTransportBoxToProject()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="printPDF()">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+      </section>
       <ng-container *ngIf="isSearching" [ngTemplateOutlet]="search"></ng-container>
     </mat-toolbar>
     <mat-card appearance="outlined" class="h-[calc(100%-64px)] ml-2 mr-2 mb-2 !flex !flex-col">
@@ -25,9 +30,14 @@
   </mat-tab>
   <mat-tab [label]="'Articles'" [disabled]="!!!selectedBox">
     <mat-card class="h-[calc(100%-8px)] m-1" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>{{selectedBox?.description}}</mat-card-title>
-        <mat-card-subtitle>List of all articles for box</mat-card-subtitle>
+      <mat-card-header class="!flex !flex-row !items-center !justify-between">
+        <section class="flex grow flex-col">
+          <mat-card-title>{{selectedBox?.description}}</mat-card-title>
+          <mat-card-subtitle>List of all articles for box</mat-card-subtitle>
+        </section>
+        <button mat-icon-button (click)="addArticlesToBox()">
+          <mat-icon>add</mat-icon>
+        </button>
       </mat-card-header>
       <mat-card-content class="!overflow-y-auto flex flex-col grow">
         <article-list [articles]="articles"></article-list>
