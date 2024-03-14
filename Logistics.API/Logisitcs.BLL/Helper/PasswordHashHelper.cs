@@ -5,22 +5,12 @@ namespace Logisitcs.BLL.Helper
 {
     public static class PasswordHashHelper
     {
-        /// <summary>
-        /// Size of salt.
-        /// </summary>
+        // Size of salt.
         private const int SaltSize = 16;
 
-        /// <summary>
-        /// Size of hash.
-        /// </summary>
+        // Size of hash.
         private const int HashSize = 20;
 
-        /// <summary>
-        /// Creates a hash from a password.
-        /// </summary>
-        /// <param name="password">The password.</param>
-        /// <param name="iterations">Number of iterations.</param>
-        /// <returns>The hash.</returns>
         public static string Hash(string password, int iterations)
         {
             // Create salt
@@ -43,32 +33,19 @@ namespace Logisitcs.BLL.Helper
             return string.Format("$MYHASH$V1${0}${1}", iterations, base64Hash);
         }
 
-        /// <summary>
-        /// Creates a hash from a password with 10000 iterations
-        /// </summary>
-        /// <param name="password">The password.</param>
-        /// <returns>The hash.</returns>
+        // Creates a hash from a password with 10000 iterations
         public static string Hash(string password)
         {
             return Hash(password, 10000);
         }
 
-        /// <summary>
-        /// Checks if hash is supported.
-        /// </summary>
-        /// <param name="hashString">The hash.</param>
-        /// <returns>Is supported?</returns>
+        // Checks if hash is supported.
         public static bool IsHashSupported(string hashString)
         {
             return hashString.Contains("$MYHASH$V1$");
         }
 
-        /// <summary>
-        /// Verifies a password against a hash.
-        /// </summary>
-        /// <param name="password">The password.</param>
-        /// <param name="hashedPassword">The hash.</param>
-        /// <returns>Could be verified?</returns>
+        // Verifies a password against a hash.
         public static bool Verify(string password, string hashedPassword)
         {
             // Check hash
