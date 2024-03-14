@@ -10,12 +10,12 @@ namespace Logisitcs.BLL.Factories
         public ArticleAndBoxAssignment CreateAdd(IArticleData articleData)
         {
             return new ArticleAndBoxAssignment
-                (Guid.NewGuid().ToString(),
+                (articleData.ArticleGuid,
              articleData.ArticleName,
              articleData.Description,
              articleData.Gtin,
              articleData.Unit,
-             Guid.NewGuid().ToString(),
+             articleData.ArticleBoxAssignment.ToString(),
              articleData.BoxGuid.ToString(),
              articleData.Position,
              DbCommandsState.GetStatusByName(articleData.Status),

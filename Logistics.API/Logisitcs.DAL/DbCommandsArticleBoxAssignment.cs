@@ -1,4 +1,5 @@
 ﻿using Logisitcs.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,16 +18,26 @@ namespace Logisitcs.DAL
         public static void AddArticleBoxAssignments(ArticleBoxAssignment articleBoxAssignment)
         {
             using var db = new LogisticsDbContext();
+            var boxExists = db.Transportboxes.Any(b => b.BoxGuid == articleBoxAssignment.BoxGuid);
+            if (!boxExists)
+            {
+                throw new KeyNotFoundException("BoxGuid does not exist in the Boxes table.");
+            }
+            var articleExists = db.Articles.Any(a => a.ArticleGuid == articleBoxAssignment.ArticleGuid);
+            if (!articleExists)
+            {
+                throw new KeyNotFoundException("ArticleGuid does not exist in the Articles table.");
+            }
             db.ArticleBoxAssignments.Add(articleBoxAssignment);
             db.SaveChanges();
         }
 
-        public static void DeleteArticleBoxAssignments(string guid)
+        public static void DeleteArticleBoxAssignments(string articleBoxAssignments)
         {
             using var db = new LogisticsDbContext();
-            ArticleBoxAssignment article = db.ArticleBoxAssignments.SingleOrDefault(x => x.ArticleGuid == guid);
-            if (article == null) return;
-            db.ArticleBoxAssignments.Remove(article);
+            ArticleBoxAssignment articleBoxAssignment = db.ArticleBoxAssignments.SingleOrDefault(x => x.AssignmentGuid == articleBoxAssignments);
+            if (articleBoxAssignment == null) return;
+            db.ArticleBoxAssignments.Remove(articleBoxAssignment);
             db.SaveChanges();
         }
 
