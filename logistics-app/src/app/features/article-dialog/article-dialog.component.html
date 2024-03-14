@@ -22,7 +22,7 @@
       </mat-form-field>
       <section class="flex flex-col">
         <mat-checkbox [checked]="!!article.value.expiryDate" (change)="setHasExpiryDate($event.checked)">has expiry date</mat-checkbox>
-        <date-picker [date]="article.value.expiryDate.toISOString()" (dateChanged)="setDate($event)"
+        <date-picker [date]="article.value.expiryDate.toDateString()" (dateChanged)="setDate($event)"
         *ngIf="!!article.value.expiryDate" title="expire date"></date-picker>
       </section>
     </section>

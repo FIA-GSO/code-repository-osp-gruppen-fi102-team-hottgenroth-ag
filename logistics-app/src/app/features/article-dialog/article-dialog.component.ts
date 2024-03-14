@@ -38,6 +38,7 @@ export class ArticleDialogComponent {
   private _formBuilder: FormBuilder = inject(FormBuilder);
 
   constructor(@Inject(MAT_DIALOG_DATA) article: IArticleData){
+    if(article.expiryDate) article.expiryDate = new Date(article.expiryDate);
     this.article = this._formBuilder.group({
       ...article,
       ...{quantity: [article.quantity, Validators.min(0)]},

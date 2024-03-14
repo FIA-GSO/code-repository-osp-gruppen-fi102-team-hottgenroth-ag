@@ -10,7 +10,7 @@ import { authInterceptor } from './app/services/authentication/auth-interceptor.
 import { AuthGuard } from './app/services/authentication/authguard';
 import { DatePipe } from '@angular/common';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
@@ -23,6 +23,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptors([authInterceptor])),
     AuthGuard,
     DatePipe,
+    MatSnackBar,
     provideNativeDateAdapter()
   ],
 }).catch((err) => console.error(err));

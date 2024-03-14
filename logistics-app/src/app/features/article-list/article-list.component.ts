@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../services/authentication/auth.service';
 import { eRole } from '../../models/enum/eRole';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'article-list',
@@ -28,6 +29,7 @@ export class ArticleListComponent{
   private _dialog: MatDialog = inject(MatDialog);
   private _auth: AuthService = inject(AuthService);
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private _snackbar: MatSnackBar = inject(MatSnackBar);
 
   constructor(){}
 
@@ -73,7 +75,6 @@ export class ArticleListComponent{
       {
         this._logisticStore.articleStore.update(result);
         this._cd.detectChanges();
-
       }
     })
   }
@@ -82,5 +83,19 @@ export class ArticleListComponent{
   {
     let role: string = this._auth.getUserRole();
     return role == eRole.user;
+  }
+
+  public openInfo()
+  {
+    this._snackbar.open("expiry date is expired!", undefined, {duration: 4000})
+  } 
+
+  public isDateExpired(pDate: string)
+  {
+    var expireDate = new Date(pDate); //dd-mm-YYYY
+    var today = new Date();
+    today.setHours(0,0,0,0);
+
+    return expireDate <= today
   }
 }
