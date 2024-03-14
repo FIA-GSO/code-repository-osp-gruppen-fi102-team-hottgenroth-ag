@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {HttpClientTestingModule } from '@angular/common/http/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DatePickerComponent } from './date-picker.component';
+import { DatePipe } from '@angular/common';
 
 describe('DatePickerComponent', () => {
   let component: DatePickerComponent;
@@ -8,7 +11,15 @@ describe('DatePickerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DatePickerComponent]
+      imports: [
+        DatePickerComponent,
+        HttpClientTestingModule,
+        BrowserAnimationsModule
+      ],
+      providers:
+      [
+        DatePipe
+      ]
     })
     .compileComponents();
     
@@ -19,5 +30,10 @@ describe('DatePickerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('set date', () => {
+    component.setDate("2012-02-20")
+    expect(component.date).toEqual("2012-02-20");
   });
 });

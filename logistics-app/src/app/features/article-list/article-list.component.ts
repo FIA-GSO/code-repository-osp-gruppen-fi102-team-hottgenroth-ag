@@ -36,16 +36,6 @@ export class ArticleListComponent{
     return this.articles.sort((a, b) => a.position.toString().localeCompare(b.position.toString(), undefined, {numeric: true}))
   }
 
-  public isArticleLastPosition(article: IArticleData): boolean
-  {
-    var samePositionList = this.getAllArticlesFromSamePositions(article);
-    if(samePositionList[samePositionList.length - 1].articleGuid == article.articleGuid)
-    {
-      return true;
-    }
-    return false;
-  }
-
   public isArticleFirstPosition(article: IArticleData): boolean
   {
     var firstPositionList = this.getAllFirstPositions();

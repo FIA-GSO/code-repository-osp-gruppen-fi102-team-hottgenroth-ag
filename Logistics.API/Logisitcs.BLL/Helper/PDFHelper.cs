@@ -3,24 +3,22 @@ using iText.Kernel.Colors;
 using iText.Kernel.Events;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
-using iText.Layout;
+using iText.Kernel.Pdf;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using System;
+using iText.Layout;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Logisitcs.BLL.Helper
 {
     public class PdfHelper
     {
         public double y_Achse = 0;
-        public string projectName = "Testprojekt";
-
-        private int _marginAllSites = 20;
+        int _marginAllSites = 20;
 
         public async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
@@ -50,7 +48,7 @@ namespace Logisitcs.BLL.Helper
             }
         }
 
-        private PdfPage AddBox(Document document, PdfDocument pdf,
+        private PdfPage AddBox(Document document, PdfDocument pdf, 
             List<ITransportBoxData> box, List<IArticleData> articles)
         {
             PdfPage pdfPage;
@@ -85,10 +83,14 @@ namespace Logisitcs.BLL.Helper
                 // Textbreite berechnen
                 float textWidth = font.GetWidth(boxCategory, fontSize);
 
+                string truncatedBoxDescription = b.Description.Length > 75 ?
+                b.Description.Substring(0, (int)70 - 3) + "..." :
+                b.Description;
+
                 // BoxNumber
                 pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
                 .MoveText(pageSize.GetLeft() + 20, y_Achse).SetColor(new DeviceRgb(0, 0, 0), true)
-                .ShowText(boxNumber)
+                .ShowText(boxNumber + " - " + truncatedBoxDescription)
                 .EndText();
 
                 // BoxCategory
@@ -99,28 +101,19 @@ namespace Logisitcs.BLL.Helper
 
                 y_Achse -= 20;
 
-                // Description
-                pdfCanvas.BeginText().SetFontAndSize(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 12)
-                .MoveText(pageSize.GetLeft() + 30, y_Achse).SetColor(new DeviceRgb(128, 128, 128), true)
-                .ShowText(b.Description)
-                .EndText();
-
-                y_Achse -= 15;
-
                 // Artikel für diese Box erhalten
-                var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString());
+                var boxArticles = GetArticlesForBox(articles, b.BoxGuid.ToString()).OrderBy(article => article.Position);
 
-                var positionRight = pageSize.GetLeft() + 40;
+                var positionRight = pageSize.GetLeft() + 30;
 
                 foreach (var article in boxArticles)
                 {
                     if ((double)(int)article.Position == article.Position)
+                    {         
+                        positionRight = pageSize.GetLeft() + 30;
+                    } else
                     {
                         positionRight = pageSize.GetLeft() + 40;
-                    }
-                    else
-                    {
-                        positionRight = pageSize.GetLeft() + 50;
                     }
 
                     // Maximale Breite des Beschreibungstextes basierend auf 3/4 der Seitenbreite
@@ -153,7 +146,7 @@ namespace Logisitcs.BLL.Helper
                     .MoveText(positionRight + 10, y_Achse)
                     .SetColor(new DeviceRgb(0, 0, 0), true) // Farbe für "Status:" auf Schwarz setzen
                     .ShowText("Status: ")
-                    .SetColor(GetStatusColor(article.Status), true)
+                    .SetColor(GetStatusColor(article.Status), true) 
                     .ShowText(article.Status)
                     .EndText();
 
@@ -173,6 +166,7 @@ namespace Logisitcs.BLL.Helper
                 pdfCanvas.SetLineWidth(0.5f).MoveTo(pageSize.GetLeft() + 40, y_Achse).LineTo(pageSize.GetRight() - 40, y_Achse).Stroke();
 
                 y_Achse -= 20; // Aktualisiere y_Achse für den nächsten Absatz
+
             }
 
             return pdfPage;
@@ -191,19 +185,15 @@ namespace Logisitcs.BLL.Helper
                 case "Defect":
                     return new DeviceRgb(240, 0, 0); // Rot
                 case "Lost":
-                    return new DeviceRgb(240, 0, 0);
-
+                    return new DeviceRgb(240, 0, 0); 
                 case "Discarded":
-                    return new DeviceRgb(255, 0, 0);
-
+                    return new DeviceRgb(255, 0, 0); 
                 case "Consumed":
                     return new DeviceRgb(0, 128, 0); // Grün
                 case "Donated":
-                    return new DeviceRgb(0, 128, 0);
-
+                    return new DeviceRgb(0, 128, 0); 
                 case "Received":
-                    return new DeviceRgb(0, 128, 0);
-
+                    return new DeviceRgb(0, 128, 0); 
                 default:
                     return new DeviceRgb(0, 0, 0); // Standard: Schwarz
             }

@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolbarComponent } from './toolbar.component';
+import { IToolbarButton } from '../../models/IToolbarButton';
+import { Guid } from 'guid-typescript';
+
+const toolbarButton1: IToolbarButton = {
+  id: Guid.create().toString(),
+  icon: ""
+}
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
@@ -17,5 +24,10 @@ describe('ToolbarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('add item', () => {
+    component.addToolbarButton(toolbarButton1);
+    expect(component.toolbarButtons.length).toEqual(1);
   });
 });

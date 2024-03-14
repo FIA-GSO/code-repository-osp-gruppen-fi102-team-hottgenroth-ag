@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>230</y>
+      <w>240</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+ArticleData
+--
+  + ArticleGuid: string
+  + ArticleName: string
+  + Description: string
+  + Gtin: int | null
+  + Unit: string
+  + Position: double | null
+  + Status: string
+  + Quantity: int | null
+  + ExpiryDate: DateTime | null
+  + BoxGuid: Guid
+  + ArticleBoxAssignment: Guid
+-
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>180</x>
+      <y>60</y>
+      <w>190</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Note..
+Die Gtin kann null sein, 
+da sie in den Testdaten 
+nicht gesetzt war.
+Also ist anzunehmen, dass
+im Anwendungsfall 
+die Gtin leer sein kann.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>240</y>
+      <w>250</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+TransportBoxData
+--
+ + BoxGuid: Guid
+ + Number: int 
+ + Description: string
+ + LocationTransport: string
+ + LocationDeployment: string
+ + LocationHome: string
+ + BoxCategory: string
+ + ProjectGuid: Guid 
+-
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>60</y>
+      <w>230</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+ProjectData
+--
+ + ProjectGuid: Guid
+ + ProjectName: string
+ + CreationDate: Date
+-
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>180</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>290</y>
+      <w>170</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>10</y>
+      <w>680</w>
+      <h>580</h>
+    </coordinates>
+    <panel_attributes>halign=center
+Klassen der Bll-Schicht
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -13,6 +13,5 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './add-name-dialog.component.scss'
 })
 export class AddNameDialogComponent {
-
   public name: string = "";
 }
