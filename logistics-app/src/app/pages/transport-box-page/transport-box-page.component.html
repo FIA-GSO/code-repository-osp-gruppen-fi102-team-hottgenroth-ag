@@ -50,7 +50,8 @@
 <ng-template #search>
   <mat-form-field class="w-full" *ngIf="isSearching">
     <mat-icon matIconPrefix>search</mat-icon>
-    <input matInput [value]="searchingValue" (keyup)="searchWithString($any($event.target).value)">
+    <input matInput [value]="searchingValue" placeholder="search category"
+    (keyup)="searchWithString($any($event.target).value)">
     <button mat-icon-button matIconSuffix (click)="closeSearch()">
       <mat-icon>clear</mat-icon>
     </button>
