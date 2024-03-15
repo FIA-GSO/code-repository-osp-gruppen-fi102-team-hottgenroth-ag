@@ -19,6 +19,7 @@ namespace Logisitcs.BLL.Helper
     {
         public double y_Achse = 0;
 
+        // Erstelle das PDF Dokument als Byte Array
         public virtual async Task<byte[]> Create(List<ITransportBoxData> box, IProjectData project, List<IArticleData> articles)
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -47,6 +48,7 @@ namespace Logisitcs.BLL.Helper
             }
         }
 
+        // Erstelle Boxen mit Artikeln
         private PdfPage AddBox(PdfDocument pdf,
             List<ITransportBoxData> box, List<IArticleData> articles)
         {
