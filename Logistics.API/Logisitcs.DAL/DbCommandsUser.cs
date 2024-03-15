@@ -6,8 +6,6 @@ namespace Logisitcs.DAL
 {
     public static class DbCommandsUser
     {
-        #region User
-
         public static void AddUser(User user)
         {
             using var db = new LogisticsDbContext();
@@ -24,9 +22,9 @@ namespace Logisitcs.DAL
         public static void DeleteUser(string guid)
         {
             using var db = new LogisticsDbContext();
-            var article = db.Users.Find(guid);
-            if (article == null) return;
-            db.Users.Remove(article);
+            var user = db.Users.SingleOrDefault(x => x.UserId == guid);
+            if (user == null) return;
+            db.Users.Remove(user);
             db.SaveChanges();
         }
 
@@ -51,10 +49,6 @@ namespace Logisitcs.DAL
             return db.Users.Find(guid);
         }
 
-        #endregion User
-
-        #region UserRole
-
         public static IEnumerable<UserRole> GetAllUserRoles()
         {
             var db = new LogisticsDbContext();
@@ -72,7 +66,5 @@ namespace Logisitcs.DAL
             using var db = new LogisticsDbContext();
             return int.Parse(db.UserRoles.Single(x => x.Role == role).RoleId.ToString());
         }
-
-        #endregion UserRole
     }
 }

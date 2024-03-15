@@ -6,8 +6,6 @@ namespace Logisitcs.DAL
 {
     public static class DbCommandsState
     {
-        #region Statues
-
         public static IEnumerable<Status> GetAllStatues()
         {
             var db = new LogisticsDbContext();
@@ -48,7 +46,5 @@ namespace Logisitcs.DAL
             using var db = new LogisticsDbContext();
             return db.Statuses.Single(x => x.Name == name).StatusId;
         }
-
-        #endregion Statues
     }
 }

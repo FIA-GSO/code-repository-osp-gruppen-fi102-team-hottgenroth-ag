@@ -12,8 +12,8 @@ namespace Logisitcs.BLL.Models
             Role = role;
         }
 
-        public string UserEmail { get; }
-        public Guid UserId { get; }
-        public string Role { get; }
+        public string UserEmail { get; set; }
+        public Guid UserId { get; set; }
+        public string Role { get; set; }
     }
 }
