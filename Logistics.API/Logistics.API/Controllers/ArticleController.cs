@@ -10,7 +10,7 @@ namespace Logistics.API.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
-        protected IArticleBll articleBll { get; }
+        private readonly IArticleBll articleBll;
 
         public ArticleController(IArticleBll articleBll)
         {
