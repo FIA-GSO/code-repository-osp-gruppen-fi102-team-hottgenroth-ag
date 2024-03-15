@@ -8,6 +8,8 @@ import { LogisticsStoreService } from '../../services/stores/logistics-store.ser
 import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 import { TruncatePipe } from '../../framework/TruncatePipe';
 import { IProjectData } from '../../models/IProjectData';
+import { AuthService } from '../../services/authentication/auth.service';
+import { eRole } from '../../models/enum/eRole';
 
 @Component({
   selector: 'transport-box-list',
@@ -25,6 +27,7 @@ export class TransportBoxListComponent {
   
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
+  private _auth: AuthService = inject(AuthService);
   
   private _selectedBox: ITransportBoxData | undefined;
   public set selectedBox(pBox: ITransportBoxData | undefined)
@@ -81,5 +84,16 @@ export class TransportBoxListComponent {
       }
       else reject();
     }))
+  }
+
+  public isAuthorized(): boolean
+  {
+    let role: string = this._auth.getUserRole();
+
+    if(role == eRole.admin || role == eRole.keeper)
+    {
+      return true;
+    }
+    return false;
   }
 }

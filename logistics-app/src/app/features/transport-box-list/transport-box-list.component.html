@@ -14,7 +14,7 @@
   <section class="flex flex-row justify-between items-center">
     {{box.description | truncate:[30]}}
     <section>
-      <button mat-icon-button (click)="deleteBoxFromProject()" *ngIf="box.boxGuid === selectedBox?.boxGuid">
+      <button mat-icon-button (click)="deleteBoxFromProject()" *ngIf="box.boxGuid === selectedBox?.boxGuid && isAuthorized()">
         <mat-icon>delete</mat-icon>
       </button>
       <button mat-icon-button (click)="changeTab()">

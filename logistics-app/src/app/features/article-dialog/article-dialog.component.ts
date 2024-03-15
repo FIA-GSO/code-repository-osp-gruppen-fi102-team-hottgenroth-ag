@@ -127,7 +127,7 @@ export class ArticleDialogComponent {
   {
     let role: string = this._auth.getUserRole();
 
-    if(role == eRole.admin || role == eRole.keeper || role == eRole.leader)
+    if(role == eRole.admin || role == eRole.keeper)
     {
       return true;
     }
