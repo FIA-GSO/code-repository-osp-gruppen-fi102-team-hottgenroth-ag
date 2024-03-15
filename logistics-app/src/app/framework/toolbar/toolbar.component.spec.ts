@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ToolbarComponent } from './toolbar.component';
 import { IToolbarButton } from '../../models/IToolbarButton';
 import { Guid } from 'guid-typescript';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 const toolbarButton1: IToolbarButton = {
   id: Guid.create().toString(),
@@ -15,7 +15,8 @@ describe('ToolbarComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ToolbarComponent]
+      imports: [ToolbarComponent,
+        HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;

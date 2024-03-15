@@ -22,15 +22,13 @@ export abstract class BaseStoreService<T>
     return this.initialized;
   }
 
-  // Make _favoritesSource private so it's not accessible from the outside,
-  // expose it as favorites$ observable (read-only) instead.
-  // Write to _favoritesSource only through specified store methods below.
+  // behaviour subject das die Referenzen speichert und alle subscriber benachrichtigt
   private readonly _source = new BehaviorSubject<T[]>([]);
 
-  // Exposed observable (read-only).
+  // Read only Observable woran die Subscriber sich dran hängen können
   public readonly items$ = this._source.asObservable();
 
-  // Get last value without subscribing to the items$ observable (synchronously).
+  // Gibt die letzen Änderungen des Observerables zurück.
   public getItems(): T[] {
     return !!this._source.getValue() ? this._source.getValue() : [];
   }
