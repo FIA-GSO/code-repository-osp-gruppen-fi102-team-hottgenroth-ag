@@ -10,7 +10,12 @@
     <mat-card-subtitle>{{user.role}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <h3>List of all user: </h3>
-    <user-list [roleOptions]="roleOptions" [userList]="allUser"></user-list>
+    <section *ngIf="!!allUser && allUser.length > 0">
+      <h3>List of all user: </h3>
+      <user-list [roleOptions]="roleOptions" [userList]="allUser"></user-list>
+    </section>
+    <section *ngIf="!!!allUser || allUser.length <= 0" class="flex justify-center">
+      <span>no user available!</span>
+    </section>
   </mat-card-content>
 </mat-card>
