@@ -6,6 +6,8 @@
  * https://www.maestralsolutions.com/angular-application-state-management-you-do-not-need-external-data-stores/
  */
 
+//Hier haben wir eine gemeinsame Datenhaltung, die auch alle Referenzen in den anderen Komponentent upadtet
+
 import { EventEmitter, inject } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 

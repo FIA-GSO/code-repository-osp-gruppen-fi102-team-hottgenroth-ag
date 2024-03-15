@@ -17,6 +17,7 @@ import { IProjectData } from '../../models/IProjectData';
   styleUrl: './transport-box-list.component.scss'
 })
 export class TransportBoxListComponent {
+  //Wir definieren Events für die Parentkomponente
   @Output() boxSelection: EventEmitter<ITransportBoxData> = new EventEmitter<ITransportBoxData>();
   @Output() tabChange: EventEmitter<void> = new EventEmitter<void>();
 
@@ -32,10 +33,13 @@ export class TransportBoxListComponent {
     {
       this._selectedBox = pBox;
   
+      //Eine Box wurde ausgewählt
       this._spinner.show("Transportbox is loading...", new Promise<void>(async(resolve, reject) => {
         if(!!this._selectedBox)
         {
+          //Wir laden alle Artikel für die Box
           await this._logisticStore.loadArticleForBox(this._selectedBox.boxGuid);
+          //Wir geben die selektierte Box in die Parentkomponente
           this.boxSelection.emit(this._selectedBox);
           resolve();
         }
@@ -44,6 +48,7 @@ export class TransportBoxListComponent {
     }
   }
 
+  //Wir sortieren die Boxen anhand der Number
   public getSortedBoxes(): ITransportBoxData[]
   {
     return this.transportBoxes.sort((a, b) => a.number - b.number);
@@ -54,11 +59,14 @@ export class TransportBoxListComponent {
     return this._selectedBox;
   }
 
+  //Der change Tab button wurde gedrückt, deswegen 
+  //melden wir der Parentkomponente, dass Sie den Tab wechseln soll
   public changeTab()
   {
     this.tabChange.emit();
   }
 
+  //Wir löschen eine Transportbox von einem Projekt und refreshen dann die Liste
   public deleteBoxFromProject(): void
   {
     this._spinner.show("deleting transportbox...", new Promise<void>(async(resolve, reject) => {

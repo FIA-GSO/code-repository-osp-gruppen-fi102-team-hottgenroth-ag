@@ -7,6 +7,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+//Wir erstellen einen Validator der überprüft ob die eingegeben Controlls valide sind
 export class PasswordStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const invalidCtrl = !!(control && control.invalid && control?.parent?.dirty);
@@ -24,6 +25,7 @@ export class PasswordStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./new-password-form.component.scss']
 })
 export class NewPasswordFormComponent {
+  //Wir definieren ein Event als Ausgabe für die Parentkomponente
   @Output() passwordChange:EventEmitter<string> = new EventEmitter<string>();
 
   private _password:string = "";
@@ -33,7 +35,7 @@ export class NewPasswordFormComponent {
     this.passwordChange.emit(value);
   }
 
-  get password():string
+  public get password():string
   {
     return this._password;
   }
@@ -49,6 +51,7 @@ export class NewPasswordFormComponent {
 
   constructor()
   {
+    //Wir erstellen die Formgroup mit den Validatoren 
     this.passwordForm = this._formBuilder.group(
       {
       passwordFormControl: ['', Validators.required], passwordConfirmFormControl: ['', Validators.required]
@@ -59,7 +62,7 @@ export class NewPasswordFormComponent {
   private checkPasswords(group: FormGroup) { // here we have the 'passwords' group
     let pass = group.controls["passwordFormControl"]?.value;
     let confirmPass = group.controls["passwordConfirmFormControl"]?.value;
-
+    //Sind die eingegebenen Passwörter gleich
     return pass === confirmPass ? null : { notSame: true }
   }
 

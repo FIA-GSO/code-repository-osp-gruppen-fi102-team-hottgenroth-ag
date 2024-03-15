@@ -25,7 +25,7 @@ export class DatePickerComponent
   @Input() set date(date: string)
   {
     if(date == null) return;
-
+    //WIr formatieren das Datum ins richtige Format und setzen es dann
     let parsedDate = this._datePipe.transform(date,"yyyy-MM-dd");
     this._date = !!parsedDate ? parsedDate : date;
   }
@@ -36,7 +36,7 @@ export class DatePickerComponent
   }
 
   @Input() title!: string;
-
+  //Wir definieren ein Event, an das sich die Parent Komponente dran hängen kann
   @Output() dateChanged: EventEmitter<string> = new EventEmitter<string>();
 
   constructor()
@@ -44,6 +44,7 @@ export class DatePickerComponent
 
   public setDate(value: string)
   {
+    //Wir setzen das Datum und triggern das definierte Event
     let date = new Date(value);
     this.date = date.toDateString();
     this.dateChanged.emit(this.date);

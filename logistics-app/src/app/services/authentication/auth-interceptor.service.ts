@@ -1,9 +1,3 @@
-//////////////////////////////////////////////////////////////////////////
-// Basically it is not recommended to send the token on every request.  //
-// Only send the token to endpoints you really need to send them to.    //
-// So if we do an interceptor we are comparing the route the request    //
-// goes to to a set of routes which should be secured.                  //
-//////////////////////////////////////////////////////////////////////////
 
 import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
@@ -19,6 +13,7 @@ export const authInterceptor: HttpInterceptorFn = (request, next) =>
 
   var url = request.url.trim()[request.url.length - 1] === "/" ? request.url.slice(0, -1) : request.url;
 
+  //Ist die Route in den SecuredRoutes? Wenn ja hängen wir das Token an den Request
   if (environment.securedRoutes.find((z: string) => new RegExp("\\b(" + z + ")(\/+[^\s]*)?\\b","gi").test(url)))
   {
     return from(requestHandler.handleRequest(request, next));
@@ -40,6 +35,7 @@ export class RequestHandler
       var hasToken: boolean = this.loginService.hasToken();
       var expired: boolean = false;
 
+      //Wir prüfen ob ein Token existiert und ob es noch nicht abgelaufen ist
       if (hasToken) 
       {
         expired = !this.loginService.isTokenValid();
@@ -56,7 +52,7 @@ export class RequestHandler
 
       if (!!token) 
       {
-        // set bearer token in request header
+        // Wir setzen das Token in den Requestheader
         var headers = request.headers.set('Authorization', 'Bearer ' + token);
         request = request.clone({ headers: headers });
       }

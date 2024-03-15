@@ -15,18 +15,25 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './add-box-selection-list.component.scss'
 })
 export class AddBoxSelectionListComponent {
-  @ViewChild("selectlist") selectionList!: MatSelectionList
+  //Das Listenelement wird im Code zugänglich gemacht
+  @ViewChild("selectlist") selectionList!: MatSelectionList;
+
+  // Alle ausgewählten boxen werden gespeichert
   public selectedBoxList: ITransportBoxData[] = [];
 
+  //Es wird zwischengespeichert ob zuletzt alle Article selektiert/unselektiert wurde
   private allSelected: boolean = false;
+
+  // Alle article werden in den Dialog reingegeben
   constructor(@Inject(MAT_DIALOG_DATA) public transportBoxes: ITransportBoxData[]){}
 
+  // Alle ausgewählten boxen werden gesetzt
   public selectionChanged(event: MatSelectionListChange): void
   {
-    console.log(event)
     this.selectedBoxList = event.source.selectedOptions.selected.map(o => o.value);
   }
 
+  //Es werden alle möglichen Optionen selektiert/deselektiert
   public toggleSelect(): void
   {
     if(!!this.selectionList)
@@ -39,6 +46,7 @@ export class AddBoxSelectionListComponent {
       {
         this.selectionList.deselectAll();
       }
+      //Wir setzen alles auf die Liste
       this.selectedBoxList = this.selectionList.selectedOptions.selected.map(o => o.value);
       this.allSelected = !this.allSelected;
     }

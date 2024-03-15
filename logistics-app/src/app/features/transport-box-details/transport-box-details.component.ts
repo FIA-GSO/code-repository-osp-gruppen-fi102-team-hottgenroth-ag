@@ -17,12 +17,13 @@ import { eRole } from '../../models/enum/eRole';
   styleUrl: './transport-box-details.component.scss'
 })
 export class TransportBoxDetailsComponent {
+  //Die, in der Parentkomponente, selektiere Transportbox
   @Input() selectedBox: ITransportBoxData | undefined;
 
   private _logisticStore: LogisticsStoreService = inject(LogisticsStoreService);
   private _auth: AuthService = inject(AuthService);
 
-
+  //Wir definieren Setter, um die Box upzudaten
   public set description(pText: string)
   {
     if(!!this.selectedBox)
@@ -40,6 +41,7 @@ export class TransportBoxDetailsComponent {
     return "";
   }
 
+  //Wir definieren Setter, um die Box upzudaten
   public set number(pNumber: number)
   {
     if(!!this.selectedBox)
@@ -57,6 +59,7 @@ export class TransportBoxDetailsComponent {
     return 0;
   }
 
+  //Wir definieren Setter, um die Box upzudaten
   public set locationHome(pLocation: string)
   {
     if(!!this.selectedBox)
@@ -74,6 +77,7 @@ export class TransportBoxDetailsComponent {
     return "";
   }
 
+  //Wir definieren Setter, um die Box upzudaten
   public set locationTransport(pLocation: string)
   {
     if(!!this.selectedBox)
@@ -91,6 +95,7 @@ export class TransportBoxDetailsComponent {
     return "";
   }
 
+  //Wir definieren Setter, um die Box upzudaten
   public set locationDeployment(pLocation: string)
   {
     if(!!this.selectedBox)
@@ -109,6 +114,7 @@ export class TransportBoxDetailsComponent {
     return "";
   }
 
+  //Wir überprüfen ob der User die passenden Rechte hat
   public isAuthorized(): boolean
   {
     let role: string = this._auth.getUserRole();
@@ -120,6 +126,7 @@ export class TransportBoxDetailsComponent {
     return false;
   }
 
+  //Wir überprüfen ob der User readOnly ist
   public isReadOnly(): boolean
   {
     let role: string = this._auth.getUserRole();

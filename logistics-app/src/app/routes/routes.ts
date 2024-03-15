@@ -13,6 +13,7 @@ export const routes: Routes = [
       component: HomepageComponent,
       children: 
       [
+        //Wenn keine Route angegeben wird, dann immer auf die Projektseite routen
         {
           path: '',  
           pathMatch: 'full',
@@ -31,6 +32,7 @@ export const routes: Routes = [
         {
           path: "user",
           component: UserManagementPageComponent,
+          //Checkt ob Token gültig ist
           canActivate: [AuthGuard]
         }
       ]

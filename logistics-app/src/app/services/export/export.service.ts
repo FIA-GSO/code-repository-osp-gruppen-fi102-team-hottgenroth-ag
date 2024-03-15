@@ -17,6 +17,7 @@ export class ExportService
   
   private _exportDatabaseUrl: string = environment.serviceURL + environment.exportServicePath;
 
+  //Wir exportieren die DB und bekommen das Ergebnis als Blob
   private async exportCatalogDatabaseAsBlob(): Promise<any>
   {
     return await this._request.getBlob(this._exportDatabaseUrl);
@@ -26,10 +27,12 @@ export class ExportService
   {
     try
     {
+      //Wir exportieren die DB und bekommen das Ergebnis als Blob
       var result: Blob | undefined = await this.exportCatalogDatabase();
 
       if (!!result)
       {
+        //Wir downloaden den Blob unter dem Namen logisticsDB.sqlite
         this.downloadBlob(result, "logisticsDB.sqlite");
       }
     }
@@ -45,8 +48,9 @@ export class ExportService
     {
       var result: Blob | undefined = undefined;
 
-      // opens a dialog so the user can download the file
+      //Wir kriegen die exportierte DB als Blob
       var blob: Blob | undefined = await this.exportCatalogDatabaseAsBlob();
+      //Ist das Ergebnis wirklich ein Blob?
       if (!!blob && blob instanceof Blob)
       {
         result = blob;
@@ -60,6 +64,7 @@ export class ExportService
     }
     catch(error)
     {
+      //Export fehlgeschlagen, informiere user
       if (error instanceof Error)
       {
         console.log(error.message)
@@ -79,11 +84,7 @@ export class ExportService
     }
   }
 
-  /**
- * Downloads the file from a blob
- * @param pBlob blob to download
- * @param pFileName name of the downloaded file
- */
+  //Wir downloaden die Datenbank im Browser
   private downloadBlob(pBlob: Blob, pFileName: string) {
     let url = window.URL.createObjectURL(pBlob);
     let a = document.createElement('a');

@@ -26,6 +26,7 @@ export class PdfService {
 
     try 
     {
+      //WIr erstellen mit den Boxdaten die PDF
       const base64Pdf: string = await this._request.post(url, transferObject);
       return base64Pdf;
     }
@@ -36,19 +37,8 @@ export class PdfService {
     }
   }
 
-  public openPdf(byteArray: Uint8Array, fileName: string): void {
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    const url = window.URL.createObjectURL(blob);
-
-    // Öffne das PDF in einem neuen Browser-Tab
-    const pdfWindow = window.open();
-    pdfWindow!.location.href = url;
-
-    // Optional: Benenne das PDF um
-    pdfWindow!.document.title = fileName;
-  }
-
-  // open a csv-file in base64 Format in a new tab (URL will be like "blob:domain/GUID")
+  // Wir öffnen den Base64 string in einem übergebenen Format
+  //Zuerst wird der Base64 zu einem Blob umgewandelt und dann gedownloadet
   public openBase64(inputString: string, format: string, name: string): void {
     let byteCharacters: string = atob(inputString);
     let byteNumbers: number[] = new Array(byteCharacters.length);
@@ -58,16 +48,12 @@ export class PdfService {
     }
     let byteArray: Uint8Array = new Uint8Array(byteNumbers);
 
-    let file: Blob = new Blob([byteArray], { type: format }); // application/pdf;base64'   ; text/csv;charset=utf-8
+    let file: Blob = new Blob([byteArray], { type: format });
 
       this.downloadBlob(file, name);
   }
 
-  /**
- * Downloads the file from a blob
- * @param pBlob blob to download
- * @param pFileName name of the downloaded file
- */
+  //Wir downloaden die PDf über den Browser
   private downloadBlob(pBlob: Blob, pFileName: string) {
     let url = window.URL.createObjectURL(pBlob);
     let a = document.createElement('a');

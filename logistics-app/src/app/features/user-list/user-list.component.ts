@@ -29,21 +29,26 @@ export class UserListComponent {
 
   public updateRole(user: IUserData)
   {
+    //Wir ändern die User rolle in der DB
     this._auth.updateUserRole(user);
   }
 
+  //Wir holen aus der E-Mail die Initialien des Users
   public getInitials(mail: string): string
   {
     return this._colorMixer.getInitialsFromEmail(mail);
   }
 
+  //Wir holen zurvor definierte Farben anhand der E-Mail
   public getColor(pEmail: string): Object 
   {
     var backgroundColor = this._colorMixer.getColourByEmail(pEmail);
+    //Wir setzen die Schriftfarbe auf eine Farbe mit hohem Kontrast zum Hintergrund
     var val = { background: backgroundColor, color: this.getConstrastColor(backgroundColor) };
     return val;
   }
 
+  //Wir holen eine Kontrastfarbe, damit ein möglichst hoher Kontrast zum Hintergrund ensteht
   private getConstrastColor(color: string): string 
   {
     return this._colorMixer.setContrast(color);

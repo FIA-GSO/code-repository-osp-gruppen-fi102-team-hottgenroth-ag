@@ -57,6 +57,7 @@ export class TransportBoxPageComponent {
   private _transportBoxes!: ITransportBoxData[];
   public get transportBoxes(): ITransportBoxData[]
   {
+    //Wenn eine Sucheingabe da ist, filter die Liste anhand der Boxkategorien
     if(this.searchingValue != "")
     {
       return this._transportBoxes.filter(box => box.boxCategory.toUpperCase().includes(this.searchingValue.toUpperCase()));
@@ -68,6 +69,7 @@ export class TransportBoxPageComponent {
   {
     if(!!this._selectedBox)
     {
+      //Wir geben alle Artikel der Box zurück
       return this._logisticStore.articleStore.getArticlesForBox(this._selectedBox.boxGuid);
     }
     return [];
@@ -84,11 +86,13 @@ export class TransportBoxPageComponent {
 
   constructor()
   {
+    //Wir holen alle Boxen die geladen sind
     this._transportBoxes = this._logisticStore.transportboxStore.getItems();
   }
 
   public closeSearch(): void
   {
+    //Wir schließen die Suche und unsubscripen die Suche
     this.isSearching = false;
     this.searchingValue = "";
 
@@ -98,6 +102,7 @@ export class TransportBoxPageComponent {
     }
   }
 
+  //Wir emiten die Veränderung der Sucheingabe
   public searchWithString(pValue: string)
   {
     this._searchTextChanged.next(pValue);
@@ -107,11 +112,14 @@ export class TransportBoxPageComponent {
   {
     this.isSearching = true;
 
+    //Wir hängen uns an die Veränderungen der Sucheingabe dran
     this._subscription = this._searchTextChanged
+    //Wir delayen die Aktualisierung, damit seltener Refreshed werden muss
     .pipe(debounceTime(300))
     .pipe(distinctUntilChanged())
     .subscribe((searchValue: string) => {
       console.log(searchValue)
+      //Die Suchvalue wird aktualisiert
       this.searchingValue = searchValue;
     });
   }
@@ -121,7 +129,9 @@ export class TransportBoxPageComponent {
     this._spinner.show("Pdf is creating...", new Promise<void>(async(resolve, reject) => {
       try
       {
+        //Wir erstellen die PDF
         var pdfByteArray: string = await  this._pdfService.createPdf();
+        //Wir öffnen den base64 String und downloaden ihn als PDF
         this._pdfService.openBase64(pdfByteArray, "application/pdf;base64", "Inventarliste");
         resolve();
       }
@@ -136,11 +146,13 @@ export class TransportBoxPageComponent {
   public async addTransportBoxToProject()
   {
     this._spinner.show("Loading boxes...", new Promise<void>(async(res, rej) => {
+      //Wir holen alle Boxen die noch keinem Projekt zugeordnet sind
       var boxes = await this._logisticStore.transportboxStore.getAllBoxesWithoutPrj();
       res();
   
       if(boxes.length > 0)
       {
+        //Wir öffnen ein Auswahldialog mit allen Boxen
         const dialogRef = this._dialog.open(AddBoxSelectionListComponent,
           {
             data: boxes
@@ -156,6 +168,7 @@ export class TransportBoxPageComponent {
           if(!!boxList && boxList.length > 0 && !!prj)
           {
             this._spinner.show("Adding boxes...", new Promise<void>(async(res, rej) => {
+              //Wir setzen bei alles ausgwählten Boxen die ProjektId und updaten diese in der DB
               for(let i = 0;boxList.length > i;i++)
               {
                 let item = boxList[i];
@@ -173,6 +186,7 @@ export class TransportBoxPageComponent {
       }
       else
       {
+        //Es existieren keine Boxen ohne Projekt mehr 
         this._dialog.open(SharedDialogComponent, {
           data:
           {
@@ -197,14 +211,17 @@ export class TransportBoxPageComponent {
     return false;
   }
 
+  //Wir fügen Artikel einer Box hinzu
   public addArticlesToBox()
   {
     this._spinner.show("Loading article...", new Promise<void>(async(res, rej) => {
+      //Wir hole alle Artikelobjekte (Nur die Werte in der ArtikelTabelle sind gesetzt)
       var arts = await this._logisticStore.articleStore.getAllBaseArticles();
       res();
   
       if(arts.length > 0)
       {
+        //Wir öffnen einen Auswahldialog um Artikel zu einer Box zu adden
         const dialogRef = this._dialog.open(AddArticleSelectionListComponent,
           {
             data: arts
@@ -219,6 +236,8 @@ export class TransportBoxPageComponent {
           if(!!artList && artList.length > 0 && !!this.selectedBox)
           {
             this._spinner.show("Adding articles...", new Promise<void>(async(res, rej) => {
+              //Wir fügen eine neue Zuweisung zu einer Box hinzu, mit den Baseartikel daten und 
+              //default values
               for(let i = 0;artList.length > i;i++)
               {
                 let item: IArticleData = artList[i];
@@ -231,6 +250,7 @@ export class TransportBoxPageComponent {
                 await this._logisticStore.articleStore.createArtToBox(item);
               }
 
+              //Wir laden die Article der Box neu
               this._logisticStore.loadArticleForBox(this._selectedBox!.boxGuid)
               res();
             }))
@@ -239,6 +259,7 @@ export class TransportBoxPageComponent {
       }
       else
       {
+        //Es existieren keine Artikel in der DB
         this._dialog.open(SharedDialogComponent, {
           data:
           {

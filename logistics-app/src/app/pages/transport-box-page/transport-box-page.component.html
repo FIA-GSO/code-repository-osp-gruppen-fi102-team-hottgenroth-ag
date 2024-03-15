@@ -2,10 +2,12 @@
 <mat-tab-group class="h-full" #grp>
   <mat-tab [label]="'Transportbox'">
     <mat-toolbar class="min-h-14 max-h-14 flex flex-row justify-between !px-2">
-      <button mat-icon-button *ngIf="!isSearching" (click)="openSearch()">
-        <mat-icon>search</mat-icon>
-      </button>
-      <h2 *ngIf="!isSearching">List of all tranport boxes</h2>
+      <section *ngIf="!isSearching" class="flex flex-row items-center">
+        <button mat-icon-button (click)="openSearch()">
+          <mat-icon>search</mat-icon>
+        </button>
+        <h2>List of all tranport boxes</h2>
+      </section>
       <section class="flex flex-row" *ngIf="!isSearching && isAuthorized()">
         <button mat-icon-button (click)="addTransportBoxToProject()">
           <mat-icon>add</mat-icon>
@@ -35,7 +37,7 @@
           <mat-card-title>{{selectedBox?.description}}</mat-card-title>
           <mat-card-subtitle>List of all articles for box</mat-card-subtitle>
         </section>
-        <button mat-icon-button (click)="addArticlesToBox()">
+        <button mat-icon-button (click)="addArticlesToBox()" *ngIf="isAuthorized()">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-header>
