@@ -42,10 +42,12 @@ export class ArticleStoreService extends BaseStoreService<IArticleData>
   }
 
   public async delete(itemID: string): Promise<boolean> {
-    try {
+    try 
+    {
       var item: IArticleData | undefined = this.getById(itemID);
 
-      if (!!item) {
+      if (!!item)
+      {
         await this.request.delete(this._serviceURL + "/" + item.articleBoxAssignment);
         this.removeItem(item);
 

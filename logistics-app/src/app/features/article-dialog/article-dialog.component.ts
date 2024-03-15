@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { IArticleData } from '../../models/IArticleData';
@@ -12,12 +12,16 @@ import { eRole } from '../../models/enum/eRole';
 import { AuthService } from '../../services/authentication/auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LogisticsStoreService } from '../../services/stores/logistics-store.service';
+import { LoadingSpinnerService } from '../../services/loading-spinner.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'article-dialog',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatFormFieldModule, MatInputModule,
-     MatButtonModule, MatSelectModule, DatePickerComponent, ReactiveFormsModule, MatCheckboxModule],
+     MatButtonModule, MatSelectModule, DatePickerComponent, 
+     ReactiveFormsModule, MatCheckboxModule, MatIconModule],
   templateUrl: './article-dialog.component.html',
   styleUrl: './article-dialog.component.scss'
 })
@@ -57,7 +61,10 @@ export class ArticleDialogComponent {
 
   private _auth: AuthService = inject(AuthService);
   private _formBuilder: FormBuilder = inject(FormBuilder);
-
+  private _logisticsStore: LogisticsStoreService = inject(LogisticsStoreService);
+  private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
+  private dialogRef: MatDialogRef<ArticleDialogComponent> = inject(MatDialogRef<ArticleDialogComponent>)
+  
   constructor(@Inject(MAT_DIALOG_DATA) article: IArticleData){
     if(article.expiryDate) article.expiryDate = new Date(article.expiryDate);
     this.article = this._formBuilder.group({
@@ -87,6 +94,20 @@ export class ArticleDialogComponent {
       (this.article.value as IArticleData).expiryDate = undefined;
     }
   }
+
+  public deleteArticleFromBox(): void
+  {
+    this._spinner.show("deleting article...", new Promise<void>(async(resolve, reject) => {
+      if(!!this.article.value)
+      {
+        await this._logisticsStore.articleStore.delete((this.article.value as IArticleData).articleBoxAssignment);
+        this.dialogRef.close(undefined);
+        resolve();
+      }
+      else reject();
+    }))
+  }
+
 
   public isAuthorized(): boolean
   {
