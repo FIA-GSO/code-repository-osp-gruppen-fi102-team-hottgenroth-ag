@@ -6,8 +6,6 @@ namespace Logisitcs.DAL
 {
     public static class DbCommandsProject
     {
-        #region Project
-
         public static IEnumerable<Project> GetAllProjects()
         {
             using var db = new LogisticsDbContext();
@@ -42,7 +40,5 @@ namespace Logisitcs.DAL
             using var db = new LogisticsDbContext();
             return db.Projects.FirstOrDefault(x => x.ProjectGuid == guid);
         }
-
-        #endregion Project
     }
 }

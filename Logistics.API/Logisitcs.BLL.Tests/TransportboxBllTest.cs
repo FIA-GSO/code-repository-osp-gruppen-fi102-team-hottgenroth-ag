@@ -24,7 +24,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestGetAllTransportBoxesByPrjGuid()
+        public void Test_Get_All_TransportBoxes_ByPrjGuid()
         {
             string projectGuid = "18500286-ad03-4240-8ec8-ffe1d3a4e77d";
             ITransportboxBll transportboxBll = new TransportboxBll(transportBoxDataFactory, transportboxFactory);
@@ -44,7 +44,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestGetAllTransportBoxesWithoutPrjGuid()
+        public void Test_Get_All_TransportBoxes_WithoutPrjGuid()
         {
             Guid guid = Guid.Empty;
             ITransportboxBll transportboxBll = new TransportboxBll(transportBoxDataFactory, transportboxFactory);
@@ -65,7 +65,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestGetTransportbox()
+        public void Test_Get_Transportbox()
         {
             //Guid der erwarteten Transportbox
             Guid transportboxGuid = Guid.Parse("9a6311bd-266c-4454-8c92-b5bde35e3e44");
@@ -86,7 +86,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestAddAndDeleteTransportbox()
+        public void Test_Add_And_Delete_Transportbox()
         {
             Guid projectGuid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
             Guid boxGuid = Guid.NewGuid();
@@ -119,7 +119,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestUpdateAndDeleteTransportbox()
+        public void Test_Update_And_Delete_Transportbox()
         {
             Guid projectGuid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
             Guid boxGuid = Guid.NewGuid();
@@ -168,7 +168,7 @@ namespace Logisitcs.BLL.Tests
         }
 
         [Test]
-        public void TestDeleteTransportboxShouldBeFalse()
+        public void Test_Delete_Transportbox_Should_BeFalse()
         {
             Guid guid = Guid.Parse("18500286-ad03-4240-8ec8-ffe1d3a4e77d");
             ITransportboxBll transportboxBll = new TransportboxBll(transportBoxDataFactory, transportboxFactory);

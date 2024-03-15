@@ -7,8 +7,6 @@ namespace Logisitcs.DAL
 {
     public static class DbCommandsArticleBoxAssignment
     {
-        #region ArticleBoxAssignments
-
         public static IEnumerable<ArticleBoxAssignment> GetAllArticleBoxAssignments(string boxId)
         {
             var db = new LogisticsDbContext();
@@ -53,7 +51,5 @@ namespace Logisitcs.DAL
             using var db = new LogisticsDbContext();
             return db.ArticleBoxAssignments.Find(guid);
         }
-
-        #endregion ArticleBoxAssignments
     }
 }

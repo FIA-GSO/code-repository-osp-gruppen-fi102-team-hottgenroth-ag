@@ -6,8 +6,6 @@ namespace Logisitcs.DAL
 {
     public static class DbCommandsArticle
     {
-        #region Article
-
         public static IEnumerable<Article> GetAllArticle()
         {
             var db = new LogisticsDbContext();
@@ -108,7 +106,5 @@ namespace Logisitcs.DAL
             db.Articles.Update(article);
             db.SaveChanges();
         }
-
-        #endregion Article
     }
 }
