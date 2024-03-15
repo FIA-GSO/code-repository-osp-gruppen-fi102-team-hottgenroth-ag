@@ -60,6 +60,14 @@ export class ArticleListComponent{
     return pos.toString().substring(0, pos.toString().indexOf("."))
   }
 
+  private hasPosNumberParent(pos: number): boolean
+  {
+    let posFirst = this.getPosNumber(pos);
+    let allFirstPositions = this.getAllFirstPositions();
+    let parent = allFirstPositions.find(art => art.position.toString() == posFirst)
+    return !!parent;
+  }
+
   public getAllFirstPositions(): IArticleData[]
   {
     return this.getSortedArticles().filter(item => !item.position.toString().includes("."))
@@ -73,6 +81,21 @@ export class ArticleListComponent{
     dialogRef.afterClosed().subscribe((result: IArticleData) => {
       if(!!result)
       {
+        //we multiply by 1 to remove leading zeros and  1,0 zeros
+        result.position = result.position * 1;
+        if(this.isArticleFirstPosition(article) && this.getPosNumber(result.position) == article.position.toString())
+        {
+          alert("position cannot be update, because it wouldn´t have a parent")
+          //der article ist die parent pos und soll auf eine unter pos geändert werden
+          //das ist nicht möglich
+          result.position = article.position;
+        }
+        else if(!this.hasPosNumberParent(result.position) && result.position.toString().includes("."))
+        {
+          alert("position cannot be update, because it wouldn´t have a parent")
+          //wenn die position nummer z.b. 1.1 ist, es aber keine 1 gibt updaten wir die Nummer nicht
+          result.position = article.position;
+        }
         this._logisticStore.articleStore.update(result);
         this._cd.detectChanges();
       }
