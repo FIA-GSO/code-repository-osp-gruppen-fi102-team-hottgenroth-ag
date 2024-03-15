@@ -71,6 +71,7 @@ export class RegisterPageComponent {
 
   public async register()
   {
+    //Wir registrieren mithilfe der eingegeben Daten den User
     this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
       try
       {
@@ -78,6 +79,7 @@ export class RegisterPageComponent {
       
         resolve();
         
+        //Wenn der Login erfolgreich war, kommt ein Dialog 
         const dialogRef = this._dialog.open(SharedDialogComponent,
         {
           data: {
@@ -93,14 +95,24 @@ export class RegisterPageComponent {
           this._dialogSubscription.unsubscribe();
         }
   
+        //Wir leiten auf die Loginmaske nachdem der Dialog geschlossen wurde
         this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
           this._router.navigate(["/login"]);
         });
       }
       catch(err: any)
       {
-        console.log(err);
         reject();
+        console.log(err);
+        this._dialog.open(SharedDialogComponent,
+        {
+          data: {
+            icon: 'warning',
+            title: "Error",
+            text: "The registration failed! Please check if the email is already registered!",
+            okButtonText: "Close"
+          }
+        });
       } 
     }))
   }

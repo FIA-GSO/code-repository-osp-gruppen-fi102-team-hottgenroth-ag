@@ -26,6 +26,7 @@ export class SharedDialogComponent {
   /** negative button clicked */
   public onNegativeButtonClicked: EventEmitter<void> = new EventEmitter<void>();
 
+  //Bei Escape negative EIngabe, bei einter Positive
   @HostListener('keyup', ['$event'])
   handleKeyUpEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -44,16 +45,20 @@ export class SharedDialogComponent {
     return this._data;
   } 
 
+  //Wir geben Dialogdaten rein, damit wird den Dialog variabel
+  //einsetzen können
   constructor(public dialogRef: MatDialogRef<SharedDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: IDialogData) {
     this._data = dialogData;
   }
 
+  //Es wurde der Bestätigunsbutton gedrückt
   public positiveButtonClicked(): void {
     this.onPositiveButtonClicked.emit();
     this.dialogRef.close(true);
   }
 
+  //Es wurde der Abbrechbutton gedrückt
   public negativeButtonClicked(): void {
     this.onNegativeButtonClicked.emit();
     this.dialogRef.close(false);

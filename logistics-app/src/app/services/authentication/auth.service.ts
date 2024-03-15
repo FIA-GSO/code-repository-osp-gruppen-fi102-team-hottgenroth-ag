@@ -27,18 +27,22 @@ export class AuthService
 
   public async login(user: ILoginData): Promise<void>
   {
-    let result: any = await this._request.post(environment.serviceURL + environment.loginServicePath, user);
+    //Login aufruf
+    let result: any = await this._request.post(this._serviceURL, user);
 
+    //Kommt ein ergebnis zurück speichern wir das Token in den Localstorage
     if(!!result && !!result.token)
     {
       localStorage.setItem(tokenLocalStorageKey, JSON.stringify(result.token));    
+      //Wir navigieren weiter, das Routing geht dann auf die Projektseite
       this._router.navigate([""]);
     }
   }
 
+  //Wir registrieren den User in der DB
   public async register(user: ILoginData): Promise<boolean>
   {
-    let result: any = await this._request.post(environment.serviceURL + environment.loginServicePath + "/register", user);
+    let result: any = await this._request.post(this._serviceURL + "/register", user);
 
     if(!!result)
     {
@@ -48,6 +52,7 @@ export class AuthService
     return false;
   }
 
+  //Wir löschen das Token und navigieren zum Login
   public logout(): void
   {
     if(this.hasToken())
@@ -57,12 +62,14 @@ export class AuthService
     }
   }
 
+  //Wir updaten die Userrolle
   public async updateUserRole(user: IUserData): Promise<boolean>
   {
-    let success: boolean = await this._request.put(environment.serviceURL + environment.loginServicePath, user);
+    let success: boolean = await this._request.put(this._serviceURL, user);
     return success;
   }
 
+  //Wir hiolen das Token aus dem Localstorage und parsen es zum String zurück
   public getToken(): string 
   {
     let token = localStorage.getItem(tokenLocalStorageKey);
@@ -74,35 +81,39 @@ export class AuthService
     return "";
   }
 
+  //Wir prüfen ob ein Token existiert
   public hasToken(): boolean 
   {
     return this.getToken() != '';
   }
 
+  //Wir prüfen ob das TOken noch gültig ist
   public isTokenValid(): boolean
   {
     let token: string = this.getToken();
     if(token != '')
     {
-      // Decode the raw token
+      // Zum decodieren nehmen wir eine externe Library
       var isExpired = this.jwtHelper.isTokenExpired(token);
       return !isExpired;
     }
     return false;
   }
 
+  //Wir lesen die User Rolle aus dem token aus
   public getUserRole(): string
   {
     let token: string = this.getToken();
     if(token != '')
     {
-      // Decode the raw token
+      // Zum decodieren nehmen wir eine externe Library
       var decodedToken: any = this.jwtHelper.decodeToken(token);
       return !!decodedToken && !!decodedToken.Role ? decodedToken.Role : "";
     }
     return "";
   }
 
+  //Wir lesen die User Id aus dem token aus
   public getUserId(): string
   {
     let token: string = this.getToken();
@@ -115,6 +126,7 @@ export class AuthService
     return "";
   }
 
+  //Wir lesen die User Mail aus dem token aus
   public getUserEmail(): string
   {
     let token: string = this.getToken();
@@ -127,11 +139,12 @@ export class AuthService
     return "";
   }
 
+  //Wir holen alle registrierten User
   public async getAllUser(): Promise<IUserData[]>
   {
     try
     {
-      let result: any = await this._request.get(environment.serviceURL + environment.loginServicePath);
+      let result: any = await this._request.get(this._serviceURL);
       return result;
     }
     catch(err: any)

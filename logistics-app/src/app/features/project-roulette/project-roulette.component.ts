@@ -24,6 +24,7 @@ import { LogisticsStoreService } from '../../services/stores/logistics-store.ser
   styleUrl: './project-roulette.component.scss'
 })
 export class ProjectRouletteComponent {
+  //Diese Werte, werden durch die Parent (einbindende Komponente) übergeben
   @Input() projects: IProjectData[] = [];
   @Input() sortedBy: 'date' | 'alphabet' = 'date';
 
@@ -39,6 +40,7 @@ export class ProjectRouletteComponent {
     
   }
 
+  //Wir Sotieren die Projekte nach alphabet oder Datum
   public getSortedProjects(): IProjectData[]
   {
     if(this.sortedBy === 'alphabet')
@@ -51,10 +53,11 @@ export class ProjectRouletteComponent {
 
   public addProject(): void
   {
+    //Darf der User ein Projekt erstellen?
     if(this.isAuthorized())
     {
       const dialogRef = this._dialog.open(AddNameDialogComponent);
-  
+      //Wir erlauben die Eingabe eines Namen und erstellen daraufhin das Projekt
       dialogRef.afterClosed().subscribe(async(name: string) => {
         if(!!name && name != '')
         {
@@ -72,6 +75,7 @@ export class ProjectRouletteComponent {
     }
     else
     {
+      //Der User ist nicht berechtigt und wird darauf hingewiesen
       var dialogData: IDialogData = {
         icon: 'warning',
         title:"Not authorized!",
@@ -87,25 +91,30 @@ export class ProjectRouletteComponent {
 
   public loadProject(prj: IProjectData): void
   {
+    //Wir Laden ein Project und setzen dessen Name in die Toolbar
     this._spinner.show("Project is loading...", new Promise<void>(async(resolve, reject) => {
+      //Die Laderoutine wird getriggert
       let project: IProjectData | undefined = await this._logisticsStore.loadProject(prj.projectGuid);
       if(!!project)
       {
         if(!!this._framework.toolbar){
           this._framework.toolbar.subtitle = prj.projectName
         } 
+        //Wir leiten über den Button auf die Transportboxseite
         this._btnStore.boxButton.click();
       }
       resolve();
     }))
   }
 
+  //Wir formatieren das Datum auf ein Lesbares Format
   public formatDate(pDate: Date): string
   {
     pDate = new Date(pDate);
     return pDate.getFullYear() + "/" + pDate.getMonth() + "/" + pDate.getDate();
   }
 
+  //WIr überprüfen ob der User die benötigten Rechte hat
   private isAuthorized(): boolean
   {
     let role: string = this._auth.getUserRole();

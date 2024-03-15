@@ -7,5 +7,5 @@ export interface ITransportBoxData
   locationDeployment: string;
   locationHome: string;
   boxCategory: string;
-  projectGuid: string;
+  projectGuid?: string;
 }

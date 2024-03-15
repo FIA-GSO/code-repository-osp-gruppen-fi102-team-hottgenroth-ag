@@ -36,8 +36,10 @@ export class TransportboxStoreService extends BaseStoreService<ITransportBoxData
     try {
       var item: ITransportBoxData | undefined = this.getById(itemID);
 
-      if (!!item) {
-        await this.request.delete(this._serviceURL + "/" + item.boxGuid);
+      if (!!item) 
+      {
+        item.projectGuid = undefined;
+        await this.request.put(this._serviceURL, item);
         this.removeItem(item);
 
         return true;

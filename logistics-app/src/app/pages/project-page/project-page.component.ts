@@ -22,12 +22,14 @@ export class ProjectPageComponent {
 
   public get projects(): IProjectData[]
   {
+    //Wir holen alle Projekte und geben Sie in das Projektroulette
     return this._logisticsStore.projectStore.getItems();
   }
 
   constructor(){
   }
-  
+
+  //Die Sortierung der Projekte wird verändert
   public toggleSorted(pSorting: 'date' | 'alphabet')
   {
     this.sortedBy = pSorting;

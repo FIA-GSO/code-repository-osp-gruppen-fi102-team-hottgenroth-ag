@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>10</y>
+      <w>940</w>
+      <h>630</h>
+    </coordinates>
+    <panel_attributes>halign=center
+Übersicht der DAL Klassen
+(Ohne Login bzw Userdaten)
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>50</y>
+      <w>290</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+Project
+--
++ ProjectGuid: string
++ ProjectName: string
++ CreationDate: DateTime
++ Transportboxes: ICollection&lt;Transportbox&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>290</y>
+      <w>390</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+Transportbox
+--
++ BoxGuid: string
++ Number: int | null
++ Description: string
++ ProjectGuid: string
++ LocationTransport: string
++ LocationHome: string
++ LocationDeployment: string
++ BoxCategory: string
++ ArticleBoxAssignments: ICollection&lt;ArticleBoxAssignment&gt;
++ Project: Project
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>520</x>
+      <y>190</y>
+      <w>290</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+ArticleBoxAssignment
+--
++ AssignmentGuid: string
++ ArticleGuid: string
++ BoxGuid: string
++ Position: double | null
++ Status: int | null
++ Quantity: int | null
++ ExpiryDate: string
++ Article: Article
++ Box: Transportbox
++ StatusNavigation: Status
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>440</y>
+      <w>390</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+Article
+--
++ ArticleGuid: string
++ ArticleName: string
++ Description: string
++ Gtin: long | null
++ Unit: string
++ ArticleBoxAssignments: ICollection&lt;ArticleBoxAssignment&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>60</y>
+      <w>410</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+Status
+--
++ StatusId: int
++ Name: string
++ ArticleBoxAssignments: ICollection&lt;ArticleBoxAssignment&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>190</y>
+      <w>50</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+hat
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>170</y>
+      <w>110</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+hat
+m1=0..n
+m2=1
+</panel_attributes>
+    <additional_attributes>10.0;80.0;80.0;80.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>290</y>
+      <w>110</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>30.0;210.0;90.0;210.0;90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>360</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+beinhaltet
+m2=0..n
+m1=1</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+</diagram>

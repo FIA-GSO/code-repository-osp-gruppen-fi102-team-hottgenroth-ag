@@ -11,6 +11,7 @@ export class AuthGuard
 
   constructor() { }
 
+  //Beim ansteuern einer Route wird geguckt ob der User ein gültiges Token hat
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return this.getLoggedIn();
   }

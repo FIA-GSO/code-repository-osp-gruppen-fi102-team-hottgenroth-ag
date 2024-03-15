@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { LoadingSpinnerService } from '../../services/loading-spinner.service';
 
 @Component({
   selector: 'app-loading-spinner',

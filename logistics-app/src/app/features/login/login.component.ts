@@ -45,12 +45,15 @@ export class LoginComponent {
             userEmail: this.userName,
             password: this.userPassword
           }
+          //Wir rufen den Login-Endpunkt auf
           await this._loginService.login(user);
           this.errorMessage = "";
           resolve();
         }
         catch(err: any)
         {
+          //Etwas lief schief, also vermutlich Passwort oder E-Mail falsch
+          //oder der User existiert nicht
           console.log(err);
           this.errorMessage = "Email or password incorrect";
           reject();

@@ -1,6 +1,7 @@
 ﻿using Logisitcs.BLL.Interfaces.Factories;
 using Logisitcs.BLL.Interfaces.ModelInterfaces;
 using Logisitcs.DAL.Models;
+using System;
 
 namespace Logisitcs.BLL.Factories
 {
@@ -8,6 +9,7 @@ namespace Logisitcs.BLL.Factories
     {
         public Transportbox Create(ITransportBoxData transportBoxData)
         {
+            var prjGuid = transportBoxData.ProjectGuid != Guid.Empty ? transportBoxData.ProjectGuid.ToString() : null;
             return new Transportbox
             {
                 BoxGuid = transportBoxData.BoxGuid.ToString(),
@@ -17,7 +19,7 @@ namespace Logisitcs.BLL.Factories
                 LocationDeployment = transportBoxData.LocationDeployment,
                 LocationHome = transportBoxData.LocationHome,
                 BoxCategory = transportBoxData.BoxCategory,
-                ProjectGuid = transportBoxData.ProjectGuid.ToString(),
+                ProjectGuid = prjGuid
             };
         }
     }

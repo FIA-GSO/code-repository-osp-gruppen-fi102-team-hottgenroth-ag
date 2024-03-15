@@ -22,6 +22,7 @@ export class UserManagementPageComponent {
   private _colorMixer: ColorMixerService = inject(ColorMixerService);
   private _spinner: LoadingSpinnerService = inject(LoadingSpinnerService);
 
+  //Der eingeloggte User
   private _user!: IUserData; 
   public get user(): IUserData
   {
@@ -30,6 +31,8 @@ export class UserManagementPageComponent {
 
   public get roleOptions(): eRole[]
   {
+    //Anhand der Rolle entscheiden wir, welche Rollen gesetzt werden dürfen
+    //Immer gleiche, aber nie höhere Rolle möglich
     switch(this._user.role)
     {
       case eRole.admin:
@@ -43,6 +46,7 @@ export class UserManagementPageComponent {
     }
   }
 
+  //Alle User die Registriert sind
   private _allUser!: IUserData[];
   public get allUser(): IUserData[]
   {
@@ -51,6 +55,7 @@ export class UserManagementPageComponent {
   
   constructor()
   {
+    //Wir lesen die Userdaten aus dem Token raus
     var user: IUserData = {
       userEmail: this._authService.getUserEmail(),
       userId: this._authService.getUserId(),
@@ -59,6 +64,8 @@ export class UserManagementPageComponent {
     this._user = user;
 
     this._spinner.show("Loading user...",new Promise<void>(async(resolve, reject) => {
+      //Wir laden alle User die registriert sind, und filtern alle Leute raus 
+      //die höhere Rollen als der User haben. Und den User selbst
       let user = await this._authService.getAllUser();
       let filteredUser = user.filter(item => this.roleOptions.includes(item.role as eRole) && item.userEmail != this.user.userEmail);
       this._allUser = filteredUser;
@@ -66,18 +73,22 @@ export class UserManagementPageComponent {
     }));
   }
 
+  //Wir holen die Initialien aus der Mail raus
   public getInitials(mail: string): string
   {
     return this._colorMixer.getInitialsFromEmail(mail);
   }
 
+  //Wir setzen die Farbe anhand der Mail
   public getColor(pEmail: string): Object 
   {
     var backgroundColor = this._colorMixer.getColourByEmail(pEmail);
+    //Wir setzen als Schriftfarbe eine Farbe mit hohem Kontrast zum Hintergrund
     var val = { background: backgroundColor, color: this.getConstrastColor(backgroundColor) };
     return val;
   }
 
+  //Wir holen eine Kontrastfarbe zu einer HEX-Farbe
   private getConstrastColor(color: string): string 
   {
     return this._colorMixer.setContrast(color);

@@ -13,8 +13,13 @@
 <ng-template #box_item let-box="boxItem">
   <section class="flex flex-row justify-between items-center">
     {{box.description | truncate:[30]}}
-    <button mat-icon-button (click)="changeTab()">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
+    <section>
+      <button mat-icon-button (click)="deleteBoxFromProject()" *ngIf="box.boxGuid === selectedBox?.boxGuid">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="changeTab()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </section>
   </section>
 </ng-template>

@@ -16,6 +16,7 @@ export class NavigationRailComponent
 {
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
 
+  //Wir holen das HTML Element der Sidenav und machen es zugänglich
   @ViewChild('drawer') railNav!: MatSidenav;
 
   private _navRailItems: INavRailItem[] = [];
@@ -33,6 +34,7 @@ export class NavigationRailComponent
     return false;
   }
 
+  //Wir öffnen bzw schließen die Sidenav
   public toggle(): void
   {
     if(!!this.railNav)
@@ -41,11 +43,13 @@ export class NavigationRailComponent
     }
   }
 
+  //Es werden alle Items geleert
   public clean(): void
   {
     this._navRailItems = [];
   }
 
+  //Wir triggern die item Click Funktion
   public async itemClicked(item: INavRailItem): Promise<void>
   {
     item.click();
@@ -55,12 +59,14 @@ export class NavigationRailComponent
     }
   }
 
+  //Adde das Navigationsitem in die Sidenav
   public addNavRailItem(item: INavRailItem): void
   { 
     this._navRailItems.push(item);
     this._cd.detectChanges();
   }
 
+  //Lösch das Navigationsitem aus der Sidenav
   public deleteNavRailItem(identifier: string): void
   {
     var index = this._navRailItems.findIndex(item => item.identifier === identifier);

@@ -12,7 +12,7 @@ export class RequestService {
   constructor(private http: HttpClient) { }
 
   private parseAndResolve(pJson: string): any {
-    // Check if parameter is of type string and also of type base64
+    // Überprüfe ob der Parameter ein String ist oder ein Base64 String
     if (typeof (pJson) === 'string') 
     {
       try 
@@ -22,17 +22,20 @@ export class RequestService {
       }
       catch
       {
-        // parameter was a string but not of type base64, so check if it is json
+        // parameter war ein string aber kein base64 string, deswegen 
+        //überprüf ob es ein JSON ist
         pJson = JSON.stringify(pJson);
       }
     }
     else 
     {
+      //Alles andere wird zum JSON gemacht
       pJson = JSON.stringify(pJson);
     }
 
     var refMap: any = {};
     
+    //Wir filtern die $id aus dem Ergebnisobjekt raus
     return JSON.parse(pJson, function (key, value) {
       if (key === '$id') 
       {
@@ -50,6 +53,8 @@ export class RequestService {
       return value;
     });
   }
+
+  //Hier werden alle HTTP-Aufrufe ausprogrammiert damit wir dies nur einmal machen müssen
 
   public get(url: string, headers: HttpHeaders | undefined = undefined,
     params: HttpParams | undefined = undefined): Promise<any | HttpErrorResponse> {

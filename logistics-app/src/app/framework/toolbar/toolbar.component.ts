@@ -6,6 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { IToolbarButton } from '../../models/IToolbarButton';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/authentication/auth.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class ToolbarComponent {
 
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
   private _router: Router = inject(Router);
+  private _auth: AuthService = inject(AuthService);
 
   public height: number = 70;
 
@@ -51,6 +53,7 @@ export class ToolbarComponent {
 
   public toolbarButtons: IToolbarButton[] = [];
 
+  //Wir fügen einen neuen Button der Toolbar hinzu
   public addToolbarButton(button: IToolbarButton)
   {
     let index = this.toolbarButtons.findIndex(items => items.id === button.id);
@@ -60,6 +63,7 @@ export class ToolbarComponent {
     }
   }
 
+  //Toolbarbutton wurde gedrückt und dessen Funktion wird ausgeführt
   public buttonClicked(btn: IToolbarButton)
   {
     if(!!btn.click)
@@ -68,18 +72,30 @@ export class ToolbarComponent {
     }
   }
 
+  //Öffne die Sidenav
   public toggleNavRail()
   {
     this.navRailToggled.emit();
   }
 
+  //Wir navigieren auf die Projektseite
   public goToProject()
   {
     this._router.navigate(["/projects"])
   }
 
+  //Sind wir gerade auf der Projektseite?
   public isProject(): boolean
   {
+    let hasToken: boolean = this._auth.hasToken();
+    let isTokenValid: boolean = this._auth.isTokenValid();
+
+    //Wenn man nicht eingeloggt ist zeig den Zurück knopf nicht an
+    if(!hasToken || !isTokenValid)
+    {
+      return true;
+    }
+
     return this._router.url.includes("project");
   }
 }

@@ -16,10 +16,13 @@ import { IArticleData } from '../../models/IArticleData';
   styleUrl: './add-article-selection-list.component.scss'
 })
 export class AddArticleSelectionListComponent {
+  // Alle ausgewählten article werden gespeichert
   public selectedArticleList: IArticleData[] = [];
 
+  // Alle article werden in den Dialog reingegeben
   constructor(@Inject(MAT_DIALOG_DATA) public articles: IArticleData[]){}
 
+  // Alle ausgewählten article werden gesetzt
   public selectionChanged(event: MatSelectionListChange): void
   {
     this.selectedArticleList = event.source.selectedOptions.selected.map(o => o.value);

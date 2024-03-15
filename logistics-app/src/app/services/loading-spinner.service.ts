@@ -8,6 +8,10 @@ import { ISpinnerEvent } from "../models/ISpinnerEvent";
   providedIn: 'root'
 })
 export class LoadingSpinnerService {
+  //Wir haben einen zentralen Loadingspinner der als Overlay über den Bildschirm gelegt wird.
+  //Dieser Spinner wird so lange angezeigt wie in dem SpinnerEvents-Array items sind. Jedes Item enthält
+  //asynchrone Promises die nacheinander abgearbeitet werden 
+
   private _overlayRef!: OverlayRef;
   private _config: OverlayConfig = new OverlayConfig();
   private _component!: ComponentRef<LoadingSpinnerComponent>;

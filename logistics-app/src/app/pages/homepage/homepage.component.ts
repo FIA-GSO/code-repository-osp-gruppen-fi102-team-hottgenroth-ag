@@ -28,9 +28,11 @@ export class HomepageComponent {
     this._spinner.show("Please wait...", new Promise<void>(async(resolve, reject) => {
       let hasToken: boolean = this._login.hasToken();
       let isTokenValid: boolean = this._login.isTokenValid();
-  
+
+      //Wir prüfen ob man eingeloggt ist und ob es noch gültig ist
       if(!hasToken || !isTokenValid)
       {
+        //Sonst leiten wir zur Loginmaske
         this._router.navigate(["./login"]);
         reject();
         return;
@@ -38,6 +40,7 @@ export class HomepageComponent {
   
       if(!!this._framework.toolbar)
       {
+        //Wir setzen die Toolbarbuttons je nach Rolle
         if(this.isAuthorized(this._login.getUserRole()))
         {
           this._framework.toolbar.addToolbarButton(this._btnStore.userButton);
@@ -46,20 +49,24 @@ export class HomepageComponent {
         this._framework.toolbar.addToolbarButton(this._btnStore.logoutButton);
       }
   
+      //Wir adden die NavRail Buttons
       if(!!this._framework.navigationRail)
       {
+        //Aktuell benötigen wir diese nicht mehr, sollte die Anwendung aber wachsen, wäre diese
+        //wieder sinnig
         this._framework.navigationRail.clean()
         this._framework.navigationRail.addNavRailItem(this._btnStore.projectButton);
         this._framework.navigationRail.addNavRailItem(this._btnStore.boxButton);
       }
   
+      //Wir laden alle Projekte und leiten auf die Projektmaske weiter
       await this._logisticsStore.loadIntitalData();
       this._router.navigate(["./projects"])
       resolve();
     }));
   }
 
-
+  //WIr überprüfen ob der User die benötigten Rechte hat
   private isAuthorized(role: string): boolean
   {
     return role == eRole.admin || role == eRole.keeper || role == eRole.leader
