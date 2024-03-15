@@ -11,12 +11,13 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { eRole } from '../../models/enum/eRole';
 import { AuthService } from '../../services/authentication/auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'article-dialog',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatFormFieldModule, MatInputModule,
-     MatButtonModule, MatSelectModule, DatePickerComponent, ReactiveFormsModule],
+     MatButtonModule, MatSelectModule, DatePickerComponent, ReactiveFormsModule, MatCheckboxModule],
   templateUrl: './article-dialog.component.html',
   styleUrl: './article-dialog.component.scss'
 })
@@ -25,6 +26,27 @@ export class ArticleDialogComponent {
 
   public get states(): eArticleState[]
   {
+    if(this._auth.getUserRole() === eRole.keeper)
+    {
+      return [
+        eArticleState.available,
+        eArticleState.unavailable,
+        eArticleState.expired,
+        eArticleState.defect,
+        eArticleState.none
+      ]
+    }
+    if(this._auth.getUserRole() === eRole.admin)
+    {
+      return [
+        eArticleState.defect,
+        eArticleState.consumed, eArticleState.discarded, 
+        eArticleState.donated, eArticleState.lost, 
+        eArticleState.received, eArticleState.none,
+        eArticleState.available,
+        eArticleState.unavailable, eArticleState.expired,
+      ]
+    }
     return [
       eArticleState.defect,
       eArticleState.consumed, eArticleState.discarded, 
@@ -37,17 +59,13 @@ export class ArticleDialogComponent {
   private _formBuilder: FormBuilder = inject(FormBuilder);
 
   constructor(@Inject(MAT_DIALOG_DATA) article: IArticleData){
+    if(article.expiryDate) article.expiryDate = new Date(article.expiryDate);
     this.article = this._formBuilder.group({
       ...article,
       ...{quantity: [article.quantity, Validators.min(0)]},
-      ...{articleName: [article.articleName]}
+      ...{articleName: [article.articleName]},
+      ...{position: [article.position]}
       });
-
-    if(!this.isAuthorized())
-    {
-      this.article.controls["articleName"].disable();
-      this.article.controls["description"].disable();
-    }
   }
 
   public setDate(pDate: string)
@@ -55,6 +73,18 @@ export class ArticleDialogComponent {
     if(!!this.article.value && !!this.article.value.expiryDate)
     {
       this.article.value.expiryDate = new Date(pDate);
+    }
+  }
+
+  public setHasExpiryDate(checked: boolean)
+  {
+    if(checked && !!this.article.value)
+    {
+      (this.article.value as IArticleData).expiryDate = new Date(); 
+    }
+    else
+    {
+      (this.article.value as IArticleData).expiryDate = undefined;
     }
   }
 

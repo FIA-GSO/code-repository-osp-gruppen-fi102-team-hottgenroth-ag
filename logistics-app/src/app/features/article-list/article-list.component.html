@@ -10,10 +10,16 @@
             <span>state: {{art.status}}</span>
           </section>
         </mat-panel-title>
-        <button mat-icon-button class="pointer-events-auto" *ngIf="!isReadOnly()"
-        (click)="openArticleDialog(art);$event.stopPropagation()">
-          <mat-icon>edit</mat-icon>
-        </button>
+        <section *ngIf="(!!art.expiryDate && isDateExpired($any(art.expiryDate))) || !isReadOnly()" class="flex flex-row">
+          <button mat-icon-button (click)="openInfo();$event.stopPropagation()" class="pointer-events-auto"
+          *ngIf="!!art.expiryDate && isDateExpired($any(art.expiryDate))">
+            <mat-icon>error</mat-icon>
+          </button>
+          <button mat-icon-button class="pointer-events-auto"
+          (click)="openArticleDialog(art);$event.stopPropagation()" *ngIf="!isReadOnly()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </section>
       </mat-expansion-panel-header>
       <mat-list>
         @for(a of getAllArticlesFromSamePositions(art);track a) 
@@ -33,9 +39,14 @@
       {{article.position}} {{article.description}}
       <span>state: {{article.status}}</span>
     </section>
-    <button mat-icon-button (click)="openArticleDialog(article)" *ngIf="!isReadOnly()">
-      <mat-icon>edit</mat-icon>
-    </button>
+    <section *ngIf="!!article.expiryDate || !isReadOnly()" class="flex flex-row">
+      <button mat-icon-button (click)="openInfo()" *ngIf="!!article.expiryDate && isDateExpired(article.expiryDate)">
+        <mat-icon>error</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openArticleDialog(article)" *ngIf="!isReadOnly()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </section>
   </section>
   <mat-divider class="!mb-1"></mat-divider>
 </ng-template>

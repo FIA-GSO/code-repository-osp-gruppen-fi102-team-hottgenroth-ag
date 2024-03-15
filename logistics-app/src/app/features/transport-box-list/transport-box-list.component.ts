@@ -43,6 +43,11 @@ export class TransportBoxListComponent {
     }
   }
 
+  public getSortedBoxes(): ITransportBoxData[]
+  {
+    return this.transportBoxes.sort((a, b) => a.number - b.number);
+  }
+
   public get selectedBox(): ITransportBoxData | undefined
   {
     return this._selectedBox;

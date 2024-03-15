@@ -1,6 +1,9 @@
 <mat-toolbar [ngStyle]="{'height': height + 'px'}" class="flex flex-row w-full toolbar-color">
-  <button mat-icon-button (click)="toggleNavRail()" class="mr-2">
+  <!-- <button mat-icon-button (click)="toggleNavRail()" class="mr-2">
     <mat-icon>menu</mat-icon>
+  </button> -->
+    <button mat-icon-button *ngIf="!isProject()" (click)="goToProject()" class="mr-2">
+    <mat-icon>arrow_back</mat-icon>
   </button>
   <section class="flex flex-col flex-grow items-start">
     <span>{{title}}</span>

@@ -1,15 +1,8 @@
 <form [formGroup]="article">
   <h2 mat-dialog-title>Article</h2>
   <section mat-dialog-content>
+    <span *ngIf="!!article.value">{{article.value.description}}</span>
     <section class="flex flex-col gap-3 justify-center pt-2">
-      <mat-form-field>
-        <mat-label>name</mat-label>
-        <input matInput formControlName="articleName" >
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>description</mat-label>
-        <textarea matInput formControlName="description"></textarea>
-      </mat-form-field>
       <mat-form-field>
         <mat-label>state</mat-label>
         <mat-select formControlName="status">
@@ -22,8 +15,16 @@
         <span matTextSuffix>{{article.value.unit}}</span>
         <mat-error *ngIf="article.controls['quantity']!.hasError('min')">quantity must be > 0</mat-error>
       </mat-form-field>
-      <date-picker [date]="article.value.expiryDate.toISOString()" (dateChanged)="setDate($event)"
-      *ngIf="!!article.value.expiryDate" title="expire date"></date-picker>
+      <mat-form-field *ngIf="isAuthorized()">
+        <mat-label>position</mat-label>
+        <input matInput type="number" formControlName="position">
+        <mat-error *ngIf="article.controls['position']!.hasError('min')">position must be > 0</mat-error>
+      </mat-form-field>
+      <section class="flex flex-col">
+        <mat-checkbox [checked]="!!article.value.expiryDate" (change)="setHasExpiryDate($event.checked)">has expiry date</mat-checkbox>
+        <date-picker [date]="article.value.expiryDate.toDateString()" (dateChanged)="setDate($event)"
+        *ngIf="!!article.value.expiryDate" title="expire date"></date-picker>
+      </section>
     </section>
   </section>
   <mat-dialog-actions class="flex flex-row !justify-end">

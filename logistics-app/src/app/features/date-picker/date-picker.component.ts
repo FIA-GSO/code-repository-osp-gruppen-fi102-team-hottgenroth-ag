@@ -4,32 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DateAdapter, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 @Injectable()
-export class YearDateAdapter extends NativeDateAdapter
-{
-  override format(date: Date, displayFormat: Object)
-  {
-    return date.getDate() + "." + date.getMonth() + "." + date.getFullYear()
-  }
-}
 
 @Component({
   selector: 'date-picker',
   standalone: true,
   imports: [CommonModule, FormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatButtonModule],
   templateUrl: './date-picker.component.html',
-  styleUrls: ['./date-picker.component.scss'],
-  providers:
-  [
-    {
-      provide: DateAdapter,
-      useClass: YearDateAdapter
-    },
-  ]
+  styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent
 {

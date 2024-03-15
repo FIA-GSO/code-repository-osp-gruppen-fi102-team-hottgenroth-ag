@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../services/authentication/auth.service';
 import { eRole } from '../../models/enum/eRole';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'article-list',
@@ -28,22 +29,13 @@ export class ArticleListComponent{
   private _dialog: MatDialog = inject(MatDialog);
   private _auth: AuthService = inject(AuthService);
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private _snackbar: MatSnackBar = inject(MatSnackBar);
 
   constructor(){}
 
   public getSortedArticles()
   {
     return this.articles.sort((a, b) => a.position.toString().localeCompare(b.position.toString(), undefined, {numeric: true}))
-  }
-
-  public isArticleLastPosition(article: IArticleData): boolean
-  {
-    var samePositionList = this.getAllArticlesFromSamePositions(article);
-    if(samePositionList[samePositionList.length - 1].articleGuid == article.articleGuid)
-    {
-      return true;
-    }
-    return false;
   }
 
   public isArticleFirstPosition(article: IArticleData): boolean
@@ -79,11 +71,10 @@ export class ArticleListComponent{
       data: article
     })
     dialogRef.afterClosed().subscribe((result: IArticleData) => {
-      console.log(result)
       if(!!result)
       {
         this._logisticStore.articleStore.update(result);
-        this._cd.detectChanges()
+        this._cd.detectChanges();
       }
     })
   }
@@ -92,5 +83,24 @@ export class ArticleListComponent{
   {
     let role: string = this._auth.getUserRole();
     return role == eRole.user;
+  }
+
+  public openInfo(): void
+  {
+    this._snackbar.open("expiry date is expired!", undefined, {duration: 4000})
+  } 
+
+  public isDateExpired(pDate: string)
+  {
+    var expireDate = new Date(pDate); //dd-mm-YYYY
+    var today = new Date();
+    today.setHours(0,0,0,0);
+
+    return expireDate <= today
+  }
+
+  public isStorekeeper(): boolean
+  {
+    return this._auth.getUserRole() == eRole.keeper || this._auth.getUserRole() == eRole.admin;
   }
 }

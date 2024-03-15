@@ -5,6 +5,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { IToolbarButton } from '../../models/IToolbarButton';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ToolbarComponent {
   @Output() navRailToggled: EventEmitter<void> = new EventEmitter<void>();
 
   private _cd: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private _router: Router = inject(Router);
 
   public height: number = 70;
 
@@ -69,5 +71,15 @@ export class ToolbarComponent {
   public toggleNavRail()
   {
     this.navRailToggled.emit();
+  }
+
+  public goToProject()
+  {
+    this._router.navigate(["/projects"])
+  }
+
+  public isProject(): boolean
+  {
+    return this._router.url.includes("project");
   }
 }

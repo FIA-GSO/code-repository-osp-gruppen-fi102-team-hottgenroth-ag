@@ -41,6 +41,7 @@ export class HomepageComponent {
         if(this.isAuthorized(this._login.getUserRole()))
         {
           this._framework.toolbar.addToolbarButton(this._btnStore.userButton);
+          this._framework.toolbar.addToolbarButton(this._btnStore.exportButton);
         }
         this._framework.toolbar.addToolbarButton(this._btnStore.logoutButton);
       }

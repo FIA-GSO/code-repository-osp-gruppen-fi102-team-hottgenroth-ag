@@ -5,5 +5,8 @@ export enum eArticleState{
   consumed = "Consumed",
   donated = "Donated",
   received = "Received",
-  none = "None"
+  none = "None",
+  expired = "Expired",
+  available = "Available",
+  unavailable = "Unavailable"
 }
