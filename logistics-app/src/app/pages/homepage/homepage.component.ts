@@ -39,7 +39,9 @@ export class HomepageComponent {
       }
   
       if(!!this._framework.toolbar)
-      {
+      { 
+        this._framework.toolbar.clear();
+
         //Wir setzen die Toolbarbuttons je nach Rolle
         if(this.isAuthorized(this._login.getUserRole()))
         {

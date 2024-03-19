@@ -98,4 +98,9 @@ export class ToolbarComponent {
 
     return this._router.url.includes("project");
   }
+
+  public clear(): void
+  {
+    this.toolbarButtons = [];
+  }
 }
