@@ -1,0 +1,49 @@
+-- Tabelle für Status
+CREATE TABLE Status (
+    StatusID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL CHECK (Name IN ('Defect', 'Lost', 'Discarded', 'Consumed', 'Donated', 'Received'))
+);
+
+-- Tabelle für Project
+CREATE TABLE Project (
+    ProjectGUID TEXT PRIMARY KEY,
+    ProjectName TEXT,
+    CreationDate DATE
+);
+
+-- Modifizierte Tabelle Transportbox
+CREATE TABLE Transportbox (
+    BoxGUID TEXT PRIMARY KEY,
+    Number INTEGER,
+    Description TEXT,
+    ProjectGUID TEXT, 
+    LocationTransport TEXT,
+    LocationHome TEXT,
+    LocationDeployment TEXT,
+    BoxCategory TEXT,
+    FOREIGN KEY (ProjectGUID) REFERENCES Project(ProjectGUID)
+);
+
+-- Tabelle Article
+CREATE TABLE Article (
+    ArticleGUID TEXT PRIMARY KEY,
+    ArticleName TEXT,
+    Description TEXT,
+    GTIN INTEGER,
+    Unit TEXT
+);
+
+-- Tabelle ArticleBoxAssignment
+CREATE TABLE ArticleBoxAssignment (
+    AssignmentGUID TEXT PRIMARY KEY,
+    ArticleGUID TEXT,
+	BoxGUID TEXT,
+	Position REAL,
+	Status INTEGER,
+	Quantity INTEGER,
+	ExpiryDate DATE,
+    ENUM Status,
+    FOREIGN KEY (ArticleGUID) REFERENCES Article(ArticleGUID),
+    FOREIGN KEY (BoxGUID) REFERENCES Transportbox(BoxGUID),
+	FOREIGN KEY (Status) REFERENCES Status(StatusID)
+);

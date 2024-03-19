@@ -1,0 +1,32 @@
+
+<section class="flex justify-center m-1 w-[calc(100%-8px)]">
+  <mat-card appearance="outlined" class="w-full max-w-xl">
+    <mat-card-header>
+      <h1 class="text-start w-full">Login</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <section class="flex flex-row w-full mb-2">
+        <mat-form-field class="w-full">
+          <mat-label>Account mail</mat-label>
+          <input matInput placeholder="Account mail" [value]="userName" (change)="userName = $any($event.target).value">
+        </mat-form-field>
+      </section>
+      <section class="flex flex-row w-full mb-3">
+        <mat-form-field class="w-full">
+          <mat-label>Enter your password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" [value]="userPassword" (change)="userPassword = $any($event.target).value">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </section>
+      <section *ngIf="errorMessage != ''" class="text-red-700">{{errorMessage}}</section>
+      <a [routerLink]="'/register'">Registrieren</a>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="flex justify-end w-full">
+        <button mat-flat-button color="primary" (click)="login()">Login</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</section>

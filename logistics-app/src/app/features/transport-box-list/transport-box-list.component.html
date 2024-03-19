@@ -1,0 +1,25 @@
+<section class="!h-full">
+  <mat-list class="w-full !overflow-auto !h-full">
+    <ng-container *ngFor="let box of getSortedBoxes()">
+      <mat-list-item (click)="selectedBox = box;" [ngClass]="!!selectedBox && selectedBox.boxGuid === box.boxGuid ? 'selected' : ''">
+        <ng-container [ngTemplateOutlet]="box_item" [ngTemplateOutletContext]="{boxItem: box}"></ng-container>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</section>
+
+
+
+<ng-template #box_item let-box="boxItem">
+  <section class="flex flex-row justify-between items-center">
+    {{box.description | truncate:[30]}}
+    <section>
+      <button mat-icon-button (click)="deleteBoxFromProject()" *ngIf="box.boxGuid === selectedBox?.boxGuid && isAuthorized()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="changeTab()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </section>
+  </section>
+</ng-template>

@@ -1,0 +1,61 @@
+
+<mat-tab-group class="h-full" #grp>
+  <mat-tab [label]="'Transportbox'">
+    <mat-toolbar class="min-h-14 max-h-14 flex flex-row justify-between !px-2">
+      <section *ngIf="!isSearching" class="flex flex-row items-center">
+        <button mat-icon-button (click)="openSearch()">
+          <mat-icon>search</mat-icon>
+        </button>
+        <h2>List of all tranport boxes</h2>
+      </section>
+      <section class="flex flex-row" *ngIf="!isSearching && isAuthorized()">
+        <button mat-icon-button (click)="addTransportBoxToProject()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="printPDF()">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+      </section>
+      <ng-container *ngIf="isSearching" [ngTemplateOutlet]="search"></ng-container>
+    </mat-toolbar>
+    <mat-card appearance="outlined" class="h-[calc(100%-64px)] ml-2 mr-2 mb-2 !flex !flex-col">
+      <mat-card-content class="!flex !flex-grow !overflow-auto">
+        <transport-box-list class="w-full" 
+        (boxSelection)="selectedBox = $event" 
+        (tabChange)="grp.selectedIndex = 1"
+        [transportBoxes]="transportBoxes"></transport-box-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab [label]="'Details'" [disabled]="!!!selectedBox">
+    <transport-box-details [selectedBox]="selectedBox"></transport-box-details>
+  </mat-tab>
+  <mat-tab [label]="'Articles'" [disabled]="!!!selectedBox">
+    <mat-card class="h-[calc(100%-8px)] m-1" appearance="outlined">
+      <mat-card-header class="!flex !flex-row !items-center !justify-between">
+        <section class="flex grow flex-col">
+          <mat-card-title>{{selectedBox?.description}}</mat-card-title>
+          <mat-card-subtitle>List of all articles for box</mat-card-subtitle>
+        </section>
+        <button mat-icon-button (click)="addArticlesToBox()" *ngIf="isAuthorized()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content class="!overflow-y-auto flex flex-col grow">
+        <article-list [articles]="articles"></article-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
+
+
+<ng-template #search>
+  <mat-form-field class="w-full" *ngIf="isSearching">
+    <mat-icon matIconPrefix>search</mat-icon>
+    <input matInput [value]="searchingValue" placeholder="search category"
+    (keyup)="searchWithString($any($event.target).value)">
+    <button mat-icon-button matIconSuffix (click)="closeSearch()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-template>

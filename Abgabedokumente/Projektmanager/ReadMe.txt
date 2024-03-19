@@ -1,0 +1,2 @@
+Das Kerndokument meiner Abgaben als Projektleiter ist die Projektsteuerung.pdf
+Die anderen Dokument sind Teil der Tätigkeiten als Projektleiter gewesen und werden größtenteils in Projektsteuerung.pdf referenziert.

@@ -1,0 +1,15 @@
+<div mat-dialog-title class="!flex flex-row items-end justify-start">
+  <div class="!mr-4" *ngIf="!!data.icon">
+    <mat-icon class="!align-middle">{{data.icon}}</mat-icon>
+  </div>
+  <h1 mat-dialog-title class="!m-0 !p-0">{{data.title}}</h1>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-content class="whitespace-pre-line">
+  <p [innerHTML]="data.text"></p>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions align="end" class="mt-1">
+  <button mat-button (click)="negativeButtonClicked();" *ngIf="data.hasCancelButton === true">{{data.cancelButtonText}}</button>
+  <button mat-button color="primary" tabindex="-1" (click)="positiveButtonClicked()" cdkFocusInitial>{{data.okButtonText}}</button>
+</div>

@@ -1,0 +1,32 @@
+<section class="w-full">
+  <mat-card appearance="outlined" class="w-full">
+    <mat-card-header>
+      <mat-icon mat-card-avatar *ngIf="sortedBy === 'alphabet'" class="text-4xl">sort_by_alpha</mat-icon>
+      <mat-icon mat-card-avatar *ngIf="sortedBy === 'date'" class="text-4xl">date_range</mat-icon>
+      <mat-card-title>Projects</mat-card-title>
+      <mat-card-subtitle>sorted by {{sortedBy}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="!flex flex-row overflow-x-auto gap-1">
+      <mat-card appearance="outlined" class="cursor-pointer min-w-48 max-w-48" (click)="addProject()">
+        <mat-card-header class="flex justify-center">
+          <mat-card-title>Add project</mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="!flex justify-center items-center">
+          <mat-icon class="text-4xl !w-10 !h-10">add_circle_outline</mat-icon>
+        </mat-card-content>
+      </mat-card>
+      <ng-container *ngFor="let prj of getSortedProjects()">
+        <mat-card appearance="outlined" class="cursor-pointer min-w-48 max-w-48" (click)="loadProject(prj)">
+          <mat-card-header>
+            <mat-card-title>{{prj.projectName}}</mat-card-title>
+            <mat-card-subtitle>created: {{formatDate(prj.creationDate)}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</section>

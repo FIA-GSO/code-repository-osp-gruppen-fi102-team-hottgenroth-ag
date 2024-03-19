@@ -1,0 +1,25 @@
+<mat-toolbar [ngStyle]="{'height': height + 'px'}" class="flex flex-row w-full toolbar-color">
+  <!-- <button mat-icon-button (click)="toggleNavRail()" class="mr-2">
+    <mat-icon>menu</mat-icon>
+  </button> -->
+    <button mat-icon-button *ngIf="!isProject()" (click)="goToProject()" class="mr-2">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <section class="flex flex-col flex-grow items-start">
+    <span>{{title}}</span>
+    <span class="text-sm">{{subtitle}}</span>
+  </section>
+  <button mat-icon-button *ngIf="toolbarButtons.length > 0" [mat-menu-trigger-for]="menu">
+    <mat-icon>settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let btn of toolbarButtons" (click)="buttonClicked(btn)">
+      <mat-icon>{{btn.icon}}</mat-icon>
+      <span *ngIf="!!btn.text">{{btn.text}}</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<div [ngStyle]="{height: 'calc(100% - ' + height + 'px)'} ">
+  <ng-content></ng-content>
+</div>

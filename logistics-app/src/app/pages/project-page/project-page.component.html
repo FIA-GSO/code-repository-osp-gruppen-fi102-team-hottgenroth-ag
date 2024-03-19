@@ -1,0 +1,24 @@
+<section class="flex flex-col gap-3 !ml-2 !mr-2 !mt-2">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Project management</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <section class="flex flex-row justify-between">
+        <span>Here you can create and delete projects, if you have the appropriate role.</span>
+        <section class="flex flex-col ml-2">
+          <span>Sorting:</span>
+          <mat-button-toggle-group [value]="sortedBy" (change)="toggleSorted($event.value)">
+            <mat-button-toggle [value]="'alphabet'">
+              <mat-icon>sort_by_alpha</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="'date'">
+              <mat-icon>date_range</mat-icon>        
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </section>
+      </section>
+    </mat-card-content>
+  </mat-card>
+  <project-roulette [sortedBy]="sortedBy" [projects]="projects"></project-roulette>
+</section>
